@@ -100,9 +100,9 @@ vector<unsigned int> RenderObject::LoadTexture(aiMaterial* material, aiTextureTy
 
 		string path = stream.str();
 
-		for(unsigned int i = 0; i < textures.size(); i++)
+		for(unsigned int i = 0; i < TextureMap.size(); i++)
 		{
-			if(textures[i].Equal(path.c_str()))
+			if(TextureMap[i].Equal(path.c_str()))
 			{
 				// Duplicate texture found.
 				// Simply get the index of that texture.
@@ -115,9 +115,9 @@ vector<unsigned int> RenderObject::LoadTexture(aiMaterial* material, aiTextureTy
 		if(!exists)
 		{
 			enum TextureType textureType = RenderTexture::aiTextureTypeToTextureType(type);
-			textures.push_back(RenderTexture(path.c_str(), textureType));
+			TextureMap.push_back(RenderTexture(path.c_str(), textureType));
 			// Get the index of the recently-pushed texture since the mesh depends on it.
-			vec.push_back(textures.size() - 1);
+			vec.push_back(TextureMap.size() - 1);
 		}
 	}
 	return vec;
@@ -168,7 +168,7 @@ void RenderObject::Draw(GLuint program)
 
 	for(auto& mesh : meshes)
 	{
-		mesh.Draw(program, textures);
+		mesh.Draw(program, &TextureMap);
 	}
 }
 

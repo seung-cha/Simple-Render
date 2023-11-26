@@ -4,6 +4,7 @@
 #include <string>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <RenderScene/RenderScene.h>
 
 
 namespace SimpleRenderUI
@@ -11,9 +12,10 @@ namespace SimpleRenderUI
 	class RenderUI
 	{
 	public:
-		inline RenderUI(std::string title)
+		inline RenderUI(std::string title, SimpleRender::RenderScene* scene)
 		{
 			this->title = title;
+			this->scene = scene;
 		}
 
 		/// <summary>
@@ -27,6 +29,8 @@ namespace SimpleRenderUI
 
 	protected:
 		std::string title;
+		SimpleRender::RenderScene* scene;
+		
 	};
 
 }

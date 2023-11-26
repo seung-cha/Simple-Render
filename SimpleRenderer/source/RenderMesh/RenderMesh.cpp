@@ -109,7 +109,7 @@ void RenderMesh::InitBuffers()
 
 
 
-void RenderMesh::Draw(GLuint program, std::vector<RenderTexture>& textureMap)
+void RenderMesh::Draw(GLuint program, std::vector<RenderTexture>* textureMap)
 {
 	glUseProgram(program);
 	
@@ -121,7 +121,7 @@ void RenderMesh::Draw(GLuint program, std::vector<RenderTexture>& textureMap)
 	for(unsigned int& index : textureIndices)
 	{
 
-		RenderTexture texture = textureMap[index];
+		RenderTexture& texture = (*textureMap)[index];
 		unsigned int texNo;
 
 		if(texture.Type() == TextureType::Diffuse)

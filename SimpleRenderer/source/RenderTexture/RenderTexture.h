@@ -25,7 +25,7 @@ namespace SimpleRender
 
 	public:
 		RenderTexture(const char* path, const TextureType type);
-		~RenderTexture();
+
 		inline GLuint ID()
 		{
 			return id;
@@ -57,6 +57,18 @@ namespace SimpleRender
 				return "Specular";
 		}
 
+		/// <summary>
+		/// Replace the current texture with the provided one
+		/// </summary>
+		/// <param name="path"></param>
+		inline void Replace(const char* path)
+		{
+			this->path = path;
+			LoadTexture();
+		}
+
+	private:
+		void LoadTexture();
 	};
 
 }

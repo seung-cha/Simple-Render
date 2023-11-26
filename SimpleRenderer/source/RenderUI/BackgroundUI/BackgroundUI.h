@@ -10,7 +10,7 @@ namespace SimpleRenderUI
 	class BackgroundUI : public RenderUI
 	{
 	public:
-		inline BackgroundUI(std::string title) : RenderUI(title)
+		inline BackgroundUI(std::string title, SimpleRender::RenderScene* scene) : RenderUI(title, scene)
 		{
 			background = glm::vec3(0.54f, 0.7f, 0.12f);
 

@@ -63,6 +63,15 @@
     <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>Resource Files\ImGUI</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderShader\RenderShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderShaderProgram\RenderShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderScene\RenderScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -118,6 +127,18 @@
     </ClInclude>
     <ClInclude Include="source\RenderUI\ObjectUI\ObjectUI.h">
       <Filter>Header Files\RenderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderUI\ShaderUI\ShaderUI.h">
+      <Filter>Header Files\RenderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderShader\RenderShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderShaderProgram\RenderShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderScene\RenderScene.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

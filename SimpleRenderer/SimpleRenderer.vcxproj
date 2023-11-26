@@ -32,6 +32,9 @@
     <ClCompile Include="source\RenderCamera\RenderCamera.cpp" />
     <ClCompile Include="source\RenderMesh\RenderMesh.cpp" />
     <ClCompile Include="source\RenderObject\RenderObject.cpp" />
+    <ClCompile Include="source\RenderScene\RenderScene.cpp" />
+    <ClCompile Include="source\RenderShaderProgram\RenderShaderProgram.cpp" />
+    <ClCompile Include="source\RenderShader\RenderShader.cpp" />
     <ClCompile Include="source\RenderTexture\RenderTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -47,11 +50,15 @@
     <ClInclude Include="source\RenderCamera\RenderCamera.h" />
     <ClInclude Include="source\RenderMesh\RenderMesh.h" />
     <ClInclude Include="source\RenderObject\RenderObject.h" />
+    <ClInclude Include="source\RenderScene\RenderScene.h" />
+    <ClInclude Include="source\RenderShaderProgram\RenderShaderProgram.h" />
+    <ClInclude Include="source\RenderShader\RenderShader.h" />
     <ClInclude Include="source\RenderTexture\RenderTexture.h" />
     <ClInclude Include="source\RenderUI\BackgroundUI\BackgroundUI.h" />
     <ClInclude Include="source\RenderUI\CameraUI\CameraUI.h" />
     <ClInclude Include="source\RenderUI\ObjectUI\ObjectUI.h" />
     <ClInclude Include="source\RenderUI\RenderUI.h" />
+    <ClInclude Include="source\RenderUI\ShaderUI\ShaderUI.h" />
     <ClInclude Include="source\RenderVertex\RenderVertex.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

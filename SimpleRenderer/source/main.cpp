@@ -9,23 +9,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "FileReader/FileReader.h"
-#include "RenderObject/RenderObject.h"
-#include "RenderCamera/RenderCamera.h"
-
-#include "RenderTexture/RenderTexture.h"
-
 
 #include "imgui.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
 
-#include "RenderUI/RenderUI.h"
+#include "RenderScene/RenderScene.h"
+
 #include "RenderUI/BackgroundUI/BackgroundUI.h"
 #include "RenderUI/CameraUI/CameraUI.h"
 #include "RenderUI/ObjectUI/ObjectUI.h"
+#include "RenderUI/ShaderUI/ShaderUI.h"
 
 
 
+void OnWindowResized(GLFWwindow* window, int width, int height);
 
 
 int main()
@@ -50,11 +48,13 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
+	glfwSetWindowSizeCallback(window, OnWindowResized);
+
+
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
+	glViewport(0, 0, width, height);
 
-
-	SimpleRender::RenderObject obj("");
 	
 	GLuint program, fragShader, vertShader;
 
@@ -87,76 +87,6 @@ int main()
 	free((void*)fragSource);
 	free((void*)vertSource);
 
-
-	//Debugging stuff
-	float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f
-	};
-
-	float cube[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
-
-	GLuint VAO, VBO;
-
-	glGenBuffers(1, &VBO);
-	glGenVertexArrays(1, &VAO);
-
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
-	
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
-	glEnableVertexAttribArray(0);
-
-	SimpleRender::RenderCamera cam;
-
-
-	glm::mat4 model = glm::mat4(1.0f);
-
 	glEnable(GL_DEPTH_TEST);
 
 
@@ -171,12 +101,16 @@ int main()
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330 core");
 
+	// Scene
+	SimpleRender::RenderScene scene;
+	scene.LoadDefaultScene();
 
 	// UI widgets
 	std::vector<SimpleRenderUI::RenderUI*> renderUIs;
-	renderUIs.push_back(new SimpleRenderUI::BackgroundUI("Background"));
-	renderUIs.push_back(new SimpleRenderUI::CameraUI("Camera", &cam));
-	renderUIs.push_back(new SimpleRenderUI::ObjectUI("Object", &obj));
+	renderUIs.push_back(new SimpleRenderUI::BackgroundUI("Background", &scene));
+	renderUIs.push_back(new SimpleRenderUI::CameraUI("Camera", &scene));
+	renderUIs.push_back(new SimpleRenderUI::ObjectUI("Object", &scene));
+	renderUIs.push_back(new SimpleRenderUI::ShaderUI("Shader", &scene));
 
 
 
@@ -184,39 +118,24 @@ int main()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-		cam.Update();
 		// Quit window
 		if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, true);
 
 
 
+		scene.DrawScene(program);
 
-
-		glUseProgram(program);
-
-		glUniformMatrix4fv(glGetUniformLocation(program, "transform.Projection"), 1, GL_FALSE, &cam.Perspective()[0][0]);
-		glUniformMatrix4fv(glGetUniformLocation(program, "transform.View"), 1, GL_FALSE, &cam.ViewMatrix()[0][0]);
-
-		glUseProgram(0);
-
-
-		obj.Draw(program);
+		
 
 	
-
-		/*std::cout << glGetError() << std::endl;
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-		glUseProgram(0);*/
 
 		
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		// Draw UIs
 		for(auto& ui : renderUIs)
 		{
 			ui->UpdateWidget();
@@ -255,4 +174,13 @@ int main()
 	std::cout << "Hello World!!" << std::endl;
 	return 0; 
 
+}
+
+
+
+
+
+void OnWindowResized(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }

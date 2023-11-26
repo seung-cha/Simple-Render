@@ -10,20 +10,29 @@ using namespace std;
 
 RenderTexture::RenderTexture(const char* path, const TextureType type)
 {
-	cout << "Generating a new texture:" << endl;
+	// Gotta find a place  to put this.
 	stbi_set_flip_vertically_on_load(true);
 
-	cout << path << endl << endl;
 
-	int x, y, chan;
 
 
 	this->path = path;
 	this->type = type;
-
-	unsigned char* img = stbi_load(path, &x, &y, &chan, 0);
-
 	glGenTextures(1, &id);
+
+	LoadTexture();
+}
+
+
+void RenderTexture::LoadTexture()
+{
+
+	cout << "Generating a new texture:" << endl;
+	cout << path << endl;
+
+	int x, y, chan;
+	unsigned char* img = stbi_load(path.c_str(), &x, &y, &chan, 0);
+
 	glBindTexture(GL_TEXTURE_2D, id);
 
 	// Texture parameters. Might make this option changeable later.
@@ -59,7 +68,7 @@ RenderTexture::RenderTexture(const char* path, const TextureType type)
 		texType = GL_RGBA;
 		break;
 	default:
-		cerr << "Texture channel is " << chan <<". " << path << endl;
+		cerr << "Texture channel is " << chan << ". " << path << endl;
 	}
 	glTexImage2D(GL_TEXTURE_2D, 0, texType, x, y, 0, texType, GL_UNSIGNED_BYTE, img);
 
@@ -68,10 +77,6 @@ RenderTexture::RenderTexture(const char* path, const TextureType type)
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(img);
-	return;
+
 }
 
-
-RenderTexture::~RenderTexture()
-{
-}

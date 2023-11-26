@@ -11,9 +11,9 @@ namespace SimpleRenderUI
 	class CameraUI : public RenderUI
 	{
 	public:
-		inline CameraUI(std::string title, SimpleRender::RenderCamera* camera) : RenderUI(title)
+		inline CameraUI(std::string title, SimpleRender::RenderScene* scene) : RenderUI(title, scene)
 		{
-			this->cam = camera;
+			this->cam = scene->ActiveCamera;
 			fov = cam->FOV();
 		}
 

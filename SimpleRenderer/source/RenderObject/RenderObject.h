@@ -21,14 +21,15 @@ namespace SimpleRender
 		~RenderObject();
 		void Draw(GLuint program);
 
+
 		glm::vec3 Position;
 		glm::vec3 Rotation;
 		glm::vec3 Scale;
+		std::vector<RenderTexture> TextureMap;
 
 
 	private:
 		std::vector<RenderMesh> meshes;
-		std::vector<RenderTexture> textures;
 		
 		void LoadMesh(const std::string path);
 
