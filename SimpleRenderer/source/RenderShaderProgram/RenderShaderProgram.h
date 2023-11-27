@@ -6,15 +6,37 @@
 
 namespace SimpleRender
 {
+	enum ShaderProgramState
+	{
+		ShaderProgramNew,
+		ShaderProgramLinked,
+		ShaderProgramError
+	};
+
 	class RenderShaderProgram
 	{
 	public:
 		RenderShaderProgram();
 
+		void AttachShader(RenderShader* shader);
+
+		void LinkProgram();
+
+		inline GLuint ID()
+		{
+			return programID;
+		}
+
+
 		
 	private:
-		GLuint programID;
 
+
+
+		GLuint programID;
+		RenderShader* shaders[3] = {nullptr, nullptr, nullptr};
+
+		
 	};
 
 }

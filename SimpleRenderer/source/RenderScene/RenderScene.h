@@ -6,9 +6,9 @@
 #include <iostream>
 
 #include <RenderObject/RenderObject.h>
+#include <RenderShaderProgram/RenderShaderProgram.h>
 #include <RenderShader/RenderShader.h>
 #include <RenderCamera/RenderCamera.h>
-#include <RenderShaderProgram/RenderShaderProgram.h>
 
 
 namespace SimpleRender
@@ -39,9 +39,13 @@ namespace SimpleRender
 		}
 
 		std::vector<RenderObject> SceneObjects;
-		std::vector<RenderShader> SceneShaders;
 		std::vector<RenderCamera> SceneCameras;
-		std::vector<RenderShaderProgram> ScenePrograms;
+
+		std::vector<RenderShader> SceneVertexShaders;
+		std::vector<RenderShader> SceneFragmentShaders;
+		std::vector<RenderShader> SceneGeometryShaders;
+
+		std::vector<RenderShaderProgram> SceneShaderPrograms;
 		
 		RenderCamera* ActiveCamera;
 		RenderObject* ActiveObject;

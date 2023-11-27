@@ -32,7 +32,8 @@ RenderObject::~RenderObject()
 void RenderObject::LoadMesh(const std::string path)
 {
 	directory = path.substr(0, path.find_last_of('/')) + '/';
-	cout << "Loading a model located in: " << directory << endl;
+	cout << "Loading a model located in: " << endl;
+	cout << path << endl << endl;
 
 	Importer importer;
 
@@ -42,11 +43,11 @@ void RenderObject::LoadMesh(const std::string path)
 
 	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
 	{
-		cerr << "Import was unsuccessful: " << importer.GetErrorString() << endl;
+		cerr << "Import was unsuccessful: " << endl;
+		cerr << importer.GetErrorString() << endl << endl;
 		return;
 	}
 
-	cout << "Initiating" << endl;
 
 	InitMeshes(scene, scene->mRootNode);
 }
@@ -135,7 +136,7 @@ RenderMesh RenderObject::CreateMesh(const aiScene* scene, const aiMesh* mesh)
 
 void RenderObject::LoadDefaultMesh()
 {
-	cout << "Loading a default mesh" << endl;
+	cout << "Loading a default mesh" << endl << endl;
 
 	// Get the default model
 	// and set transforms specific to this model

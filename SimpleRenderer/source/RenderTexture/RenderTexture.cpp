@@ -44,7 +44,7 @@ void RenderTexture::LoadTexture()
 	if(!img)
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
-		cerr << "Could not load the texture: " << path << endl;
+		cerr << "Failed: could not load the image. " << path << endl << endl;
 		stbi_image_free(img);
 		return;
 	}
@@ -66,15 +66,18 @@ void RenderTexture::LoadTexture()
 		texType = GL_RGBA;
 		break;
 	default:
-		cerr << "Texture channel is " << chan << ". " << path << endl;
+		cerr << "Warning: Texture channel is " << chan << ". " << path << endl;
 	}
 	glTexImage2D(GL_TEXTURE_2D, 0, texType, x, y, 0, texType, GL_UNSIGNED_BYTE, img);
 
+
+	cout << "Texture Generated successfully." << endl << endl;
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(img);
 	status = TextureStatus::Ready;
+
 
 }
 
