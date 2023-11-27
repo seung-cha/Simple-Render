@@ -75,17 +75,20 @@ namespace SimpleRender
 
 
 		/// <summary>
-		/// Replace the current texture with the provided one
+		/// Replace the current texture with the provided one.
+		/// This function simply calls the function to load texture
+		/// and replaces the current path to the provided one if successful.
+		/// If not, nothing occurs.
 		/// </summary>
 		/// <param name="path"></param>
 		inline void Replace(const char* path)
 		{
-			this->path = path;
-			LoadTexture();
+			if(LoadTexture(path))
+				this->path = path;
 		}
 
 	private:
-		void LoadTexture();
+		bool LoadTexture(const char* path);
 	};
 
 }

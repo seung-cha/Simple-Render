@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <Windows.h>
+
 
 using namespace std; 
 
@@ -14,7 +16,7 @@ const char* FileReader::ReadFile(const char* path)
 	if(!file.is_open())
 	{
 		cerr << "Could not open the file: " << path << endl;
-		return "";
+		return nullptr;
 	}
 
 	try
@@ -32,5 +34,33 @@ const char* FileReader::ReadFile(const char* path)
 	}
 	
 	file.close();
+	return nullptr;
+}
+
+string FileReader::OpenFileDialogue()
+{
+	// Direct copy from a tutorial by The Cherno
+	// https://youtu.be/zn7N7zHgCcs?si=Mf70bKsJdPrk0woi
+
+	// Should come back to understand it later.
+
+	OPENFILENAMEA ofn;
+	CHAR szFile[260] = { 0 };
+
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = "";
+	ofn.nFilterIndex = 1;
+
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+	if(GetOpenFileNameA(&ofn) == TRUE)
+	{
+		return ofn.lpstrFile;
+	}
+
 	return "";
 }

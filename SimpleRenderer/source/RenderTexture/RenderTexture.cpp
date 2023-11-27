@@ -14,22 +14,23 @@ RenderTexture::RenderTexture(const char* path, const TextureType type)
 	stbi_set_flip_vertically_on_load(true);
 
 
-	this->path = path;
+	this->path = "";
 	this->type = type;
 	glGenTextures(1, &id);
 
-	LoadTexture();
+	if(LoadTexture(path))
+		this->path = path;
 }
 
 
-void RenderTexture::LoadTexture()
+bool RenderTexture::LoadTexture(const char* path)
 {
 
 	cout << "Generating a new texture:" << endl;
 	cout << path << endl;
 
 	int x, y, chan;
-	unsigned char* img = stbi_load(path.c_str(), &x, &y, &chan, 0);
+	unsigned char* img = stbi_load(path, &x, &y, &chan, 0);
 
 	glBindTexture(GL_TEXTURE_2D, id);
 
@@ -46,7 +47,7 @@ void RenderTexture::LoadTexture()
 		glBindTexture(GL_TEXTURE_2D, 0);
 		cerr << "Failed: could not load the image. " << path << endl << endl;
 		stbi_image_free(img);
-		return;
+		return false;
 	}
 
 
@@ -77,7 +78,7 @@ void RenderTexture::LoadTexture()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(img);
 	status = TextureStatus::Ready;
-
+	return true;
 
 }
 

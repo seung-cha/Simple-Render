@@ -1,5 +1,6 @@
 #include "ObjectUI.h"
 #include <vector>
+#include <FileReader/FileReader.h>
 
 
 using namespace SimpleRenderUI;
@@ -98,7 +99,7 @@ void ObjectUI::FocusedTextureDetails()
 
 	if(ImGui::Button("Replace This Texture"))
 	{
-
+		selectedTexture->Replace(FileReader::OpenFileDialogue().c_str());
 	}
 
 
