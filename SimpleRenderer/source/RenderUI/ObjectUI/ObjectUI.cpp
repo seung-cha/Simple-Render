@@ -69,14 +69,20 @@ void ObjectUI::TextureTable(enum TextureType type)
 		{
 			if(ImGui::Button("NO IMAGE", textureButtonSize))
 			{
-				selectedTexture = texture;
+				if(selectedTexture == texture)
+					selectedTexture = nullptr;
+				else
+					selectedTexture = texture;
 			}
 		}
 		else
 		{
 			if(ImGui::ImageButton((ImTextureID)texture->ID(), textureButtonSize))
 			{
-				selectedTexture = texture;
+				if(selectedTexture == texture)
+					selectedTexture = nullptr;
+				else
+					selectedTexture = texture;
 			}
 
 		}

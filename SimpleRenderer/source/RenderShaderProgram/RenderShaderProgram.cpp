@@ -25,9 +25,11 @@ void RenderShaderProgram::LinkProgram()
 	if(status == GL_TRUE)
 	{
 		cout << "Linking successful." << endl << endl;
+		state = ShaderProgramLinked;
 		return;
 	}
 
+	state = ShaderProgramError;
 	cout << "Linking unsuccessful: " << endl;
 
 	char log[512];

@@ -15,7 +15,10 @@ void ShaderUI::UpdateWidget()
 	if(ImGui::IsWindowAppearing())
 	{
 		selectedShader = nullptr;
+		selectedShaderProgram = nullptr;
 	}
+
+	ShaderProgramsWidget();
 
 	ShadersWidget(ShaderType::Vertex);
 	ShadersWidget(ShaderType::Fragment);
@@ -25,6 +28,11 @@ void ShaderUI::UpdateWidget()
 	if(selectedShader)
 	{
 		FocusedShaderDetails();
+	}
+
+	if(selectedShaderProgram)
+	{
+		FocusedShaderProgramDetails();
 	}
 
 
@@ -46,7 +54,11 @@ void ShaderUI::ShadersWidget(enum ShaderType type)
 		s << title << i;
 		if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
 		{
-			selectedShader = shaders[i];
+			if(selectedShader == shaders[i])
+				selectedShader = nullptr;
+			else
+				selectedShader = shaders[i];
+
 			cout << "Pressed" << endl;
 		}
 
@@ -88,4 +100,55 @@ void ShaderUI::FocusedShaderDetails()
 	ImGui::EndChild();
 	ImGui::PopStyleColor();
 	
+}
+
+void ShaderUI::ShaderProgramsWidget()
+{
+	ImGui::SeparatorText("Shader Program");
+
+	for(unsigned int i = 0; i < scene->SceneShaderPrograms.size(); i++)
+	{
+		ostringstream stream;
+		stream << "Program" << i;
+
+		if(ImGui::Button(stream.str().c_str(), ImVec2(64.0f, 64.0f)))
+		{
+			// Deselect if the same item is pressed.
+			if(selectedShaderProgram == scene->SceneShaderPrograms[i])
+				selectedShaderProgram = nullptr;
+			else
+				selectedShaderProgram = scene->SceneShaderPrograms[i];
+		}
+
+	}
+
+}
+
+void ShaderUI::FocusedShaderProgramDetails()
+{
+	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
+	ImGui::BeginChild("ShaderProgramDetails", ImVec2(ImGui::GetContentRegionAvail().x, 320.0f));
+
+	string stateStr = RenderShaderProgram::ShaderProgramStateToString(selectedShaderProgram->State());
+
+	ImGui::Text("State: ");
+	ImGui::SameLine();
+	ImGui::Text(stateStr.c_str());
+
+	ImGui::SeparatorText("Shader attachment status");
+
+	ImGui::Text("Vertex: ");
+	ImGui::SameLine();
+	ImGui::Text(selectedShaderProgram->IsShaderAttached(ShaderType::Vertex) ? "O" : "X");
+
+	ImGui::Text("Fragment: ");
+	ImGui::SameLine();
+	ImGui::Text(selectedShaderProgram->IsShaderAttached(ShaderType::Fragment) ? "O" : "X");
+
+	ImGui::Text("Geometry: ");
+	ImGui::SameLine();
+	ImGui::Text(selectedShaderProgram->IsShaderAttached(ShaderType::Geometry) ? "O" : "X");
+
+	ImGui::PopStyleColor();
+	ImGui::EndChild();
 }
