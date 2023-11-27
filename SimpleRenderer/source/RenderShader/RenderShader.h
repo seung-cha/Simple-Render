@@ -35,7 +35,7 @@ namespace SimpleRender
 
 		inline ShaderState State()
 		{
-			state;
+			return state;
 		}
 
 		inline GLuint ID()
@@ -43,7 +43,17 @@ namespace SimpleRender
 			return shaderID;
 		}
 
-		inline std::string ShaderTypeToString(enum ShaderType type)
+		inline std::string Path()
+		{
+			return path;
+		}
+
+		inline const char* Source()
+		{
+			return source;
+		}
+
+		static inline std::string ShaderTypeToString(enum ShaderType type)
 		{
 			if(type == Vertex)
 				return "Vertex";
@@ -52,6 +62,7 @@ namespace SimpleRender
 			else
 				return "Geometry";
 		}
+
 
 		void ShaderSource(std::string path);
 

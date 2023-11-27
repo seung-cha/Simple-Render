@@ -88,7 +88,7 @@ void ObjectUI::TextureTable(enum TextureType type)
 void ObjectUI::FocusedTextureDetails()
 {
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
-	ImGui::BeginChild("TextureDetails", ImVec2(ImGui::GetContentRegionAvail().x, 320), ImGuiChildFlags_None, ImGuiWindowFlags_None);
+	ImGui::BeginChild("TextureDetails", ImVec2(ImGui::GetContentRegionAvail().x, 320.0f));
 
 	ImGui::Image((ImTextureID)selectedTexture->ID(), ImVec2(128, 128));
 

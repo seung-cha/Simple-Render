@@ -20,6 +20,10 @@ namespace SimpleRenderUI
 
 		}
 
+	private:
+		void ShadersWidget(enum SimpleRender::ShaderType type);
+		void FocusedShaderDetails();
+		SimpleRender::RenderShader* selectedShader = nullptr;
 
 
 

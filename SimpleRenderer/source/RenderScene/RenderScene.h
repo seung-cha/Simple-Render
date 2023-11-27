@@ -38,6 +38,17 @@ namespace SimpleRender
 
 		}
 
+
+		inline std::vector<RenderShader>* GetShadersOfType(enum ShaderType type)
+		{
+			if(type == ShaderType::Vertex)
+				return &SceneVertexShaders;
+			else if(type == ShaderType::Fragment)
+				return &SceneFragmentShaders;
+			else
+				return &SceneGeometryShaders;
+		}
+
 		std::vector<RenderObject> SceneObjects;
 		std::vector<RenderCamera> SceneCameras;
 
