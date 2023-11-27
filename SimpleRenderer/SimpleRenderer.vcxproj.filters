@@ -19,6 +19,9 @@
     <Filter Include="Header Files\RenderUI">
       <UniqueIdentifier>{cd99ab10-39f6-4790-a26b-5f0165e42905}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\RenderUI">
+      <UniqueIdentifier>{de72f788-6866-4231-bc47-175a70d9d79a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -71,6 +74,18 @@
     </ClCompile>
     <ClCompile Include="source\RenderScene\RenderScene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderUI\BackgroundUI\BackgroundUI.cpp">
+      <Filter>Source Files\RenderUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderUI\CameraUI\CameraUI.cpp">
+      <Filter>Source Files\RenderUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderUI\ObjectUI\ObjectUI.cpp">
+      <Filter>Source Files\RenderUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderUI\ShaderUI\ShaderUI.cpp">
+      <Filter>Source Files\RenderUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

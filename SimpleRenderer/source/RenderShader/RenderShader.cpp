@@ -9,7 +9,6 @@ using namespace std;
 RenderShader::RenderShader(enum ShaderType type)
 {
 	this->type = type;
-	
 	CreateShader();
 }
 

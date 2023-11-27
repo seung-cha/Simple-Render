@@ -12,14 +12,8 @@ namespace SimpleRenderUI
 
 		}
 
-		virtual inline void UpdateWidget()
-		{
-			ImGui::Begin(title.c_str()); 
-
-
-			ImGui::End();
-			
-		}
+		virtual void UpdateWidget();
+		
 
 		virtual inline void ReflectUpdate()
 		{

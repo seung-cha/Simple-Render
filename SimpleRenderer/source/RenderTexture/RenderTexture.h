@@ -16,15 +16,31 @@ namespace SimpleRender
 		Specular
 	};
 
+	enum TextureStatus
+	{
+		NotReady,
+		Ready
+	};
+
 	class RenderTexture
 	{
 	private:
 		GLuint id;
 		enum TextureType type;
+		enum TextureStatus status = TextureStatus::NotReady;
 		std::string path;
 
 	public:
 		RenderTexture(const char* path, const TextureType type);
+
+		inline std::string* Path()
+		{
+			return &path;
+		}
+		inline enum TextureStatus Status()
+		{
+			return status;
+		}
 
 		inline GLuint ID()
 		{
@@ -56,6 +72,7 @@ namespace SimpleRender
 			else if(type == TextureType::Specular)
 				return "Specular";
 		}
+
 
 		/// <summary>
 		/// Replace the current texture with the provided one

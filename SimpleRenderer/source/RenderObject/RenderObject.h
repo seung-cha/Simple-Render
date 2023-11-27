@@ -27,6 +27,19 @@ namespace SimpleRender
 		glm::vec3 Scale;
 		std::vector<RenderTexture> TextureMap;
 
+		inline std::vector<RenderTexture*> TextureMapOfType(enum TextureType type)
+		{
+			std::vector<RenderTexture*> tex;
+			for(RenderTexture& texture : TextureMap)
+			{
+				if(texture.Type() == type)
+					tex.push_back(&texture);
+			}
+
+			return tex;
+		}
+
+
 
 	private:
 		std::vector<RenderMesh> meshes;

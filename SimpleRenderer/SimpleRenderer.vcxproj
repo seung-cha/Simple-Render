@@ -36,6 +36,10 @@
     <ClCompile Include="source\RenderShaderProgram\RenderShaderProgram.cpp" />
     <ClCompile Include="source\RenderShader\RenderShader.cpp" />
     <ClCompile Include="source\RenderTexture\RenderTexture.cpp" />
+    <ClCompile Include="source\RenderUI\BackgroundUI\BackgroundUI.cpp" />
+    <ClCompile Include="source\RenderUI\CameraUI\CameraUI.cpp" />
+    <ClCompile Include="source\RenderUI\ObjectUI\ObjectUI.cpp" />
+    <ClCompile Include="source\RenderUI\ShaderUI\ShaderUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\backends\imgui_impl_glfw.h" />

@@ -17,15 +17,8 @@ namespace SimpleRenderUI
 			fov = cam->FOV();
 		}
 
-		virtual inline void UpdateWidget()
-		{
-			ImGui::Begin(title.c_str());
-
-			ImGui::DragFloat("FOV", &fov);
-
-			ImGui::End();
-
-		}
+		virtual void UpdateWidget();
+		
 
 		virtual inline void ReflectUpdate()
 		{

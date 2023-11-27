@@ -21,7 +21,7 @@ namespace SimpleRenderUI
 		/// <summary>
 		/// Update the UI, receiving input but not applying them
 		/// </summary>
-		virtual inline void UpdateWidget() = 0;
+		virtual void UpdateWidget() = 0;
 		/// <summary>
 		/// Update the applicationw with received inputs
 		/// </summary>

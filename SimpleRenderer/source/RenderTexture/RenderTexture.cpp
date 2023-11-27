@@ -14,8 +14,6 @@ RenderTexture::RenderTexture(const char* path, const TextureType type)
 	stbi_set_flip_vertically_on_load(true);
 
 
-
-
 	this->path = path;
 	this->type = type;
 	glGenTextures(1, &id);
@@ -74,9 +72,9 @@ void RenderTexture::LoadTexture()
 
 
 	glGenerateMipmap(GL_TEXTURE_2D);
-
 	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(img);
+	status = TextureStatus::Ready;
 
 }
 

@@ -18,13 +18,7 @@ namespace SimpleRenderUI
 
 		}
 
-		virtual inline void UpdateWidget()
-		{
-			
-			ImGui::Begin(title.c_str());
-			ImGui::ColorPicker3("Background Colour", &background[0]);
-			ImGui::End();
-		}
+		virtual void UpdateWidget();
 
 		virtual inline void ReflectUpdate()
 		{
