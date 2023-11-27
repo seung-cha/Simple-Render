@@ -5,58 +5,53 @@
 #include <vector>
 #include <iostream>
 
-#include <RenderObject/RenderObject.h>
-#include <RenderShaderProgram/RenderShaderProgram.h>
-#include <RenderShader/RenderShader.h>
-#include <RenderCamera/RenderCamera.h>
+#include "RenderShaderProgram/RenderShaderProgram.h"
+#include "RenderShader/RenderShader.h"
+#include "RenderCamera/RenderCamera.h"
 
 
 namespace SimpleRender
 {
+	// Forward declare all classes
+	class RenderObject;
+
 
 	class RenderScene
 	{
 	public:
 		void LoadDefaultScene();
 
-		// To do: Associate a shader program to each object
-		// So that they can be drawn uniquely.
-		// For now, use only one shader.
-		inline void DrawScene(GLuint& program)
+		void DrawScene();
+
+		/// <summary>
+		/// Free allocated memory.
+		/// As of now does nothing.
+		/// Should implement an interface to release OpenGL IDs of each class.
+		/// </summary>
+		inline void Dispose()
 		{
-			glUseProgram(program);
-
-			glUniformMatrix4fv(glGetUniformLocation(program, "transform.Perspective"), 1, GL_FALSE, &ActiveCamera->PerspectiveMatrix()[0][0]);
-			glUniformMatrix4fv(glGetUniformLocation(program, "transform.View"), 1, GL_FALSE, &ActiveCamera->ViewMatrix()[0][0]);
-
-			for(auto& object : SceneObjects)
-			{
-				object.Draw(program);
-			}
-
-			glUseProgram(0); 
 
 		}
 
 
-		inline std::vector<RenderShader>* GetShadersOfType(enum ShaderType type)
+		inline std::vector<RenderShader*> GetShadersOfType(enum ShaderType type)
 		{
 			if(type == ShaderType::Vertex)
-				return &SceneVertexShaders;
+				return SceneVertexShaders;
 			else if(type == ShaderType::Fragment)
-				return &SceneFragmentShaders;
+				return SceneFragmentShaders;
 			else
-				return &SceneGeometryShaders;
+				return SceneGeometryShaders;
 		}
 
-		std::vector<RenderObject> SceneObjects;
-		std::vector<RenderCamera> SceneCameras;
+		std::vector<RenderObject*> SceneObjects;
+		std::vector<RenderCamera*> SceneCameras;
 
-		std::vector<RenderShader> SceneVertexShaders;
-		std::vector<RenderShader> SceneFragmentShaders;
-		std::vector<RenderShader> SceneGeometryShaders;
+		std::vector<RenderShader*> SceneVertexShaders;
+		std::vector<RenderShader*> SceneFragmentShaders;
+		std::vector<RenderShader*> SceneGeometryShaders;
 
-		std::vector<RenderShaderProgram> SceneShaderPrograms;
+		std::vector<RenderShaderProgram*> SceneShaderPrograms;
 		
 		RenderCamera* ActiveCamera;
 		RenderObject* ActiveObject;

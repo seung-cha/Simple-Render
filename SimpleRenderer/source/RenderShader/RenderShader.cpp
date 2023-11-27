@@ -38,7 +38,7 @@ void RenderShader::ShaderSource(std::string path)
 
 	source = src;
 
-	glShaderSource(shaderID, 1, &source, NULL);
+	glShaderSource(shaderID, 1, &source, 0);
 }
 
 

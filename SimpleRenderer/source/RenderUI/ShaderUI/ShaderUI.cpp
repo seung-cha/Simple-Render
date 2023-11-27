@@ -36,17 +36,17 @@ void ShaderUI::UpdateWidget()
 void ShaderUI::ShadersWidget(enum ShaderType type)
 {
 	string title = RenderShader::ShaderTypeToString(type);
-	vector<RenderShader>* shaders = scene->GetShadersOfType(type);
+	vector<RenderShader*> shaders = scene->GetShadersOfType(type);
 
 	ImGui::SeparatorText(title.c_str());
 
-	for(int i = 0; i < shaders->size(); i++)
+	for(int i = 0; i < shaders.size(); i++)
 	{
 		ostringstream s;
 		s << title << i;
 		if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
 		{
-			selectedShader = &((* shaders)[i]);
+			selectedShader = shaders[i];
 			cout << "Pressed" << endl;
 		}
 

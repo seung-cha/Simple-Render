@@ -1,6 +1,8 @@
 #include "RenderMesh.h"
 #include <sstream>
 
+#include "RenderShaderProgram/RenderShaderProgram.h"
+
 
 using namespace SimpleRender;
 using namespace std;
@@ -109,9 +111,9 @@ void RenderMesh::InitBuffers()
 
 
 
-void RenderMesh::Draw(GLuint program, std::vector<RenderTexture>* textureMap)
+void RenderMesh::Draw(RenderShaderProgram* program, std::vector<RenderTexture*> textureMap)
 {
-	glUseProgram(program);
+	glUseProgram(program->ID());
 	
 	// Bind textures
 	unsigned int diffNo = 0;
@@ -121,29 +123,27 @@ void RenderMesh::Draw(GLuint program, std::vector<RenderTexture>* textureMap)
 	for(unsigned int& index : textureIndices)
 	{
 
-		RenderTexture& texture = (*textureMap)[index];
+		RenderTexture* texture = textureMap[index];
 		unsigned int texNo;
 
-		if(texture.Type() == TextureType::Diffuse)
+		if(texture->Type() == TextureType::Diffuse)
 			texNo = diffNo++;
-		else if(texture.Type() == TextureType::Specular)
+		else if(texture->Type() == TextureType::Specular)
 			texNo = specNo++;
 
 
 		ostringstream stream;
-		stream << "material." << RenderTexture::TextureTypeToString(texture.Type()) << texNo;
+		stream << "material." << RenderTexture::TextureTypeToString(texture->Type()) << texNo;
 		
 		string location = stream.str();
 
 
 		glActiveTexture(GL_TEXTURE0 + globalTexID);
-		glUniform1f(glGetUniformLocation(program, location.c_str()), globalTexID++);
-		glBindTexture(GL_TEXTURE_2D, texture.ID());
+		glUniform1f(glGetUniformLocation(program->ID(), location.c_str()), globalTexID++);
+		glBindTexture(GL_TEXTURE_2D, texture->ID());
 		
 
 	}
-	
-
 
 	glBindVertexArray(vertexArray);
 

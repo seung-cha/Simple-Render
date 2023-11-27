@@ -8,8 +8,11 @@
 #include "RenderTexture/RenderTexture.h"
 
 
+
 namespace SimpleRender
 {
+	class RenderShaderProgram;
+
 	enum BufferType
 	{
 		VBO,
@@ -30,7 +33,7 @@ namespace SimpleRender
 		/// <param name="textureIndices">texture slots to use, mapped onto the texture vector in the object class</param>
 		RenderMesh(const aiScene* scene, const aiMesh* mesh, const std::vector<unsigned int> textureIndices);
 		~RenderMesh();
-		void Draw(GLuint program, std::vector<RenderTexture>* textureMap);
+		void Draw(RenderShaderProgram* program, std::vector<RenderTexture*> textureMap);
 
 	private:
 		/// <summary>

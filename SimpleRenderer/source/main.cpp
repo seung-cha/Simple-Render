@@ -124,7 +124,7 @@ int main()
 
 
 
-		scene.DrawScene(program);
+		scene.DrawScene();
 
 		
 
@@ -167,8 +167,10 @@ int main()
 	// Free UIs
 	for(auto& ui : renderUIs)
 	{
-		free(ui);
+		delete(ui);
 	}
+
+	scene.Dispose();
 
 
 	std::cout << "Hello World!!" << std::endl;

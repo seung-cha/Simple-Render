@@ -4,12 +4,18 @@
 #include <sstream>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "RenderScene/RenderScene.h"
+
+
 using namespace SimpleRender;
 using namespace std;
 using namespace Assimp;
 
-RenderObject::RenderObject(const string path)
+RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, const string path)
 {
+
+	shaderProgram = program;
+	this->scene = scene;
 
 	Position = glm::vec3(0.0f);
 	Rotation = glm::vec3(0.0f);
@@ -27,6 +33,7 @@ RenderObject::RenderObject(const string path)
 
 RenderObject::~RenderObject()
 {
+
 }
 
 void RenderObject::LoadMesh(const std::string path)
@@ -103,7 +110,7 @@ vector<unsigned int> RenderObject::LoadTexture(aiMaterial* material, aiTextureTy
 
 		for(unsigned int i = 0; i < TextureMap.size(); i++)
 		{
-			if(TextureMap[i].Equal(path.c_str()))
+			if(TextureMap[i]->Equal(path.c_str()))
 			{
 				// Duplicate texture found.
 				// Simply get the index of that texture.
@@ -116,7 +123,7 @@ vector<unsigned int> RenderObject::LoadTexture(aiMaterial* material, aiTextureTy
 		if(!exists)
 		{
 			enum TextureType textureType = RenderTexture::aiTextureTypeToTextureType(type);
-			TextureMap.push_back(RenderTexture(path.c_str(), textureType));
+			TextureMap.push_back(new RenderTexture(path.c_str(), textureType));
 			// Get the index of the recently-pushed texture since the mesh depends on it.
 			vec.push_back(TextureMap.size() - 1);
 		}
@@ -145,9 +152,9 @@ void RenderObject::LoadDefaultMesh()
 	
 }
 
-void RenderObject::Draw(GLuint program)
+void RenderObject::Draw()
 {
-	glUseProgram(program);
+	glUseProgram(shaderProgram->ID());
 
 	// Apply transformation
 	// Consider changing order of effects
@@ -162,15 +169,23 @@ void RenderObject::Draw(GLuint program)
 	transform = glm::rotate(transform, glm::radians(Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Model"), 1, GL_FALSE, &transform[0][0]);
 
-	glUniformMatrix4fv(glGetUniformLocation(program, "transform.Model"), 1, GL_FALSE, &transform[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.View"), 1,
+		GL_FALSE, &scene->ActiveCamera->ViewMatrix()[0][0]);
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Perspective"), 1,
+		GL_FALSE, &scene->ActiveCamera->PerspectiveMatrix()[0][0]);
+
+
 
 	glUseProgram(0);
 
 	for(auto& mesh : meshes)
 	{
-		mesh.Draw(program, &TextureMap);
+		mesh.Draw(shaderProgram, TextureMap);
 	}
+
 }
 
 
