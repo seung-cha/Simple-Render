@@ -1,6 +1,7 @@
 # Simple Render
 Real time 3D objects visualisation tool using OpenGL  
 ![preview](readme_imgs/preview.png)  
+Model by [Francesco Coldesina](https://sketchfab.com/3d-models/gibson-from-rickgreeve-cee58deadaa44425bbb4bf8f0ec46b44)
 
 
 ## List of Classes
