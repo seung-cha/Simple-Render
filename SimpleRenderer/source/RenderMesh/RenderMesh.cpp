@@ -139,13 +139,11 @@ void RenderMesh::Draw(RenderShaderProgram* program, std::vector<RenderTexture*> 
 
 
 		glActiveTexture(GL_TEXTURE0 + globalTexID);
-		glUniform1f(glGetUniformLocation(program->ID(), location.c_str()), globalTexID++);
-		glBindTexture(GL_TEXTURE_2D, texture->ID());
-		
+		glUniform1i(glGetUniformLocation(program->ID(), location.c_str()), globalTexID++);
+		glBindTexture(GL_TEXTURE_2D, texture->ID());		
 
 	}
 
-	//cout << glGetError() << endl;
 	//char log[512];
 	//glGetProgramInfoLog(program->ID(), 512, 0, log);
 	//cout << log << endl;
