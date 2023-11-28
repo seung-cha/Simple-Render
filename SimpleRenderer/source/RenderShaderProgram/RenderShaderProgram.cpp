@@ -55,4 +55,6 @@ void RenderShaderProgram::AttachShader(RenderShader* shader)
 	shaders[type] = shader;
 	glAttachShader(programID, shaders[type]->ID());
 
+	cout << "Attached a " << RenderShader::ShaderTypeToString(shader->Type()) << " shader" << endl << endl;
+
 }

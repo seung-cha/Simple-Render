@@ -27,6 +27,7 @@ void RenderShader::ShaderSource(std::string path)
 	this->path = path;
 
 	const char* src = FileReader::ReadFile(path.c_str());
+
 	// Free the source if it already exists
 	if(source)
 	{
@@ -75,11 +76,11 @@ bool RenderShader::CompileShader()
 	cout << "Compiling Shader: " << endl;
 	cout << path << endl;
 
-	if(state == ShaderState::ShaderCompiled)
-	{
-		cout << "Shader is already compiled" << endl;
-		return true;
-	}
+	//if(state == ShaderState::ShaderCompiled)
+	//{
+	//	cout << "Shader is already compiled" << endl;
+	//	return true;
+	//}
 
 	glCompileShader(shaderID);
 

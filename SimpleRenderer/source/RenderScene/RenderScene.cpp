@@ -4,11 +4,24 @@
 
 
 using namespace SimpleRender;
+using namespace std;
+
+RenderScene::RenderScene()
+{
+	SceneObjects = new vector<RenderObject*>();
+	SceneCameras = new vector<RenderCamera*>();
+
+	SceneVertexShaders = new vector<RenderShader*>();
+	SceneFragmentShaders = new vector<RenderShader*>();
+	SceneGeometryShaders = new vector<RenderShader*>();
+
+	SceneShaderPrograms = new vector<RenderShaderProgram*>();
+}
 
 void RenderScene::DrawScene()
 {
 
-	for(auto& object : SceneObjects)
+	for(auto& object : *SceneObjects)
 	{
 		object->Draw();
 	}
@@ -16,23 +29,23 @@ void RenderScene::DrawScene()
 
 void RenderScene::LoadDefaultScene()
 {
-	SceneVertexShaders.push_back(new RenderShader(ShaderType::Vertex, "shaders/debug/debug.vert"));
-	SceneFragmentShaders.push_back(new RenderShader(ShaderType::Fragment, "shaders/debug/debug.frag"));
+	SceneVertexShaders->push_back(new RenderShader(ShaderType::Vertex, "shaders/debug/debug.vert"));
+	SceneFragmentShaders->push_back(new RenderShader(ShaderType::Fragment, "shaders/debug/debug.frag"));
 
-	SceneShaderPrograms.push_back(new RenderShaderProgram());
+	SceneShaderPrograms->push_back(new RenderShaderProgram());
 
-	RenderShaderProgram* prog = SceneShaderPrograms[0];
+	RenderShaderProgram* prog = (*SceneShaderPrograms)[0];
 
-	prog->AttachShader(SceneVertexShaders[0]);
-	prog->AttachShader(SceneFragmentShaders[0]);
+	prog->AttachShader((*SceneVertexShaders)[0]);
+	prog->AttachShader((*SceneFragmentShaders)[0]);
 
 	prog->LinkProgram();
 
-	SceneObjects.push_back(new RenderObject(this, SceneShaderPrograms[0], ""));
-	ActiveObject = SceneObjects[0];
+	SceneObjects->push_back(new RenderObject(this, (*SceneShaderPrograms)[0], ""));
+	ActiveObject = (*SceneObjects)[0];
 
-	SceneCameras.push_back(new RenderCamera());
-	ActiveCamera = SceneCameras[0];
+	SceneCameras->push_back(new RenderCamera());
+	ActiveCamera = (*SceneCameras)[0];
 
 
 

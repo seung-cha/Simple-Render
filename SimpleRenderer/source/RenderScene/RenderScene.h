@@ -19,6 +19,7 @@ namespace SimpleRender
 	class RenderScene
 	{
 	public:
+		RenderScene();
 		void LoadDefaultScene();
 
 		void DrawScene();
@@ -34,7 +35,7 @@ namespace SimpleRender
 		}
 
 
-		inline std::vector<RenderShader*> GetShadersOfType(enum ShaderType type)
+		inline std::vector<RenderShader*>* GetShadersOfType(enum ShaderType type)
 		{
 			if(type == ShaderType::Vertex)
 				return SceneVertexShaders;
@@ -44,17 +45,17 @@ namespace SimpleRender
 				return SceneGeometryShaders;
 		}
 
-		std::vector<RenderObject*> SceneObjects;
-		std::vector<RenderCamera*> SceneCameras;
+		std::vector<RenderObject*>* SceneObjects;
+		std::vector<RenderCamera*>* SceneCameras;
 
-		std::vector<RenderShader*> SceneVertexShaders;
-		std::vector<RenderShader*> SceneFragmentShaders;
-		std::vector<RenderShader*> SceneGeometryShaders;
+		std::vector<RenderShader*>* SceneVertexShaders;
+		std::vector<RenderShader*>* SceneFragmentShaders;
+		std::vector<RenderShader*>* SceneGeometryShaders;
 
-		std::vector<RenderShaderProgram*> SceneShaderPrograms;
+		std::vector<RenderShaderProgram*>* SceneShaderPrograms;
 		
-		RenderCamera* ActiveCamera;
-		RenderObject* ActiveObject;
+		RenderCamera* ActiveCamera = nullptr;
+		RenderObject* ActiveObject = nullptr;
 
 	private:
 

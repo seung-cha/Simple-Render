@@ -102,15 +102,15 @@ int main()
 	ImGui_ImplOpenGL3_Init("#version 330 core");
 
 	// Scene
-	SimpleRender::RenderScene scene;
-	scene.LoadDefaultScene();
+	SimpleRender::RenderScene* scene = new SimpleRender::RenderScene();
+	scene->LoadDefaultScene();
 
 	// UI widgets
 	std::vector<SimpleRenderUI::RenderUI*> renderUIs;
-	renderUIs.push_back(new SimpleRenderUI::BackgroundUI("Background", &scene));
-	renderUIs.push_back(new SimpleRenderUI::CameraUI("Camera", &scene));
-	renderUIs.push_back(new SimpleRenderUI::ObjectUI("Object", &scene));
-	renderUIs.push_back(new SimpleRenderUI::ShaderUI("Shader", &scene));
+	renderUIs.push_back(new SimpleRenderUI::BackgroundUI("Background", scene));
+	renderUIs.push_back(new SimpleRenderUI::CameraUI("Camera", scene));
+	renderUIs.push_back(new SimpleRenderUI::ObjectUI("Object", scene));
+	renderUIs.push_back(new SimpleRenderUI::ShaderUI("Shader", scene));
 
 
 
@@ -124,7 +124,7 @@ int main()
 
 
 
-		scene.DrawScene();
+		scene->DrawScene();
 
 		
 
@@ -170,7 +170,8 @@ int main()
 		delete(ui);
 	}
 
-	scene.Dispose();
+	scene->Dispose();
+	delete(scene);
 
 
 	std::cout << "Hello World!!" << std::endl;

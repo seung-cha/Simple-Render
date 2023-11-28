@@ -145,6 +145,11 @@ void RenderMesh::Draw(RenderShaderProgram* program, std::vector<RenderTexture*> 
 
 	}
 
+	//cout << glGetError() << endl;
+	//char log[512];
+	//glGetProgramInfoLog(program->ID(), 512, 0, log);
+	//cout << log << endl;
+
 	glBindVertexArray(vertexArray);
 
 	glDrawElements(GL_TRIANGLES, elementIndices.size(), GL_UNSIGNED_INT, 0);

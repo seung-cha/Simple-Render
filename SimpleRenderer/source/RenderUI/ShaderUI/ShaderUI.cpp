@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "FileReader/FileReader.h"
 
 
 using namespace SimpleRenderUI;
@@ -44,25 +45,39 @@ void ShaderUI::UpdateWidget()
 void ShaderUI::ShadersWidget(enum ShaderType type)
 {
 	string title = RenderShader::ShaderTypeToString(type);
-	vector<RenderShader*> shaders = scene->GetShadersOfType(type);
+	vector<RenderShader*>* shaders = scene->GetShadersOfType(type);
 
 	ImGui::SeparatorText(title.c_str());
 
-	for(int i = 0; i < shaders.size(); i++)
+	for(int i = 0; i < shaders->size(); i++)
 	{
+
 		ostringstream s;
 		s << title << i;
 		if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
 		{
-			if(selectedShader == shaders[i])
+			if(selectedShader == (*shaders)[i])
 				selectedShader = nullptr;
 			else
-				selectedShader = shaders[i];
+				selectedShader = (*shaders)[i];
 
 			cout << "Pressed" << endl;
 		}
 
+		ImGui::SameLine();
 	}
+
+	// button to create a new shader
+	ostringstream s;
+	s << "New " << title;
+	if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
+	{
+		vector<RenderShader*>* vec = scene->GetShadersOfType(type);
+		vec->push_back(new RenderShader(type));
+
+		std::cout << scene->GetShadersOfType(type)->size() << endl;
+	}
+
 }
 
 void ShaderUI::FocusedShaderDetails()
@@ -95,6 +110,11 @@ void ShaderUI::FocusedShaderDetails()
 		ImGui::Text("This shader is compiled.");
 	}
 
+	if(ImGui::Button("Replace source"))
+	{
+		selectedShader->ShaderSource(FileReader::OpenFileDialogue());
+		selectedShader->CompileShader();
+	}
 
 
 	ImGui::EndChild();
@@ -106,7 +126,7 @@ void ShaderUI::ShaderProgramsWidget()
 {
 	ImGui::SeparatorText("Shader Program");
 
-	for(unsigned int i = 0; i < scene->SceneShaderPrograms.size(); i++)
+	for(unsigned int i = 0; i < scene->SceneShaderPrograms->size(); i++)
 	{
 		ostringstream stream;
 		stream << "Program" << i;
@@ -114,10 +134,10 @@ void ShaderUI::ShaderProgramsWidget()
 		if(ImGui::Button(stream.str().c_str(), ImVec2(64.0f, 64.0f)))
 		{
 			// Deselect if the same item is pressed.
-			if(selectedShaderProgram == scene->SceneShaderPrograms[i])
+			if(selectedShaderProgram == (*scene->SceneShaderPrograms)[i])
 				selectedShaderProgram = nullptr;
 			else
-				selectedShaderProgram = scene->SceneShaderPrograms[i];
+				selectedShaderProgram = (*scene->SceneShaderPrograms)[i];
 		}
 
 	}
@@ -148,6 +168,15 @@ void ShaderUI::FocusedShaderProgramDetails()
 	ImGui::Text("Geometry: ");
 	ImGui::SameLine();
 	ImGui::Text(selectedShaderProgram->IsShaderAttached(ShaderType::Geometry) ? "O" : "X");
+
+	if(selectedShader)
+	{
+		if(ImGui::Button("Replace shader with the selected one"))
+		{
+			selectedShaderProgram->AttachShader(selectedShader);
+			selectedShaderProgram->LinkProgram();
+		}
+	}
 
 	ImGui::PopStyleColor();
 	ImGui::EndChild();
