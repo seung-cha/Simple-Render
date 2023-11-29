@@ -56,6 +56,8 @@ namespace SimpleRender
 		
 		RenderCamera* ActiveCamera = nullptr;
 		RenderObject* ActiveObject = nullptr;
+		RenderShaderProgram* ActiveShaderProgram = nullptr;
+		RenderShader* ActiveShader = nullptr;
 
 	private:
 

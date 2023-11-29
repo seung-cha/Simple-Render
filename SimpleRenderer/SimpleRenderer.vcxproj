@@ -38,6 +38,7 @@
     <ClCompile Include="source\RenderTexture\RenderTexture.cpp" />
     <ClCompile Include="source\RenderUI\BackgroundUI\BackgroundUI.cpp" />
     <ClCompile Include="source\RenderUI\CameraUI\CameraUI.cpp" />
+    <ClCompile Include="source\RenderUI\HierarchyUI\HierarchyUI.cpp" />
     <ClCompile Include="source\RenderUI\ObjectUI\ObjectUI.cpp" />
     <ClCompile Include="source\RenderUI\ShaderUI\ShaderUI.cpp" />
   </ItemGroup>
@@ -60,6 +61,7 @@
     <ClInclude Include="source\RenderTexture\RenderTexture.h" />
     <ClInclude Include="source\RenderUI\BackgroundUI\BackgroundUI.h" />
     <ClInclude Include="source\RenderUI\CameraUI\CameraUI.h" />
+    <ClInclude Include="source\RenderUI\HierarchyUI\HierarchyUI.h" />
     <ClInclude Include="source\RenderUI\ObjectUI\ObjectUI.h" />
     <ClInclude Include="source\RenderUI\RenderUI.h" />
     <ClInclude Include="source\RenderUI\ShaderUI\ShaderUI.h" />

@@ -18,9 +18,9 @@ namespace SimpleRenderUI
 
 		}
 
-		virtual void UpdateWidget();
+		virtual void UpdateWidget() override;
 
-		virtual inline void ReflectUpdate()
+		virtual inline void ReflectUpdate() override
 		{
 			glClearColor(background.r, background.g, background.b, 1.0f);
 		}

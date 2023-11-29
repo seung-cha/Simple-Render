@@ -87,6 +87,9 @@
     <ClCompile Include="source\RenderUI\ShaderUI\ShaderUI.cpp">
       <Filter>Source Files\RenderUI</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderUI\HierarchyUI\HierarchyUI.cpp">
+      <Filter>Source Files\RenderUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="source\RenderScene\RenderScene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderUI\HierarchyUI\HierarchyUI.h">
+      <Filter>Header Files\RenderUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

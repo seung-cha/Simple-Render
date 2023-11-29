@@ -12,10 +12,10 @@ namespace SimpleRenderUI
 
 		}
 
-		virtual void UpdateWidget();
+		virtual void UpdateWidget() override;
 		
 
-		virtual inline void ReflectUpdate()
+		virtual inline void ReflectUpdate() override
 		{
 
 		}
@@ -25,8 +25,8 @@ namespace SimpleRenderUI
 		void ShaderProgramsWidget();
 		void FocusedShaderDetails();
 		void FocusedShaderProgramDetails();
-		SimpleRender::RenderShader* selectedShader = nullptr;
-		SimpleRender::RenderShaderProgram* selectedShaderProgram = nullptr;
+
+
 
 
 

@@ -7,7 +7,9 @@ using namespace SimpleRenderUI;
 using namespace SimpleRender;
 using namespace std;
 
-
+// 
+//	Add null check later
+//
 void ObjectUI::UpdateWidget()
 {
 
@@ -26,6 +28,14 @@ void ObjectUI::UpdateWidget()
 	if(selectedTexture)
 	{
 		FocusedTextureDetails();
+	}
+
+	if(scene->ActiveShaderProgram && scene->ActiveShaderProgram->State() == ShaderProgramState::ShaderProgramLinked)
+	{
+		if(ImGui::Button("Change Shader Program"))
+		{
+			object->ReplaceShaderProgram(scene->ActiveShaderProgram);
+		}
 	}
 
 

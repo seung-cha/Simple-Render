@@ -13,11 +13,11 @@ namespace SimpleRenderUI
 			selectedTexture = nullptr; 
 		}
 
-		virtual void UpdateWidget();
+		virtual void UpdateWidget() override;
 
-		virtual inline void ReflectUpdate()
+		virtual inline void ReflectUpdate() override
 		{
-
+			this->object = scene->ActiveObject;
 		}
 
 	private:

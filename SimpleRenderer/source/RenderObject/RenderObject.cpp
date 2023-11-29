@@ -52,6 +52,7 @@ void RenderObject::LoadMesh(const std::string path)
 	{
 		cerr << "Import was unsuccessful: " << endl;
 		cerr << importer.GetErrorString() << endl << endl;
+		LoadDefaultMesh();
 		return;
 	}
 

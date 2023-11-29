@@ -20,6 +20,7 @@
 #include "RenderUI/CameraUI/CameraUI.h"
 #include "RenderUI/ObjectUI/ObjectUI.h"
 #include "RenderUI/ShaderUI/ShaderUI.h"
+#include "RenderUI/HierarchyUI/HierarchyUI.h"
 
 
 
@@ -111,6 +112,7 @@ int main()
 	renderUIs.push_back(new SimpleRenderUI::CameraUI("Camera", scene));
 	renderUIs.push_back(new SimpleRenderUI::ObjectUI("Object", scene));
 	renderUIs.push_back(new SimpleRenderUI::ShaderUI("Shader", scene));
+	renderUIs.push_back(new SimpleRenderUI::HierarchyUI("Scene Hierarchy", scene));
 
 
 

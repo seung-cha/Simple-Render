@@ -15,8 +15,8 @@ void ShaderUI::UpdateWidget()
 
 	if(ImGui::IsWindowAppearing())
 	{
-		selectedShader = nullptr;
-		selectedShaderProgram = nullptr;
+		scene->ActiveShader = nullptr;
+		scene->ActiveShader = nullptr;
 	}
 
 	ShaderProgramsWidget();
@@ -26,12 +26,12 @@ void ShaderUI::UpdateWidget()
 	ShadersWidget(ShaderType::Geometry);
 
 
-	if(selectedShader)
+	if(scene->ActiveShader)
 	{
 		FocusedShaderDetails();
 	}
 
-	if(selectedShaderProgram)
+	if(scene->ActiveShaderProgram)
 	{
 		FocusedShaderProgramDetails();
 	}
@@ -56,10 +56,10 @@ void ShaderUI::ShadersWidget(enum ShaderType type)
 		s << title << i;
 		if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
 		{
-			if(selectedShader == (*shaders)[i])
-				selectedShader = nullptr;
+			if(scene->ActiveShader == (*shaders)[i])
+				scene->ActiveShader = nullptr;
 			else
-				selectedShader = (*shaders)[i];
+				scene->ActiveShader = (*shaders)[i];
 
 			cout << "Pressed" << endl;
 		}
@@ -70,6 +70,7 @@ void ShaderUI::ShadersWidget(enum ShaderType type)
 	// button to create a new shader
 	ostringstream s;
 	s << "New " << title;
+
 	if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
 	{
 		vector<RenderShader*>* vec = scene->GetShadersOfType(type);
@@ -87,21 +88,21 @@ void ShaderUI::FocusedShaderDetails()
 
 	ImGui::Text("Type: ");
 	ImGui::SameLine();
-	ImGui::Text(RenderShader::ShaderTypeToString(selectedShader->Type()).c_str());
+	ImGui::Text(RenderShader::ShaderTypeToString(scene->ActiveShader->Type()).c_str());
 
 	ImGui::Text("Path: ");
 	ImGui::SameLine();
-	ImGui::Text(selectedShader->Path().c_str());
+	ImGui::Text(scene->ActiveShader->Path().c_str());
 
 	ImGui::Text("Source: ");
-	ImGui::Text(selectedShader->Source() ? selectedShader->Source() : "This shader does not have a source.");
+	ImGui::Text(scene->ActiveShader->Source() ? scene->ActiveShader->Source() : "This shader does not have a source.");
 
-	if(selectedShader->State() == ShaderState::ShaderNew)
+	if(scene->ActiveShader->State() == ShaderState::ShaderNew)
 	{
 		ImGui::Text("This shader is newly created.");
 	}
 
-	else if(selectedShader->State() == ShaderState::ShaderError)
+	else if(scene->ActiveShader->State() == ShaderState::ShaderError)
 	{
 		ImGui::Text("This shader contains errors.");
 	}
@@ -112,8 +113,8 @@ void ShaderUI::FocusedShaderDetails()
 
 	if(ImGui::Button("Replace source"))
 	{
-		selectedShader->ShaderSource(FileReader::OpenFileDialogue());
-		selectedShader->CompileShader();
+		scene->ActiveShader->ShaderSource(FileReader::OpenFileDialogue());
+		scene->ActiveShader->CompileShader();
 	}
 
 
@@ -134,11 +135,19 @@ void ShaderUI::ShaderProgramsWidget()
 		if(ImGui::Button(stream.str().c_str(), ImVec2(64.0f, 64.0f)))
 		{
 			// Deselect if the same item is pressed.
-			if(selectedShaderProgram == (*scene->SceneShaderPrograms)[i])
-				selectedShaderProgram = nullptr;
+			if(scene->ActiveShaderProgram == (*scene->SceneShaderPrograms)[i])
+				scene->ActiveShaderProgram = nullptr;
 			else
-				selectedShaderProgram = (*scene->SceneShaderPrograms)[i];
+				scene->ActiveShaderProgram = (*scene->SceneShaderPrograms)[i];
 		}
+
+		ImGui::SameLine();
+	}
+
+	if(ImGui::Button("New Program", ImVec2(64.0f, 64.0f)))
+	{
+		vector<RenderShaderProgram*>* vec = scene->SceneShaderPrograms;
+		vec->push_back(new RenderShaderProgram());
 
 	}
 
@@ -149,7 +158,7 @@ void ShaderUI::FocusedShaderProgramDetails()
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
 	ImGui::BeginChild("ShaderProgramDetails", ImVec2(ImGui::GetContentRegionAvail().x, 320.0f));
 
-	string stateStr = RenderShaderProgram::ShaderProgramStateToString(selectedShaderProgram->State());
+	string stateStr = RenderShaderProgram::ShaderProgramStateToString(scene->ActiveShaderProgram->State());
 
 	ImGui::Text("State: ");
 	ImGui::SameLine();
@@ -159,22 +168,22 @@ void ShaderUI::FocusedShaderProgramDetails()
 
 	ImGui::Text("Vertex: ");
 	ImGui::SameLine();
-	ImGui::Text(selectedShaderProgram->IsShaderAttached(ShaderType::Vertex) ? "O" : "X");
+	ImGui::Text(scene->ActiveShaderProgram->IsShaderAttached(ShaderType::Vertex) ? "O" : "X");
 
 	ImGui::Text("Fragment: ");
 	ImGui::SameLine();
-	ImGui::Text(selectedShaderProgram->IsShaderAttached(ShaderType::Fragment) ? "O" : "X");
+	ImGui::Text(scene->ActiveShaderProgram->IsShaderAttached(ShaderType::Fragment) ? "O" : "X");
 
 	ImGui::Text("Geometry: ");
 	ImGui::SameLine();
-	ImGui::Text(selectedShaderProgram->IsShaderAttached(ShaderType::Geometry) ? "O" : "X");
+	ImGui::Text(scene->ActiveShaderProgram->IsShaderAttached(ShaderType::Geometry) ? "O" : "X");
 
-	if(selectedShader)
+	if(scene->ActiveShader)
 	{
 		if(ImGui::Button("Replace shader with the selected one"))
 		{
-			selectedShaderProgram->AttachShader(selectedShader);
-			selectedShaderProgram->LinkProgram();
+			scene->ActiveShaderProgram->AttachShader(scene->ActiveShader);
+			scene->ActiveShaderProgram->LinkProgram();
 		}
 	}
 

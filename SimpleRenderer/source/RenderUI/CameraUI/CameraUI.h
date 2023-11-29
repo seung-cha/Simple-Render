@@ -17,10 +17,10 @@ namespace SimpleRenderUI
 			fov = cam->FOV();
 		}
 
-		virtual void UpdateWidget();
+		virtual void UpdateWidget() override;
 		
 
-		virtual inline void ReflectUpdate()
+		virtual inline void ReflectUpdate() override
 		{
 			cam->SetFOV(fov);
 
