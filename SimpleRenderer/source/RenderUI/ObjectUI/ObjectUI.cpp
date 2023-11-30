@@ -13,7 +13,12 @@ using namespace std;
 void ObjectUI::UpdateWidget()
 {
 
+	if(!scene->ActiveObject)
+		return;
+
 	ImGui::Begin(title.c_str());
+
+
 
 	if(ImGui::IsWindowAppearing())
 	{
@@ -34,10 +39,24 @@ void ObjectUI::UpdateWidget()
 	{
 		if(ImGui::Button("Change Shader Program"))
 		{
-			object->ReplaceShaderProgram(scene->ActiveShaderProgram);
+			scene->ActiveObject->ReplaceShaderProgram(scene->ActiveShaderProgram);
 		}
 	}
 
+	if(ImGui::Button("DELETE THIS OBJECT"))
+	{
+		for(unsigned int i = 0; i < scene->SceneObjects->size(); i++)
+		{
+			if(scene->ActiveObject == (*scene->SceneObjects)[i])
+			{
+				scene->SceneObjects->erase(scene->SceneObjects->begin() + i);
+				break;
+			}
+		}
+
+		scene->ActiveObject->Dispose();
+		scene->ActiveObject = nullptr;
+	}
 
 
 	ImGui::End();
@@ -49,9 +68,9 @@ void ObjectUI::TransformWidget()
 	// Render Object Transformation
 	ImGui::SeparatorText("Transform");
 
-	ImGui::DragFloat3("Position", &object->Position[0], 0.5f);
-	ImGui::DragFloat3("Rotation", &object->Rotation[0], 0.5f);
-	ImGui::DragFloat3("Scale", &object->Scale[0], 0.01f);
+	ImGui::DragFloat3("Position", &scene->ActiveObject->Position[0], 0.5f);
+	ImGui::DragFloat3("Rotation", &scene->ActiveObject->Rotation[0], 0.5f);
+	ImGui::DragFloat3("Scale", &scene->ActiveObject->Scale[0], 0.01f);
 }
 
 void ObjectUI::TextureWidget()
@@ -70,7 +89,7 @@ void ObjectUI::TextureWidget()
 
 void ObjectUI::TextureTable(enum TextureType type)
 {
-	vector<RenderTexture*> textures = object->TextureMapOfType(type);
+	vector<RenderTexture*> textures = scene->ActiveObject->TextureMapOfType(type);
 
 	ImGui::BeginGroup();
 	for(RenderTexture* texture : textures)

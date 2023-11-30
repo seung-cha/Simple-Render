@@ -9,7 +9,6 @@ namespace SimpleRenderUI
 	public:
 		ObjectUI(std::string title, SimpleRender::RenderScene* scene) : RenderUI(title, scene)
 		{
-			this->object = scene->ActiveObject;
 			selectedTexture = nullptr; 
 		}
 
@@ -17,7 +16,6 @@ namespace SimpleRenderUI
 
 		virtual inline void ReflectUpdate() override
 		{
-			this->object = scene->ActiveObject;
 		}
 
 	private:
@@ -26,7 +24,6 @@ namespace SimpleRenderUI
 		void FocusedTextureDetails();
 		void TextureTable(enum SimpleRender::TextureType type);
 
-		SimpleRender::RenderObject* object;
 		SimpleRender::RenderTexture* selectedTexture;
 
 		ImVec2 textureButtonSize = ImVec2(64, 64);

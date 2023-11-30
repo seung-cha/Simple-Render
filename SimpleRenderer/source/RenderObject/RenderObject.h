@@ -5,6 +5,7 @@
 #include "RenderTexture/RenderTexture.h"
 #include "RenderShaderProgram/RenderShaderProgram.h"
 #include "RenderMesh/RenderMesh.h"
+#include "RenderPure/Disposable.h"
 
 #include <glm/glm.hpp>
 #include <assimp/Importer.hpp>
@@ -18,7 +19,7 @@ namespace SimpleRender
 {
 	class RenderScene;
 
-	class RenderObject
+	class RenderObject : SimpleRenderPure::Disposable
 	{
 	public:
 		RenderObject(RenderScene* scene, RenderShaderProgram* program, const std::string path = "");
@@ -29,12 +30,12 @@ namespace SimpleRender
 		glm::vec3 Position;
 		glm::vec3 Rotation;
 		glm::vec3 Scale;
-		std::vector<RenderTexture*> TextureMap;
+		std::vector<RenderTexture*>* TextureMap = &textures;
 
 		inline std::vector<RenderTexture*> TextureMapOfType(enum TextureType type)
 		{
 			std::vector<RenderTexture*> tex;
-			for(RenderTexture* texture : TextureMap)
+			for(RenderTexture* texture : textures)
 			{
 				if(texture->Type() == type)
 					tex.push_back(texture);
@@ -63,8 +64,23 @@ namespace SimpleRender
 			}
 		}
 
+
+		inline void Dispose() override
+		{
+			for(auto& texture : textures)
+			{
+				texture->Dispose();
+			}
+
+			for(auto& mesh : meshes)
+			{
+				mesh.Dispose();
+			}
+		}
+
 	private:
 		std::vector<RenderMesh> meshes;
+		std::vector<RenderTexture*> textures;
 		RenderScene* scene;
 		RenderShaderProgram* shaderProgram;
 		

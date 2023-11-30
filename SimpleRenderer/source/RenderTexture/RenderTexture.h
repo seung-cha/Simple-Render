@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+#include "RenderPure/Disposable.h"
+
 namespace SimpleRender
 {
 	// Number of supporting textures.
@@ -22,7 +24,7 @@ namespace SimpleRender
 		Ready
 	};
 
-	class RenderTexture
+	class RenderTexture : public SimpleRenderPure::Disposable
 	{
 	private:
 		GLuint id;
@@ -71,6 +73,11 @@ namespace SimpleRender
 				return "Diffuse";
 			else if(type == TextureType::Specular)
 				return "Specular";
+		}
+
+		void Dispose() override
+		{
+			glDeleteTextures(1, &id);
 		}
 
 

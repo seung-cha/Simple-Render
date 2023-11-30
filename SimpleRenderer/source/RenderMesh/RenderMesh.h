@@ -6,6 +6,7 @@
 
 #include "RenderVertex/RenderVertex.h"
 #include "RenderTexture/RenderTexture.h"
+#include "RenderPure/Disposable.h"
 
 
 
@@ -22,7 +23,7 @@ namespace SimpleRender
 	};
 
 
-	class RenderMesh
+	class RenderMesh : SimpleRenderPure::Disposable
 	{
 	public:
 		/// <summary>
@@ -33,7 +34,13 @@ namespace SimpleRender
 		/// <param name="textureIndices">texture slots to use, mapped onto the texture vector in the object class</param>
 		RenderMesh(const aiScene* scene, const aiMesh* mesh, const std::vector<unsigned int> textureIndices);
 		~RenderMesh();
-		void Draw(RenderShaderProgram* program, std::vector<RenderTexture*> textureMap);
+		void Draw(RenderShaderProgram* program, std::vector<RenderTexture*>* textureMap);
+
+		void Dispose() override
+		{
+			glDeleteBuffers(BufferType::LEN, buffers);
+			glDeleteVertexArrays(1, &vertexArray);
+		}
 
 	private:
 		/// <summary>
