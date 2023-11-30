@@ -10,6 +10,7 @@ using namespace std;
 
 RenderTexture::RenderTexture(const char* path, const TextureType type)
 {
+	// To do:
 	// Gotta find a place  to put this.
 	stbi_set_flip_vertically_on_load(true);
 

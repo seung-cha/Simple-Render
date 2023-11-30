@@ -50,7 +50,27 @@ namespace SimpleRender
 		/// <param name="program"></param>
 		inline void ReplaceShaderProgram(RenderShaderProgram* program)
 		{
+			if(shaderProgram)
+			{
+				shaderProgram->AssociatedObjects->erase(this);
+			}
+
 			shaderProgram = program;
+
+			if(shaderProgram)
+			{
+				shaderProgram->AssociatedObjects->insert(this);
+			}
+		}
+
+		/// <summary>
+		/// assign nullptr to the shader program
+		/// Does not erase its reference in the shader program class.
+		/// Call this when disposing of a shader program
+		/// </summary>
+		inline void RemoveShaderProgram()
+		{
+			shaderProgram = nullptr;
 		}
 
 

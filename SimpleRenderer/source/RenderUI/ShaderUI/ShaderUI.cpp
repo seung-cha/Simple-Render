@@ -187,6 +187,24 @@ void ShaderUI::FocusedShaderProgramDetails()
 		}
 	}
 
+	if(ImGui::Button("DELETE THIS SHADER"))
+	{
+		scene->ActiveShaderProgram->Dispose();
+
+		for(unsigned int i = 0; i < scene->SceneShaderPrograms->size(); i++)
+		{
+			if(scene->ActiveShaderProgram == (*scene->SceneShaderPrograms)[i])
+			{
+				scene->SceneShaderPrograms->erase(scene->SceneShaderPrograms->begin() + i);
+				break;
+			}
+		}
+
+
+		delete scene->ActiveShaderProgram;
+		scene->ActiveShaderProgram = nullptr;
+	}
+
 	ImGui::PopStyleColor();
 	ImGui::EndChild();
 }

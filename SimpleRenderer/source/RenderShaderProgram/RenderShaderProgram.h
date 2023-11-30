@@ -4,9 +4,16 @@
 #include <glad/glad.h>
 #include "RenderShader/RenderShader.h"
 
+#include "RenderPure/Disposable.h"
 
-namespace SimpleRender
+#include <iostream>
+#include <unordered_set>
+
+namespace SimpleRender 
 {
+
+	class RenderObject;
+
 	enum ShaderProgramState
 	{
 		ShaderProgramNew,
@@ -14,13 +21,49 @@ namespace SimpleRender
 		ShaderProgramError
 	};
 
-	class RenderShaderProgram
+	class RenderShaderProgram : public SimpleRenderPure::Disposable
 	{
 	public:
 
 		RenderShaderProgram();
 
-		void AttachShader(RenderShader* shader);
+		inline void AttachShader(RenderShader* shader)
+		{
+			GLenum type = shader->Type();
+
+			// Detach the shader from the program if exists
+			if(shaders[type])
+			{
+				glDetachShader(programID, shaders[type]->ID());
+			}
+
+
+			shaders[type] = shader;
+			glAttachShader(programID, shaders[type]->ID());
+
+			std::cout << "Attached a " << RenderShader::ShaderTypeToString(shader->Type()) << " shader" << std::endl << std::endl;
+
+		}
+
+		inline void DetachShader(enum ShaderType type)
+		{
+			if(shaders[type])
+			{
+				glDetachShader(programID, shaders[type]->ID());
+				shaders[type] = nullptr;
+			}
+
+		}
+
+		inline void DetachAllShaders()
+		{
+			for(int i = 0; i < 3; i++)
+			{
+				if(shaders[i])
+					DetachShader(shaders[i]->Type());
+			}
+
+		}
 
 		void LinkProgram();
 
@@ -34,7 +77,15 @@ namespace SimpleRender
 			return shaders[index];
 		}
 
-
+		std::unordered_set<RenderObject*>* AssociatedObjects = &associatedObjects;
+		
+		/// <summary>
+		/// Delete the shader program.
+		/// This object practically becomes useless.
+		/// All objects that use this shader must not use it after calling this function.
+		/// Attached shaders are automatically detached by OpenGL.
+		/// </summary>
+		virtual void Dispose() override;
 
 		inline GLuint ID()
 		{
@@ -60,6 +111,8 @@ namespace SimpleRender
 		
 	private:
 
+
+		std::unordered_set<RenderObject*> associatedObjects;
 
 		enum ShaderProgramState state = ShaderProgramNew;
 		GLuint programID;

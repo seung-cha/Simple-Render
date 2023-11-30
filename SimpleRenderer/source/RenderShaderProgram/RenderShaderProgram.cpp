@@ -1,5 +1,6 @@
 #include "RenderShaderProgram.h"
 #include <iostream>
+#include "RenderObject/RenderObject.h"
 
 
 using namespace SimpleRender;
@@ -40,21 +41,12 @@ void RenderShaderProgram::LinkProgram()
 
 }
 
-
-void RenderShaderProgram::AttachShader(RenderShader* shader)
+void RenderShaderProgram::Dispose()
 {
-	GLenum type = shader->Type();
-
-	// Detach the shader from the program if exists
-	if(shaders[type])
+	for(auto& object : associatedObjects)
 	{
-		glDetachShader(programID, shaders[type]->ID());
+		object->RemoveShaderProgram();
 	}
-
-
-	shaders[type] = shader;
-	glAttachShader(programID, shaders[type]->ID());
-
-	cout << "Attached a " << RenderShader::ShaderTypeToString(shader->Type()) << " shader" << endl << endl;
-
+	glDeleteProgram(programID);
 }
+

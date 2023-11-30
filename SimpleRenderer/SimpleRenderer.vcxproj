@@ -52,6 +52,7 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="source\FileReader\FileReader.h" />
+    <ClInclude Include="source\Pure\Disposable.h" />
     <ClInclude Include="source\RenderCamera\RenderCamera.h" />
     <ClInclude Include="source\RenderMesh\RenderMesh.h" />
     <ClInclude Include="source\RenderObject\RenderObject.h" />

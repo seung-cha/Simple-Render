@@ -22,6 +22,9 @@
     <Filter Include="Source Files\RenderUI">
       <UniqueIdentifier>{de72f788-6866-4231-bc47-175a70d9d79a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Interface">
+      <UniqueIdentifier>{8a698359-3113-4e0f-9b44-62707c0bc855}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="source\RenderUI\HierarchyUI\HierarchyUI.h">
       <Filter>Header Files\RenderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Pure\Disposable.h">
+      <Filter>Header Files\Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

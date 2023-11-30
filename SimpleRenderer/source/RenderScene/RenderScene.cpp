@@ -8,14 +8,7 @@ using namespace std;
 
 RenderScene::RenderScene()
 {
-	SceneObjects = new vector<RenderObject*>();
-	SceneCameras = new vector<RenderCamera*>();
 
-	SceneVertexShaders = new vector<RenderShader*>();
-	SceneFragmentShaders = new vector<RenderShader*>();
-	SceneGeometryShaders = new vector<RenderShader*>();
-
-	SceneShaderPrograms = new vector<RenderShaderProgram*>();
 }
 
 void RenderScene::DrawScene()
@@ -48,7 +41,4 @@ void RenderScene::LoadDefaultScene()
 	ActiveCamera = (*SceneCameras)[0];
 
 
-
-
-	
 }

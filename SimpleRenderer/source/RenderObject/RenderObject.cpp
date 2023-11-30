@@ -15,6 +15,8 @@ RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, con
 {
 
 	shaderProgram = program;
+	shaderProgram->AssociatedObjects->insert(this);
+
 	this->scene = scene;
 
 	Position = glm::vec3(0.0f);
@@ -155,6 +157,11 @@ void RenderObject::LoadDefaultMesh()
 
 void RenderObject::Draw()
 {
+	//Do not draw if the shader program is invalid.
+	if(!shaderProgram)
+		return;
+
+
 	glUseProgram(shaderProgram->ID());
 
 	// Apply transformation

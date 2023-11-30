@@ -46,3 +46,8 @@ To avoid circular dependency and share objects across multiple classes, Render o
 * FileReader: Helper class to read files
 
 
+
+## To do
+* Consider using a different data structure for Render elements in RenderScene. Deletion is inconvenient and costly
+* Find a place to shove in stbi_set_flip_vertically_on_load in RenderTexture
+* Understand and how OpenFileName works and customise it

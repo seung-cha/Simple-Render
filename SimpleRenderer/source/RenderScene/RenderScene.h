@@ -9,6 +9,7 @@
 #include "RenderShader/RenderShader.h"
 #include "RenderCamera/RenderCamera.h"
 
+// To do: Consider using different data structure for Scene elements
 
 namespace SimpleRender
 {
@@ -45,14 +46,14 @@ namespace SimpleRender
 				return SceneGeometryShaders;
 		}
 
-		std::vector<RenderObject*>* SceneObjects;
-		std::vector<RenderCamera*>* SceneCameras;
+		std::vector<RenderObject*>* SceneObjects = &objects;
+		std::vector<RenderCamera*>* SceneCameras = &cameras;
 
-		std::vector<RenderShader*>* SceneVertexShaders;
-		std::vector<RenderShader*>* SceneFragmentShaders;
-		std::vector<RenderShader*>* SceneGeometryShaders;
+		std::vector<RenderShader*>* SceneVertexShaders = &vertexShaders;
+		std::vector<RenderShader*>* SceneFragmentShaders = &fragmentShaders;
+		std::vector<RenderShader*>* SceneGeometryShaders = &geometryShaders;
 
-		std::vector<RenderShaderProgram*>* SceneShaderPrograms;
+		std::vector<RenderShaderProgram*>* SceneShaderPrograms = &shaderPrograms;
 		
 		RenderCamera* ActiveCamera = nullptr;
 		RenderObject* ActiveObject = nullptr;
@@ -60,7 +61,14 @@ namespace SimpleRender
 		RenderShader* ActiveShader = nullptr;
 
 	private:
+		std::vector<RenderObject*> objects;
+		std::vector<RenderCamera*> cameras;
 
+		std::vector<RenderShader*> vertexShaders;
+		std::vector<RenderShader*> fragmentShaders;
+		std::vector<RenderShader*> geometryShaders;
+
+		std::vector<RenderShaderProgram*> shaderPrograms;
 	};
 
 
