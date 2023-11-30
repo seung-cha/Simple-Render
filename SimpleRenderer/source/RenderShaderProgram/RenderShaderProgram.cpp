@@ -43,10 +43,23 @@ void RenderShaderProgram::LinkProgram()
 
 void RenderShaderProgram::Dispose()
 {
-	for(auto& object : associatedObjects)
+	auto copy = associatedObjects;
+
+	for(auto& object : copy)
 	{
-		object->RemoveShaderProgram();
+		object->ReplaceShaderProgram(nullptr);
 	}
+
+	for(int i = 0; i < 3; i++)
+	{
+		if(shaders[i])
+		{
+			shaders[i]->ParentShaderPrograms->erase(this);
+		}
+	}
+
+	
+
 	glDeleteProgram(programID);
 }
 

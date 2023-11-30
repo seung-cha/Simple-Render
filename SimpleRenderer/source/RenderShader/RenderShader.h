@@ -2,9 +2,13 @@
 
 #include <glad/glad.h>
 #include <string>
+#include "RenderPure/Disposable.h"
+#include <unordered_set>
 
 namespace SimpleRender
 {
+	class RenderShaderProgram;
+
 	enum ShaderType
 	{
 		Vertex,
@@ -19,7 +23,7 @@ namespace SimpleRender
 		ShaderError
 	};
 
-	class RenderShader
+	class RenderShader : public SimpleRenderPure::Disposable
 	{
 
 
@@ -63,12 +67,15 @@ namespace SimpleRender
 				return "Geometry";
 		}
 
-
 		void ShaderSource(std::string path);
+
+		virtual void Dispose() override;
+
+		std::unordered_set<RenderShaderProgram*>* ParentShaderPrograms = &shaderPrograms;
 
 	private:
 		void CreateShader();
-
+		std::unordered_set<RenderShaderProgram*> shaderPrograms;
 
 		const char* source = nullptr;
 		std::string path;

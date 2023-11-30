@@ -1,6 +1,7 @@
 #include "RenderShader.h"
 #include <iostream>
 #include "FileReader/FileReader.h"
+#include "RenderShaderProgram/RenderShaderProgram.h"
 
 using namespace SimpleRender;
 using namespace std;
@@ -105,6 +106,19 @@ bool RenderShader::CompileShader()
 	cerr << log << endl;
 	return false;
 
+}
+
+void RenderShader::Dispose()
+{
+	auto copy = shaderPrograms;
+
+	for(auto& program : copy)
+	{
+		program->DetachShader(type);
+	}
+
+	free((void*)source);
+	glDeleteShader(shaderID);
 }
 
 

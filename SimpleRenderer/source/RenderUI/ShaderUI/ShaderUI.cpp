@@ -117,6 +117,24 @@ void ShaderUI::FocusedShaderDetails()
 		scene->ActiveShader->CompileShader();
 	}
 
+	if(ImGui::Button("DELETE THIS SHADER"))
+	{
+		vector<RenderShader*>* shaders = scene->GetShadersOfType(scene->ActiveShader->Type());
+		for(unsigned int i = 0; i < shaders->size(); i++)
+		{
+			if(scene->ActiveShader == (*shaders)[i])
+			{
+				shaders->erase(shaders->begin() + i);
+				break;
+			}
+		}
+
+
+		scene->ActiveShader->Dispose();
+		delete scene->ActiveShader;
+		scene->ActiveShader = nullptr;
+	}
+
 
 	ImGui::EndChild();
 	ImGui::PopStyleColor();
@@ -187,7 +205,7 @@ void ShaderUI::FocusedShaderProgramDetails()
 		}
 	}
 
-	if(ImGui::Button("DELETE THIS SHADER"))
+	if(ImGui::Button("DELETE THIS PROGRAM"))
 	{
 		scene->ActiveShaderProgram->Dispose();
 

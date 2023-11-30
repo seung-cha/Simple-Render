@@ -63,17 +63,6 @@ namespace SimpleRender
 			}
 		}
 
-		/// <summary>
-		/// assign nullptr to the shader program
-		/// Does not erase its reference in the shader program class.
-		/// Call this when disposing of a shader program
-		/// </summary>
-		inline void RemoveShaderProgram()
-		{
-			shaderProgram = nullptr;
-		}
-
-
 	private:
 		std::vector<RenderMesh> meshes;
 		RenderScene* scene;

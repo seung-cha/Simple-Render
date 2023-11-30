@@ -35,10 +35,12 @@ namespace SimpleRender
 			if(shaders[type])
 			{
 				glDetachShader(programID, shaders[type]->ID());
+				shaders[type]->ParentShaderPrograms->erase(this);
 			}
 
 
 			shaders[type] = shader;
+			shaders[type]->ParentShaderPrograms->insert(this);
 			glAttachShader(programID, shaders[type]->ID());
 
 			std::cout << "Attached a " << RenderShader::ShaderTypeToString(shader->Type()) << " shader" << std::endl << std::endl;
@@ -50,6 +52,7 @@ namespace SimpleRender
 			if(shaders[type])
 			{
 				glDetachShader(programID, shaders[type]->ID());
+				shaders[type]->ParentShaderPrograms->erase(this);
 				shaders[type] = nullptr;
 			}
 
@@ -86,6 +89,7 @@ namespace SimpleRender
 		/// Attached shaders are automatically detached by OpenGL.
 		/// </summary>
 		virtual void Dispose() override;
+
 
 		inline GLuint ID()
 		{
