@@ -129,7 +129,7 @@ int main()
 
 		scene->DrawScene();
 
-		
+		//glfwGetWindowAttrib(window,GLFW_MINI )
 
 	
 

@@ -16,7 +16,6 @@ void ScreenUI::UpdateWidget()
 
 	ImGui::Begin(title.c_str(), 0,  ImGuiWindowFlags_NoScrollbar);
 
-
 	ImVec2 s = ImGui::GetWindowSize();
 	ImGui::Image((ImTextureID)(*scene->SceneTexture), s, { 0, 1 }, {1, 0});
 	
