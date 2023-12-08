@@ -138,6 +138,17 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		const ImGuiViewport* v = ImGui::GetMainViewport();
+
+		ImGui::SetNextWindowSize(v->WorkSize);
+		ImGui::SetNextWindowPos(v->WorkPos);
+
+		ImGui::Begin("Window", 0, ImGuiWindowFlags_NoTitleBar);
+
+		ImGuiID id = ImGui::GetID("DockSpace");
+		ImGui::DockSpace(id);
+
+		ImGui::End();
 
 		// Draw UIs
 		for(auto& ui : renderUIs)
