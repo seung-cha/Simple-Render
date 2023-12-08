@@ -21,6 +21,7 @@
 #include "RenderUI/ObjectUI/ObjectUI.h"
 #include "RenderUI/ShaderUI/ShaderUI.h"
 #include "RenderUI/HierarchyUI/HierarchyUI.h"
+#include "RenderUI/ScreenUI/ScreenUI.h"
 
 
 
@@ -37,6 +38,7 @@ int main()
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
 	
 	GLFWwindow* window = glfwCreateWindow(width, height, title.c_str(), 0, 0);
@@ -97,13 +99,13 @@ int main()
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330 core");
 
 	// Scene
-	SimpleRender::RenderScene* scene = new SimpleRender::RenderScene();
+	SimpleRender::RenderScene* scene = new SimpleRender::RenderScene(width, height);
 	scene->LoadDefaultScene();
 
 	// UI widgets
@@ -113,12 +115,11 @@ int main()
 	renderUIs.push_back(new SimpleRenderUI::ObjectUI("Object", scene));
 	renderUIs.push_back(new SimpleRenderUI::ShaderUI("Shader", scene));
 	renderUIs.push_back(new SimpleRenderUI::HierarchyUI("Scene Hierarchy", scene));
-
+	renderUIs.push_back(new SimpleRenderUI::ScreenUI("Screen View", scene));
 
 
 	while(!glfwWindowShouldClose(window))
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Quit window
 		if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -137,6 +138,7 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+
 		// Draw UIs
 		for(auto& ui : renderUIs)
 		{
@@ -144,7 +146,7 @@ int main()
 			ui->ReflectUpdate();
 		}
 
-		ImGui::End();
+		
 
 
 		ImGui::Render();

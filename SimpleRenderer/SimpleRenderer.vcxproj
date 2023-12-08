@@ -40,6 +40,7 @@
     <ClCompile Include="source\RenderUI\CameraUI\CameraUI.cpp" />
     <ClCompile Include="source\RenderUI\HierarchyUI\HierarchyUI.cpp" />
     <ClCompile Include="source\RenderUI\ObjectUI\ObjectUI.cpp" />
+    <ClCompile Include="source\RenderUI\ScreenUI\ScreenUI.cpp" />
     <ClCompile Include="source\RenderUI\ShaderUI\ShaderUI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +66,7 @@
     <ClInclude Include="source\RenderUI\HierarchyUI\HierarchyUI.h" />
     <ClInclude Include="source\RenderUI\ObjectUI\ObjectUI.h" />
     <ClInclude Include="source\RenderUI\RenderUI.h" />
+    <ClInclude Include="source\RenderUI\ScreenUI\ScreenUI.h" />
     <ClInclude Include="source\RenderUI\ShaderUI\ShaderUI.h" />
     <ClInclude Include="source\RenderVertex\RenderVertex.h" />
   </ItemGroup>

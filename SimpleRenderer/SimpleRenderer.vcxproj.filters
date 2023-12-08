@@ -93,6 +93,9 @@
     <ClCompile Include="source\RenderUI\HierarchyUI\HierarchyUI.cpp">
       <Filter>Source Files\RenderUI</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderUI\ScreenUI\ScreenUI.cpp">
+      <Filter>Source Files\RenderUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="source\Pure\Disposable.h">
       <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderUI\ScreenUI\ScreenUI.h">
+      <Filter>Header Files\RenderUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

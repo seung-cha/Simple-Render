@@ -20,7 +20,7 @@ namespace SimpleRender
 	class RenderScene
 	{
 	public:
-		RenderScene();
+		RenderScene(int width, int height);
 		void LoadDefaultScene();
 
 		void DrawScene();
@@ -60,7 +60,16 @@ namespace SimpleRender
 		RenderShaderProgram* ActiveShaderProgram = nullptr;
 		RenderShader* ActiveShader = nullptr;
 
+		GLuint* SceneFrameBuffer = &framebuffer;
+		GLuint* SceneTexture = &screenTexture;
+
+		int* Width = &width;
+		int* Height = &height;
+
 	private:
+
+		int width, height;
+
 		std::vector<RenderObject*> objects;
 		std::vector<RenderCamera*> cameras;
 
@@ -69,6 +78,9 @@ namespace SimpleRender
 		std::vector<RenderShader*> geometryShaders;
 
 		std::vector<RenderShaderProgram*> shaderPrograms;
+
+		GLuint framebuffer = 0;
+		GLuint screenTexture = 0;
 	};
 
 
