@@ -51,3 +51,5 @@ To avoid circular dependency and share objects across multiple classes, Render o
 * Consider using a different data structure for Render elements in RenderScene. Deletion is inconvenient and costly
 * Find a place to shove in stbi_set_flip_vertically_on_load in RenderTexture
 * Understand and how OpenFileName works and customise it
+* Fix a bug where the program crashes when minimised
+* Update UI objects so that they can communicate to one another.
