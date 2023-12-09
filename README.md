@@ -1,6 +1,6 @@
 # Simple Render
 Real time 3D objects visualisation tool using OpenGL  
-![preview](readme_imgs/preview.png)  
+![preview](readme_imgs/preview1.jpg)  
 Model by [Francesco Coldesina](https://sketchfab.com/3d-models/gibson-from-rickgreeve-cee58deadaa44425bbb4bf8f0ec46b44)
 
 
@@ -53,3 +53,4 @@ To avoid circular dependency and share objects across multiple classes, Render o
 * Understand and how OpenFileName works and customise it
 * Fix a bug where the program crashes when minimised
 * Update UI objects so that they can communicate to one another.
+* Centralise inputs and refactor the camera class

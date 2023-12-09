@@ -26,7 +26,10 @@
 
 
 void OnWindowResized(GLFWwindow* window, int width, int height);
+void OnMousePosChanged(GLFWwindow* window, double x, double y);
+void OnKeyPressed(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+SimpleRender::RenderScene* scene;
 
 int main()
 {
@@ -51,7 +54,11 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
+
 	glfwSetWindowSizeCallback(window, OnWindowResized);
+	glfwSetKeyCallback(window, OnKeyPressed);
+	glfwSetCursorPosCallback(window, OnMousePosChanged);
+
 
 
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -105,7 +112,7 @@ int main()
 	ImGui_ImplOpenGL3_Init("#version 330 core");
 
 	// Scene
-	SimpleRender::RenderScene* scene = new SimpleRender::RenderScene(width, height);
+	scene = new SimpleRender::RenderScene(width, height);
 	scene->LoadDefaultScene();
 
 	// UI widgets
@@ -128,6 +135,9 @@ int main()
 
 
 		scene->DrawScene();
+
+		scene->ActiveCamera->Update();
+		scene->ActiveCamera->Input(window);
 
 		//glfwGetWindowAttrib(window,GLFW_MINI )
 
@@ -204,4 +214,18 @@ int main()
 void OnWindowResized(GLFWwindow* window, int width, int height)
 {
 	//glViewport(0, 0, width, height);
+}
+
+void OnMousePosChanged(GLFWwindow* window, double x, double y)
+{
+	scene->ActiveCamera->MouseInput(x, y);
+
+}
+
+void OnKeyPressed(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if(key == GLFW_KEY_C && action == GLFW_PRESS)
+	{
+		scene->ActiveCamera->ToggleFocus(window);
+	}
 }
