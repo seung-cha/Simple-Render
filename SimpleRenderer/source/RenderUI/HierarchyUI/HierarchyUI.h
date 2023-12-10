@@ -8,7 +8,7 @@ namespace SimpleRenderUI
 	class HierarchyUI : public RenderUI
 	{
 	public:
-		HierarchyUI(std::string title, SimpleRender::RenderScene* scene);
+		HierarchyUI(SimpleRender::RenderScene* scene, std::string title="Scene Hierarchy");
 
 
 

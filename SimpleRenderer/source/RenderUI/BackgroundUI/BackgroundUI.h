@@ -10,13 +10,8 @@ namespace SimpleRenderUI
 	class BackgroundUI : public RenderUI
 	{
 	public:
-		inline BackgroundUI(std::string title, SimpleRender::RenderScene* scene) : RenderUI(title, scene)
-		{
-			background = glm::vec3(0.54f, 0.7f, 0.12f);
+		BackgroundUI(SimpleRender::RenderScene* scene, std::string title = "Background");
 
-			colourFlags = 0;
-
-		}
 
 		virtual void UpdateWidget() override;
 

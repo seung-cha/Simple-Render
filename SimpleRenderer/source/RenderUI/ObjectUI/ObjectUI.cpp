@@ -7,6 +7,12 @@ using namespace SimpleRenderUI;
 using namespace SimpleRender;
 using namespace std;
 
+ObjectUI::ObjectUI(SimpleRender::RenderScene* scene, std::string title): RenderUI(title, scene)
+{
+	selectedTexture = nullptr;
+}
+
+
 // 
 //	Add null check later
 //

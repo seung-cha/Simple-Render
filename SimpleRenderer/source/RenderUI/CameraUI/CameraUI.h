@@ -11,11 +11,8 @@ namespace SimpleRenderUI
 	class CameraUI : public RenderUI
 	{
 	public:
-		inline CameraUI(std::string title, SimpleRender::RenderScene* scene) : RenderUI(title, scene)
-		{
-			this->cam = scene->ActiveCamera;
-			fov = cam->FOV();
-		}
+		CameraUI(SimpleRender::RenderScene* scene, std::string title = "Camera");
+
 
 		virtual void UpdateWidget() override;
 		

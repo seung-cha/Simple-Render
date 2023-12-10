@@ -9,7 +9,7 @@ using namespace SimpleRender;
 using namespace std;
 
 
-HierarchyUI::HierarchyUI(string title, RenderScene* scene) : RenderUI(title, scene)
+HierarchyUI::HierarchyUI(RenderScene* scene, string title) : RenderUI(title, scene)
 {
 	
 }

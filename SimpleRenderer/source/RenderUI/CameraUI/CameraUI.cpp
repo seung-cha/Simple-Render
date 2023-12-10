@@ -4,6 +4,11 @@
 
 using namespace SimpleRenderUI;
 
+CameraUI::CameraUI(SimpleRender::RenderScene* scene, std::string title) : RenderUI(title, scene)
+{
+	this->cam = scene->ActiveCamera;
+	fov = cam->FOV();
+}
 
 void CameraUI::UpdateWidget()
 {

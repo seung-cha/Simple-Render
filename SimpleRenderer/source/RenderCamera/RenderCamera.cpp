@@ -43,7 +43,6 @@ void RenderCamera::ToggleFocus(GLFWwindow* window)
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	else
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
 }
 
 void RenderCamera::MouseInput(double x, double y)

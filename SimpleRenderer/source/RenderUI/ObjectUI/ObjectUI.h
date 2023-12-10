@@ -7,10 +7,8 @@ namespace SimpleRenderUI
 	class ObjectUI : public RenderUI
 	{
 	public:
-		ObjectUI(std::string title, SimpleRender::RenderScene* scene) : RenderUI(title, scene)
-		{
-			selectedTexture = nullptr; 
-		}
+		ObjectUI(SimpleRender::RenderScene* scene, std::string title = "Objects");
+
 
 		virtual void UpdateWidget() override;
 

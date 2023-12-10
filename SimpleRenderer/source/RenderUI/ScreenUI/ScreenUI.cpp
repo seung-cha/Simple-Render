@@ -2,7 +2,7 @@
 
 using namespace SimpleRenderUI; 
 
-ScreenUI::ScreenUI(std::string title, SimpleRender::RenderScene* scene) : RenderUI(title, scene)
+ScreenUI::ScreenUI(SimpleRender::RenderScene* scene, std::string title) : RenderUI(title, scene)
 {
 }
 

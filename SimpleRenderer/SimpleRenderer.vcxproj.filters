@@ -96,6 +96,9 @@
     <ClCompile Include="source\RenderUI\ScreenUI\ScreenUI.cpp">
       <Filter>Source Files\RenderUI</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderApplication\RenderApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="source\RenderUI\ScreenUI\ScreenUI.h">
       <Filter>Header Files\RenderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderApplication\RenderApplication.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

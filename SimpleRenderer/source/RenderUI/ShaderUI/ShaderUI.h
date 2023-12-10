@@ -7,10 +7,7 @@ namespace SimpleRenderUI
 	class ShaderUI : public RenderUI
 	{
 	public:
-		ShaderUI(std::string title, SimpleRender::RenderScene* scene) : RenderUI(title, scene)
-		{
-
-		}
+		ShaderUI(SimpleRender::RenderScene* scene, std::string title = "Shaders");
 
 		virtual void UpdateWidget() override;
 		

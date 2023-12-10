@@ -22,6 +22,7 @@
 #include "RenderUI/ShaderUI/ShaderUI.h"
 #include "RenderUI/HierarchyUI/HierarchyUI.h"
 #include "RenderUI/ScreenUI/ScreenUI.h"
+#include "RenderApplication/RenderApplication.h"
 
 
 
@@ -33,7 +34,6 @@ SimpleRender::RenderScene* scene;
 
 int main()
 {
-
 	int width = 1920;
 	int height = 1080;
 	std::string title = "Simple Renderer";
@@ -43,7 +43,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
-	
+
 	GLFWwindow* window = glfwCreateWindow(width, height, title.c_str(), 0, 0);
 
 	if(!window)
@@ -117,12 +117,12 @@ int main()
 
 	// UI widgets
 	std::vector<SimpleRenderUI::RenderUI*> renderUIs;
-	renderUIs.push_back(new SimpleRenderUI::BackgroundUI("Background", scene));
-	renderUIs.push_back(new SimpleRenderUI::CameraUI("Camera", scene));
-	renderUIs.push_back(new SimpleRenderUI::ObjectUI("Object", scene));
-	renderUIs.push_back(new SimpleRenderUI::ShaderUI("Shader", scene));
-	renderUIs.push_back(new SimpleRenderUI::HierarchyUI("Scene Hierarchy", scene));
-	renderUIs.push_back(new SimpleRenderUI::ScreenUI("Screen View", scene));
+	renderUIs.push_back(new SimpleRenderUI::BackgroundUI(scene));
+	renderUIs.push_back(new SimpleRenderUI::CameraUI(scene));
+	renderUIs.push_back(new SimpleRenderUI::ObjectUI(scene));
+	renderUIs.push_back(new SimpleRenderUI::ShaderUI(scene));
+	renderUIs.push_back(new SimpleRenderUI::HierarchyUI(scene));
+	renderUIs.push_back(new SimpleRenderUI::ScreenUI(scene));
 
 
 	while(!glfwWindowShouldClose(window))

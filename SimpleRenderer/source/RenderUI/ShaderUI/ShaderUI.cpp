@@ -9,6 +9,12 @@ using namespace SimpleRenderUI;
 using namespace SimpleRender;
 using namespace std;
 
+
+ShaderUI::ShaderUI(SimpleRender::RenderScene* scene, std::string title) : RenderUI(title, scene)
+{
+
+}
+
 void ShaderUI::UpdateWidget()
 {
 	ImGui::Begin(title.c_str());

@@ -12,11 +12,11 @@ namespace SimpleRenderUI
 	class RenderUI
 	{
 	public:
-		inline RenderUI(std::string title, SimpleRender::RenderScene* scene)
+		RenderUI(std::string title, SimpleRender::RenderScene* scene) : title{ title }, scene{scene}
 		{
-			this->title = title;
-			this->scene = scene;
 		}
+
+		virtual ~RenderUI() {};
 
 		/// <summary>
 		/// Update the UI, receiving input but not applying them
