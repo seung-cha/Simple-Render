@@ -1,5 +1,6 @@
 #include "RenderScene.h"
 #include "RenderObject/RenderObject.h"
+#include "RenderApplication/RenderApplication.h"
 
 #include "imgui.h"
 
@@ -7,7 +8,7 @@
 using namespace SimpleRender;
 using namespace std;
 
-RenderScene::RenderScene(int width, int height)
+RenderScene::RenderScene(RenderApplication* application)
 {
 	// initialise a frame buffer
 	glGenFramebuffers(1, &framebuffer);
@@ -16,7 +17,7 @@ RenderScene::RenderScene(int width, int height)
 	glGenTextures(1, &screenTexture);
 	glBindTexture(GL_TEXTURE_2D, screenTexture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, application->Status->Width, application->Status->Height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -25,7 +26,7 @@ RenderScene::RenderScene(int width, int height)
 	GLuint renderBuffer;
 	glGenRenderbuffers(1, &renderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, application->Status->Width, application->Status->Height);
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
 
@@ -42,8 +43,7 @@ RenderScene::RenderScene(int width, int height)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
-	this->width = width;
-	this->height = height;
+	this->application = application;
 
 }
 

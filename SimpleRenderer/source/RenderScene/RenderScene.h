@@ -15,12 +15,13 @@ namespace SimpleRender
 {
 	// Forward declare all classes
 	class RenderObject;
+	class RenderApplication;
 
 
 	class RenderScene
 	{
 	public:
-		RenderScene(int width, int height);
+		RenderScene(RenderApplication* application);
 		void LoadDefaultScene();
 
 		void DrawScene();
@@ -63,12 +64,13 @@ namespace SimpleRender
 		GLuint* SceneFrameBuffer = &framebuffer;
 		GLuint* SceneTexture = &screenTexture;
 
-		int* Width = &width;
-		int* Height = &height;
+		
+		const RenderApplication* Application = application;
+
 
 	private:
-
-		int width, height;
+		RenderApplication* application;
+		
 
 		std::vector<RenderObject*> objects;
 		std::vector<RenderCamera*> cameras;
