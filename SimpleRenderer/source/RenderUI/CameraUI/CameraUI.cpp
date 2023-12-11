@@ -1,12 +1,14 @@
 #include "CameraUI.h"
 
+#include "RenderApplication/RenderApplication.h"
+#include "RenderScene/RenderScene.h"
 
 
 using namespace SimpleRenderUI;
 
-CameraUI::CameraUI(SimpleRender::RenderScene* scene, std::string title) : RenderUI(title, scene)
+CameraUI::CameraUI(SimpleRender::RenderApplication* application, std::string title) : RenderUI(title, application)
 {
-	this->cam = scene->ActiveCamera;
+	this->cam = application->Scene->ActiveCamera;
 	fov = cam->FOV();
 }
 

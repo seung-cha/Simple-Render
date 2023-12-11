@@ -1,13 +1,13 @@
 #pragma once
 #include "RenderUI/RenderUI.h"
-
+#include "RenderShader/RenderShader.h"
 
 namespace SimpleRenderUI
 {
 	class ShaderUI : public RenderUI
 	{
 	public:
-		ShaderUI(SimpleRender::RenderScene* scene, std::string title = "Shaders");
+		ShaderUI(SimpleRender::RenderApplication* application, std::string title = "Shaders");
 
 		virtual void UpdateWidget() override;
 		

@@ -4,15 +4,19 @@
 #include <string>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include <RenderScene/RenderScene.h>
 
+
+namespace SimpleRender
+{
+	class RenderApplication;
+}
 
 namespace SimpleRenderUI
 {
 	class RenderUI
 	{
 	public:
-		RenderUI(std::string title, SimpleRender::RenderScene* scene) : title{ title }, scene{scene}
+		RenderUI(std::string title, SimpleRender::RenderApplication* application) : title{ title }, application{ application }
 		{
 		}
 
@@ -29,7 +33,7 @@ namespace SimpleRenderUI
 
 	protected:
 		std::string title;
-		SimpleRender::RenderScene* scene;
+		SimpleRender::RenderApplication* application;
 		
 	};
 

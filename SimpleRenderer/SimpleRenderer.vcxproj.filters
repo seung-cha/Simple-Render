@@ -99,6 +99,9 @@
     <ClCompile Include="source\RenderApplication\RenderApplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderCamera\Viewport\RenderViewportCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -177,6 +180,9 @@
       <Filter>Header Files\RenderUI</Filter>
     </ClInclude>
     <ClInclude Include="source\RenderApplication\RenderApplication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderCamera\Viewport\RenderViewportCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

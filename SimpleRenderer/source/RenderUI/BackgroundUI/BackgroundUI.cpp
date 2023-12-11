@@ -5,7 +5,7 @@
 using namespace SimpleRenderUI;
 
 
-BackgroundUI::BackgroundUI(SimpleRender::RenderScene* scene, std::string title) : RenderUI(title, scene)
+BackgroundUI::BackgroundUI(SimpleRender::RenderApplication* application, std::string title) : RenderUI(title, application)
 {
 	background = glm::vec3(0.54f, 0.7f, 0.12f);
 	colourFlags = 0;

@@ -11,7 +11,7 @@ namespace SimpleRenderUI
 	class CameraUI : public RenderUI
 	{
 	public:
-		CameraUI(SimpleRender::RenderScene* scene, std::string title = "Camera");
+		CameraUI(SimpleRender::RenderApplication* application, std::string title = "Camera");
 
 
 		virtual void UpdateWidget() override;

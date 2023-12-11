@@ -10,7 +10,7 @@ namespace SimpleRenderUI
 	class BackgroundUI : public RenderUI
 	{
 	public:
-		BackgroundUI(SimpleRender::RenderScene* scene, std::string title = "Background");
+		BackgroundUI(SimpleRender::RenderApplication* application, std::string title = "Background");
 
 
 		virtual void UpdateWidget() override;

@@ -3,13 +3,16 @@
 #include "FileReader/FileReader.h"
 #include "RenderObject/RenderObject.h"
 
+#include "RenderApplication/RenderApplication.h"
+#include "RenderScene/RenderScene.h"
+
 
 using namespace SimpleRenderUI;
 using namespace SimpleRender;
 using namespace std;
 
 
-HierarchyUI::HierarchyUI(RenderScene* scene, string title) : RenderUI(title, scene)
+HierarchyUI::HierarchyUI(RenderApplication* application, string title) : RenderUI(title, application)
 {
 	
 }
@@ -22,19 +25,19 @@ void HierarchyUI::UpdateWidget()
 	{
 		string path = FileReader::OpenFileDialogue();
 
-		RenderObject* obj = new RenderObject(scene, (*scene->SceneShaderPrograms)[0], path);
-		scene->SceneObjects->push_back(obj);
-		scene->ActiveObject = obj;
+		RenderObject* obj = new RenderObject(application->Scene, (*application->Scene->SceneShaderPrograms)[0], path);
+		application->Scene->SceneObjects->push_back(obj);
+		application->Scene->ActiveObject = obj;
 	}
 
-	for(unsigned int i = 0; i < scene->SceneObjects->size(); i++)
+	for(unsigned int i = 0; i < application->Scene->SceneObjects->size(); i++)
 	{
 		ostringstream s;
 		s << "Object" << i;
 
 		if(ImGui::Button(s.str().c_str()))
 		{
-			scene->ActiveObject = (*scene->SceneObjects)[i];
+			application->Scene->ActiveObject = (*application->Scene->SceneObjects)[i];
 		}
 
 

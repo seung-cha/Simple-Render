@@ -7,7 +7,7 @@ namespace SimpleRenderUI
 	class ObjectUI : public RenderUI
 	{
 	public:
-		ObjectUI(SimpleRender::RenderScene* scene, std::string title = "Objects");
+		ObjectUI(SimpleRender::RenderApplication* application, std::string title = "Objects");
 
 
 		virtual void UpdateWidget() override;

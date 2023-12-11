@@ -20,14 +20,14 @@ namespace SimpleRender
 		void MouseInput(double x, double y);
 		void ToggleFocus(GLFWwindow* window);
 
-		inline glm::mat4 ViewMatrix()
+		inline glm::mat4 ViewMatrix() const
 		{
 			return viewMat;
 		}
 
 
 
-		inline float FOV()
+		inline float FOV() const
 		{
 			return fov;
 		}
@@ -41,21 +41,12 @@ namespace SimpleRender
 			perspective = glm::perspective(glm::radians(fov), width / (float)height, 0.1f, 1000.0f);
 		}
 
-		inline glm::mat4 PerspectiveMatrix()
+		inline glm::mat4 PerspectiveMatrix() const
 		{
 			return perspective;
 		}
 
-	private:
-
-		inline void CalculateView()
-		{
-			viewMat = glm::lookAt(position, position + forward, up);
-		}
-
-		float speed = 1.5f;
-		float sens = 0.1f;
-		float fov;
+	protected:
 		glm::mat4 perspective;
 		glm::mat4 viewMat;
 
@@ -64,6 +55,18 @@ namespace SimpleRender
 		glm::vec3 forward;
 		glm::vec3 up;
 		glm::vec3 right;
+
+		inline void CalculateView()
+		{
+			viewMat = glm::lookAt(position, position + forward, up);
+		}
+
+
+	private:
+
+		float speed = 1.5f;
+		float sens = 0.1f;
+		float fov;
 
 		float roll = 0.0f;
 		float pitch = 0.0f;

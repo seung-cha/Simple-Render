@@ -21,7 +21,7 @@ namespace SimpleRender
 	class RenderScene
 	{
 	public:
-		RenderScene(RenderApplication* application);
+		RenderScene(SimpleRender::RenderApplication* application);
 		void LoadDefaultScene();
 
 		void DrawScene();

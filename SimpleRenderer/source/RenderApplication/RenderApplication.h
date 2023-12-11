@@ -69,8 +69,9 @@ namespace SimpleRender
 		/// <summary>
 		/// DO NOT WRITE TO THIS
 		/// </summary>
-		AppStatus* Status = &status;
+		AppStatus* const Status = &status;
 
+		RenderScene*& Scene = scene;
 
 
 	private:

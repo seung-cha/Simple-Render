@@ -1,13 +1,15 @@
 #include "ObjectUI.h"
 #include <vector>
-#include <FileReader/FileReader.h>
+#include "FileReader/FileReader.h"
 
+#include "RenderApplication/RenderApplication.h"
+#include "RenderScene/RenderScene.h"
 
 using namespace SimpleRenderUI;
 using namespace SimpleRender;
 using namespace std;
 
-ObjectUI::ObjectUI(SimpleRender::RenderScene* scene, std::string title): RenderUI(title, scene)
+ObjectUI::ObjectUI(SimpleRender::RenderApplication* application, std::string title): RenderUI(title, application)
 {
 	selectedTexture = nullptr;
 }
@@ -19,7 +21,7 @@ ObjectUI::ObjectUI(SimpleRender::RenderScene* scene, std::string title): RenderU
 void ObjectUI::UpdateWidget()
 {
 
-	if(!scene->ActiveObject)
+	if(!application->Scene->ActiveObject)
 		return;
 
 	ImGui::Begin(title.c_str());
@@ -41,27 +43,27 @@ void ObjectUI::UpdateWidget()
 		FocusedTextureDetails();
 	}
 
-	if(scene->ActiveShaderProgram && scene->ActiveShaderProgram->State() == ShaderProgramState::ShaderProgramLinked)
+	if(application->Scene->ActiveShaderProgram && application->Scene->ActiveShaderProgram->State() == ShaderProgramState::ShaderProgramLinked)
 	{
 		if(ImGui::Button("Change Shader Program"))
 		{
-			scene->ActiveObject->ReplaceShaderProgram(scene->ActiveShaderProgram);
+			application->Scene->ActiveObject->ReplaceShaderProgram(application->Scene->ActiveShaderProgram);
 		}
 	}
 
 	if(ImGui::Button("DELETE THIS OBJECT"))
 	{
-		for(unsigned int i = 0; i < scene->SceneObjects->size(); i++)
+		for(unsigned int i = 0; i < application->Scene->SceneObjects->size(); i++)
 		{
-			if(scene->ActiveObject == (*scene->SceneObjects)[i])
+			if(application->Scene->ActiveObject == (*application->Scene->SceneObjects)[i])
 			{
-				scene->SceneObjects->erase(scene->SceneObjects->begin() + i);
+				application->Scene->SceneObjects->erase(application->Scene->SceneObjects->begin() + i);
 				break;
 			}
 		}
 
-		scene->ActiveObject->Dispose();
-		scene->ActiveObject = nullptr;
+		application->Scene->ActiveObject->Dispose();
+		application->Scene->ActiveObject = nullptr;
 	}
 
 
@@ -74,9 +76,9 @@ void ObjectUI::TransformWidget()
 	// Render Object Transformation
 	ImGui::SeparatorText("Transform");
 
-	ImGui::DragFloat3("Position", &scene->ActiveObject->Position[0], 0.5f);
-	ImGui::DragFloat3("Rotation", &scene->ActiveObject->Rotation[0], 0.5f);
-	ImGui::DragFloat3("Scale", &scene->ActiveObject->Scale[0], 0.01f);
+	ImGui::DragFloat3("Position", &application->Scene->ActiveObject->Position[0], 0.5f);
+	ImGui::DragFloat3("Rotation", &application->Scene->ActiveObject->Rotation[0], 0.5f);
+	ImGui::DragFloat3("Scale", &application->Scene->ActiveObject->Scale[0], 0.01f);
 }
 
 void ObjectUI::TextureWidget()
@@ -95,7 +97,7 @@ void ObjectUI::TextureWidget()
 
 void ObjectUI::TextureTable(enum TextureType type)
 {
-	vector<RenderTexture*> textures = scene->ActiveObject->TextureMapOfType(type);
+	vector<RenderTexture*> textures = application->Scene->ActiveObject->TextureMapOfType(type);
 
 	ImGui::BeginGroup();
 	for(RenderTexture* texture : textures)

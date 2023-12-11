@@ -26,7 +26,7 @@ using namespace SimpleRenderUI;
 using namespace std;
 
 
-RenderApplication::RenderApplication()
+SimpleRender::RenderApplication::RenderApplication()
 {
 
 
@@ -94,12 +94,12 @@ RenderApplication::RenderApplication()
 
 
 	// Add Widgets
-	AddUI(new BackgroundUI(scene));
-	AddUI(new CameraUI(scene));
-	AddUI(new ObjectUI(scene));
-	AddUI(new ShaderUI(scene));
-	AddUI(new HierarchyUI(scene));
-	AddUI(new ScreenUI(scene));
+	AddUI(new BackgroundUI(this));
+	AddUI(new CameraUI(this));
+	AddUI(new ObjectUI(this));
+	AddUI(new ShaderUI(this));
+	AddUI(new HierarchyUI(this));
+	AddUI(new ScreenUI(this));
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -108,7 +108,7 @@ RenderApplication::RenderApplication()
 
 
 
-bool RenderApplication::Run()
+bool SimpleRender::RenderApplication::Run()
 {
 	if(!window || !scene || glfwWindowShouldClose(window))
 		return false;
@@ -129,7 +129,7 @@ bool RenderApplication::Run()
 	return true;
 }
 
-void RenderApplication::UpdateWidgets()
+void SimpleRender::RenderApplication::UpdateWidgets()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -157,14 +157,14 @@ void RenderApplication::UpdateWidgets()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void RenderApplication::AddUI(RenderUI* widget)
+void SimpleRender::RenderApplication::AddUI(RenderUI* widget)
 {
 	widgets.insert(widget);
 }
 
 
 
-void RenderApplication::Dispose()
+void SimpleRender::RenderApplication::Dispose()
 {
 	glfwTerminate();
 
