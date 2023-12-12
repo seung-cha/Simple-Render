@@ -7,10 +7,9 @@
 using namespace SimpleRenderUI; 
 using namespace std;
 
-ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string title) : RenderUI(title, application)
+ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string title) : RenderUI(title, application), camera(application)
 {
 	// Initialise the frame buffer for this viewport
-
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer); 
 

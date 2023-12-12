@@ -34,6 +34,9 @@
     <ClCompile Include="source\RenderCamera\Viewport\RenderViewportCamera.cpp" />
     <ClCompile Include="source\RenderMesh\RenderMesh.cpp" />
     <ClCompile Include="source\RenderObject\RenderObject.cpp" />
+    <ClCompile Include="source\RenderPure\ContiguousKeyInput.cpp" />
+    <ClCompile Include="source\RenderPure\DiscreteKeyInput.cpp" />
+    <ClCompile Include="source\RenderPure\MousePositionInput.cpp" />
     <ClCompile Include="source\RenderScene\RenderScene.cpp" />
     <ClCompile Include="source\RenderShaderProgram\RenderShaderProgram.cpp" />
     <ClCompile Include="source\RenderShader\RenderShader.cpp" />
@@ -55,12 +58,15 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="source\FileReader\FileReader.h" />
-    <ClInclude Include="source\Pure\Disposable.h" />
     <ClInclude Include="source\RenderApplication\RenderApplication.h" />
     <ClInclude Include="source\RenderCamera\RenderCamera.h" />
     <ClInclude Include="source\RenderCamera\Viewport\RenderViewportCamera.h" />
     <ClInclude Include="source\RenderMesh\RenderMesh.h" />
     <ClInclude Include="source\RenderObject\RenderObject.h" />
+    <ClInclude Include="source\RenderPure\ContiguousKeyInput.h" />
+    <ClInclude Include="source\RenderPure\DiscreteKeyInput.h" />
+    <ClInclude Include="source\RenderPure\Disposable.h" />
+    <ClInclude Include="source\RenderPure\MousePositionInput.h" />
     <ClInclude Include="source\RenderScene\RenderScene.h" />
     <ClInclude Include="source\RenderShaderProgram\RenderShaderProgram.h" />
     <ClInclude Include="source\RenderShader\RenderShader.h" />

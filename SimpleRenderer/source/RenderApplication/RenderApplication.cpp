@@ -16,6 +16,10 @@
 #include "RenderUI/HierarchyUI/HierarchyUI.h"
 #include "RenderUI/ScreenUI/ScreenUI.h"
 
+#include "RenderPure/ContiguousKeyInput.h"
+#include "RenderPure/DiscreteKeyInput.h"
+#include "RenderPure/MousePositionInput.h"
+
 
 #include <iostream>
 #include <functional>
@@ -54,10 +58,23 @@ SimpleRender::RenderApplication::RenderApplication()
 
 	auto resizeFunc = [](GLFWwindow* window, int x, int y)
 	{ 
-		cout << x << ", " << y << endl;
-		static_cast<RenderApplication*>(glfwGetWindowUserPointer(window))->Status->UpdateWindowSizeStatus(x, y);
+		RenderApplication* app = static_cast<RenderApplication*>(glfwGetWindowUserPointer(window));
+		app->Status->UpdateWindowSizeStatus(x, y);
 	};
 	glfwSetFramebufferSizeCallback(window, resizeFunc);
+
+
+	auto mousePosFunc = [](GLFWwindow* window, double x, double y)
+	{
+		RenderApplication* app = static_cast<RenderApplication*>(glfwGetWindowUserPointer(window));
+
+		for(auto& input : *app->MousePositionInputs)
+		{
+			input->OnMousePositionInput(x, y);
+		}
+	};
+
+	glfwSetCursorPosCallback(window, mousePosFunc);
 
 
 	auto keyFunc = [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -66,6 +83,15 @@ SimpleRender::RenderApplication::RenderApplication()
 		{
 			glfwSetWindowShouldClose(window, true);
 		}
+
+		RenderApplication* app = static_cast<RenderApplication*>(glfwGetWindowUserPointer(window));
+
+
+		for(auto& input : *app->DiscreteKeyInputs)
+		{
+			input->OnDiscreteKeyInput(key, scancode, action, mods);
+		}
+
 	};
 	glfwSetKeyCallback(window, keyFunc);
 
@@ -120,9 +146,12 @@ bool SimpleRender::RenderApplication::Run()
 		return true;
 	}
 
-	scene->DrawScene();
+
+	scene->DrawScene();		// Draw Scene (Will be removed)
 	
-	UpdateWidgets();
+	UpdateWidgets();		// Update widget
+
+	ProcessInput();			// Process key inputs
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
@@ -137,6 +166,7 @@ void SimpleRender::RenderApplication::UpdateWidgets()
 
 	
 	const ImGuiViewport* v = ImGui::GetMainViewport();
+
 
 	ImGui::SetNextWindowSize(v->WorkSize);
 	ImGui::SetNextWindowPos(v->WorkPos);
@@ -157,11 +187,22 @@ void SimpleRender::RenderApplication::UpdateWidgets()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void SimpleRender::RenderApplication::ProcessInput()
+{
+	for(auto& keys : contiguousKeyInputs)
+	{
+		keys->OnContiguousKeyInput();
+	}
+
+
+}
+
+
+
 void SimpleRender::RenderApplication::AddUI(RenderUI* widget)
 {
 	widgets.insert(widget);
 }
-
 
 
 void SimpleRender::RenderApplication::Dispose()
@@ -176,6 +217,39 @@ void SimpleRender::RenderApplication::Dispose()
 	scene->Dispose();
 	delete(scene);
 
+}
 
+void SimpleRender::RenderApplication::RegisterContiguousKeyInput(SimpleRenderPure::ContiguousKeyInput* keyInput)
+{
+	contiguousKeyInputs.insert(keyInput);
+}
+
+void SimpleRender::RenderApplication::UnregisterContiguousKeyInput(SimpleRenderPure::ContiguousKeyInput* keyInput)
+{
+	contiguousKeyInputs.erase(keyInput);
+}
+
+
+
+void SimpleRender::RenderApplication::RegisterDiscreteKeyInput(SimpleRenderPure::DiscreteKeyInput* keyInput)
+{
+	discreteKeyInputs.insert(keyInput);
+}
+
+
+
+void SimpleRender::RenderApplication::UnregisterDiscreteKeyInput(SimpleRenderPure::DiscreteKeyInput* keyInput)
+{
+	discreteKeyInputs.erase(keyInput);
+}
+
+void SimpleRender::RenderApplication::RegisterMousePositionInput(SimpleRenderPure::MousePositionInput* mouseInput)
+{
+	mousePositionInput.insert(mouseInput);
+}
+
+void SimpleRender::RenderApplication::UnregisterMousePositionInput(SimpleRenderPure::MousePositionInput* mouseInput)
+{
+	mousePositionInput.erase(mouseInput);
 
 }

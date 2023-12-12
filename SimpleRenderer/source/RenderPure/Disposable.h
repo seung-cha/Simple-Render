@@ -6,7 +6,7 @@ namespace SimpleRenderPure
 	{
 	public:
 		Disposable() {};
-		~Disposable() {};
+		virtual ~Disposable() {};
 
 		virtual void Dispose() = 0;
 

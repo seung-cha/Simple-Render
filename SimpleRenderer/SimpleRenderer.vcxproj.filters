@@ -25,6 +25,9 @@
     <Filter Include="Header Files\Interface">
       <UniqueIdentifier>{8a698359-3113-4e0f-9b44-62707c0bc855}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Interface">
+      <UniqueIdentifier>{9773c53e-78d4-48b4-aabb-eb90a5d4ef5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -102,6 +105,15 @@
     <ClCompile Include="source\RenderCamera\Viewport\RenderViewportCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderPure\ContiguousKeyInput.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderPure\MousePositionInput.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderPure\DiscreteKeyInput.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -173,9 +185,6 @@
     <ClInclude Include="source\RenderUI\HierarchyUI\HierarchyUI.h">
       <Filter>Header Files\RenderUI</Filter>
     </ClInclude>
-    <ClInclude Include="source\Pure\Disposable.h">
-      <Filter>Header Files\Interface</Filter>
-    </ClInclude>
     <ClInclude Include="source\RenderUI\ScreenUI\ScreenUI.h">
       <Filter>Header Files\RenderUI</Filter>
     </ClInclude>
@@ -184,6 +193,18 @@
     </ClInclude>
     <ClInclude Include="source\RenderCamera\Viewport\RenderViewportCamera.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderPure\Disposable.h">
+      <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderPure\ContiguousKeyInput.h">
+      <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderPure\DiscreteKeyInput.h">
+      <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderPure\MousePositionInput.h">
+      <Filter>Header Files\Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

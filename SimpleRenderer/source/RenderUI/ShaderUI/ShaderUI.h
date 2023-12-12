@@ -1,9 +1,16 @@
 #pragma once
 #include "RenderUI/RenderUI.h"
-#include "RenderShader/RenderShader.h"
+
+
+namespace SimpleRender
+{
+	enum ShaderType;
+}
 
 namespace SimpleRenderUI
 {
+	enum SimpleRender::ShaderType;
+
 	class ShaderUI : public RenderUI
 	{
 	public:
