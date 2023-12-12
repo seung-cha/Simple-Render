@@ -48,7 +48,7 @@ ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string tit
 void ScreenUI::UpdateWidget()
 {
 
-	
+	RenderScene();
 
 	//ImGui::SetNextWindowSize(v->WorkSize);
 	//ImGui::SetNextWindowPos(v->WorkPos);
@@ -56,7 +56,7 @@ void ScreenUI::UpdateWidget()
 	ImGui::Begin(title.c_str(), 0,  ImGuiWindowFlags_NoScrollbar);
 
 	ImVec2 s = ImGui::GetWindowSize();
-	ImGui::Image((ImTextureID)(*application->Scene->SceneTexture), s, { 0, 1 }, {1, 0});
+	ImGui::Image((ImTextureID)(texture), s, { 0, 1 }, {1, 0});
 	
 
 
@@ -66,4 +66,12 @@ void ScreenUI::UpdateWidget()
 void ScreenUI::ReflectUpdate()
 {
 
+}
+
+
+
+void ScreenUI::RenderScene()
+{
+	camera.Update();
+	application->Scene->DrawScene(&camera, framebuffer);
 }

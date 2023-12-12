@@ -146,8 +146,11 @@ bool SimpleRender::RenderApplication::Run()
 		return true;
 	}
 
+	//Update the screen. Do so so that when no viewports are present the screen keeps refreshing
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
 
-	scene->DrawScene();		// Draw Scene (Will be removed)
+	//scene->DrawScene(nullptr, 0);		// Draw Scene (Will be removed)
 	
 	UpdateWidgets();		// Update widget
 

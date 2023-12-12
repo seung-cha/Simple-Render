@@ -15,6 +15,7 @@ namespace SimpleRender
 	{
 	public:
 		RenderCamera();
+		virtual ~RenderCamera() {};
 		void Update();
 
 

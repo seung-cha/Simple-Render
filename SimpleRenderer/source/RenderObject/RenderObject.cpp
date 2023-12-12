@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "RenderScene/RenderScene.h"
-
+#include "RenderCamera/RenderCamera.h"
 
 using namespace SimpleRender;
 using namespace std;
@@ -155,7 +155,7 @@ void RenderObject::LoadDefaultMesh()
 	
 }
 
-void RenderObject::Draw()
+void RenderObject::Draw(RenderCamera* camera)
 {
 	//Do not draw if the shader program is invalid.
 	if(!shaderProgram)
@@ -180,10 +180,10 @@ void RenderObject::Draw()
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Model"), 1, GL_FALSE, &transform[0][0]);
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.View"), 1,
-		GL_FALSE, &scene->ActiveCamera->ViewMatrix()[0][0]);
+		GL_FALSE, &camera->ViewMatrix()[0][0]);
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Perspective"), 1,
-		GL_FALSE, &scene->ActiveCamera->PerspectiveMatrix()[0][0]);
+		GL_FALSE, &camera->PerspectiveMatrix()[0][0]);
 
 
 

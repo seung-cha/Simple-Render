@@ -18,13 +18,14 @@
 namespace SimpleRender
 {
 	class RenderScene;
+	class RenderCamera;
 
 	class RenderObject : SimpleRenderPure::Disposable
 	{
 	public:
 		RenderObject(RenderScene* scene, RenderShaderProgram* program, const std::string path = "");
 		~RenderObject();
-		void Draw();
+		void Draw(RenderCamera* camera);
 
 
 		glm::vec3 Position;

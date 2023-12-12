@@ -47,13 +47,14 @@ RenderScene::RenderScene(RenderApplication* application)
 
 }
 
-void RenderScene::DrawScene()
+void RenderScene::DrawScene(RenderCamera* camera, GLuint framebuffer)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	for(auto& object : *SceneObjects)
 	{
-		object->Draw();
+		object->Draw(camera);
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

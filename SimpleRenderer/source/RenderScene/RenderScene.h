@@ -16,6 +16,7 @@ namespace SimpleRender
 	// Forward declare all classes
 	class RenderObject;
 	class RenderApplication;
+	class RenderCamera;
 
 
 	class RenderScene
@@ -24,7 +25,7 @@ namespace SimpleRender
 		RenderScene(SimpleRender::RenderApplication* application);
 		void LoadDefaultScene();
 
-		void DrawScene();
+		void DrawScene(RenderCamera* camera, GLuint framebuffer);
 
 		/// <summary>
 		/// Free allocated memory.
