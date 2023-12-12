@@ -1,5 +1,7 @@
 #pragma once
 
+struct GLFWwindow;
+
 namespace SimpleRender
 {
 	class RenderApplication;
@@ -19,7 +21,7 @@ namespace SimpleRenderPure
 		void UnregisterMousePositionInput();
 
 
-		virtual void OnMousePositionInput(double x, double y) = 0;
+		virtual void OnMousePositionInput(GLFWwindow* window, double x, double y) = 0;
 
 	private:
 		SimpleRender::RenderApplication* application;

@@ -1,5 +1,7 @@
 #pragma once
 
+
+struct GLFWwindow;
 namespace SimpleRender
 {
 	class RenderApplication;
@@ -7,6 +9,7 @@ namespace SimpleRender
 
 namespace SimpleRenderPure
 {
+
 	/// <summary>
 	/// Interface to receive contiguous key input
 	/// Pass a reference to an application.
@@ -22,7 +25,7 @@ namespace SimpleRenderPure
 		void RegisterContiguousKeyInput();
 		void UnregisterContiguousKeyInput();
 
-		virtual void OnContiguousKeyInput() = 0;
+		virtual void OnContiguousKeyInput(GLFWwindow* window) = 0;
 		
 
 

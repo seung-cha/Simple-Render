@@ -16,9 +16,7 @@ namespace SimpleRender
 	public:
 		RenderCamera();
 		void Update();
-		void Input(GLFWwindow* window);
-		void MouseInput(double x, double y);
-		void ToggleFocus(GLFWwindow* window);
+
 
 		inline glm::mat4 ViewMatrix() const
 		{
@@ -56,6 +54,9 @@ namespace SimpleRender
 		glm::vec3 up;
 		glm::vec3 right;
 
+		/// <summary>
+		/// Update the view matrix with given position and forward vector
+		/// </summary>
 		inline void CalculateView()
 		{
 			viewMat = glm::lookAt(position, position + forward, up);
@@ -64,19 +65,6 @@ namespace SimpleRender
 
 	private:
 
-		float speed = 1.5f;
-		float sens = 0.1f;
-		float fov;
-
-		float roll = 0.0f;
-		float pitch = 0.0f;
-		float yaw = -90.0f;
-
-		bool focused = false;
-
-		double lastX;
-		double lastY;
-
-
+		float fov = 60.0f;
 	};
 }

@@ -9,11 +9,14 @@ namespace SimpleRenderUI
 	{
 	public:
 		ScreenUI(SimpleRender::RenderApplication* application, std::string title="Scene Screen");
+
 		virtual void UpdateWidget() override;
 		virtual void ReflectUpdate() override;
 
 
 	private:
+
+
 		GLuint framebuffer;
 		GLuint texture;
 

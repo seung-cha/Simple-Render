@@ -1,5 +1,6 @@
 #pragma once
 
+struct GLFWwindow;
 
 namespace SimpleRender
 {
@@ -25,7 +26,7 @@ namespace SimpleRenderPure
 		void UnregisterDiscreteKeyInput();
 		
 
-		virtual void OnDiscreteKeyInput(int key, int scancode, int action, int mods) = 0;
+		virtual void OnDiscreteKeyInput(GLFWwindow* window, int key, int scancode, int action, int mods) = 0;
 
 
 	private:

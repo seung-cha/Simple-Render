@@ -70,7 +70,7 @@ SimpleRender::RenderApplication::RenderApplication()
 
 		for(auto& input : *app->MousePositionInputs)
 		{
-			input->OnMousePositionInput(x, y);
+			input->OnMousePositionInput(window, x, y);
 		}
 	};
 
@@ -89,7 +89,7 @@ SimpleRender::RenderApplication::RenderApplication()
 
 		for(auto& input : *app->DiscreteKeyInputs)
 		{
-			input->OnDiscreteKeyInput(key, scancode, action, mods);
+			input->OnDiscreteKeyInput(window, key, scancode, action, mods);
 		}
 
 	};
@@ -191,7 +191,7 @@ void SimpleRender::RenderApplication::ProcessInput()
 {
 	for(auto& keys : contiguousKeyInputs)
 	{
-		keys->OnContiguousKeyInput();
+		keys->OnContiguousKeyInput(window);
 	}
 
 

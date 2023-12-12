@@ -26,13 +26,6 @@
 
 
 
-void OnWindowResized(GLFWwindow* window, int width, int height);
-void OnMousePosChanged(GLFWwindow* window, double x, double y);
-void OnKeyPressed(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-
-
-
 int main()
 {
 	SimpleRender::RenderApplication* application = new SimpleRender::RenderApplication();
@@ -224,23 +217,3 @@ int main()
 */
 
 
-
-
-void OnWindowResized(GLFWwindow* window, int width, int height)
-{
-	//glViewport(0, 0, width, height);
-}
-
-void OnMousePosChanged(GLFWwindow* window, double x, double y)
-{
-	scene->ActiveCamera->MouseInput(x, y);
-
-}
-
-void OnKeyPressed(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	if(key == GLFW_KEY_C && action == GLFW_PRESS)
-	{
-		scene->ActiveCamera->ToggleFocus(window);
-	}
-}
