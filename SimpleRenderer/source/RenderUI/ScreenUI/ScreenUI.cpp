@@ -4,6 +4,8 @@
 #include "RenderScene/RenderScene.h"
 #include "RenderApplication/RenderApplication.h"
 
+#include "ImGuizmo.h"
+
 using namespace SimpleRenderUI; 
 using namespace std;
 
@@ -53,15 +55,16 @@ void ScreenUI::UpdateWidget()
 	//ImGui::SetNextWindowPos(v->WorkPos);
 
 	ImGui::Begin(title.c_str(), 0,  ImGuiWindowFlags_NoScrollbar);
-	RenderScene();
-
-
 	ImVec2 s = ImGui::GetWindowSize();
 	ImGui::Image(ImTextureID(texture), s, { 0, 1 }, {1, 0});
+	RenderScene();
+	RenderGizmo();
+
 	
 
 
 	ImGui::End();
+
 
 }
 void ScreenUI::ReflectUpdate()
@@ -75,4 +78,18 @@ void ScreenUI::RenderScene()
 {
 	camera.Update();
 	application->Scene->DrawScene(&camera, framebuffer);
+
+}
+
+void ScreenUI::RenderGizmo()
+{
+	ImGuizmo::SetDrawlist();
+	ImGuizmo::SetRect(0, 0, application->Status->Width, application->Status->Height);
+
+	glm::mat4 m(1.0f);
+	if(application->Scene->ActiveObject)
+	{
+		ImGuizmo::Manipulate(&camera.ViewMatrix()[0][0], &camera.PerspectiveMatrix()[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &m[0][0]);
+	}
+
 }

@@ -16,6 +16,7 @@ namespace SimpleRenderUI
 
 	private:
 		void RenderScene();
+		void RenderGizmo();
 
 
 		GLuint framebuffer;

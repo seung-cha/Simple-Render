@@ -1,3 +1,4 @@
+
 #include "RenderApplication.h"
 
 #include "RenderUI/RenderUI.h"
@@ -7,7 +8,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
 
-
+#include "ImGuizmo.h"
 
 #include "RenderUI/BackgroundUI/BackgroundUI.h"
 #include "RenderUI/CameraUI/CameraUI.h"
@@ -166,6 +167,9 @@ void SimpleRender::RenderApplication::UpdateWidgets()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+
+	ImGuizmo::BeginFrame();
+
 
 	
 	const ImGuiViewport* v = ImGui::GetMainViewport();

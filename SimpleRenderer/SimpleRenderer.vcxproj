@@ -19,6 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="imguizmo\GraphEditor.cpp" />
+    <ClCompile Include="imguizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="imguizmo\ImGradient.cpp" />
+    <ClCompile Include="imguizmo\ImGuizmo.cpp" />
+    <ClCompile Include="imguizmo\ImSequencer.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -49,6 +54,12 @@
     <ClCompile Include="source\RenderUI\ShaderUI\ShaderUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="imguizmo\GraphEditor.h" />
+    <ClInclude Include="imguizmo\ImCurveEdit.h" />
+    <ClInclude Include="imguizmo\ImGradient.h" />
+    <ClInclude Include="imguizmo\ImGuizmo.h" />
+    <ClInclude Include="imguizmo\ImSequencer.h" />
+    <ClInclude Include="imguizmo\ImZoomSlider.h" />
     <ClInclude Include="imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="imgui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -158,7 +169,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imgui;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imgui;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\source;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imguizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -175,7 +186,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imgui;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imgui;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\source;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imguizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -192,7 +203,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imgui;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imgui;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\source;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imguizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -209,7 +220,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imgui;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imgui;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\source;C:\Users\pro gamer\source\repos\SimpleRenderer\SimpleRenderer\imguizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
