@@ -4,7 +4,6 @@
 #include "RenderPure/MousePositionInput.h"
 
 
-
 namespace SimpleRender
 {
 	class RenderApplication;
@@ -17,6 +16,10 @@ namespace SimpleRender
 		RenderViewportCamera(RenderApplication* application);
 
 
+		/// <summary>
+		/// Should the camera receive input and update its posiiton?
+		/// </summary>
+		bool Active = false;
 
 	private:
 		void ToggleFocus(GLFWwindow* window);

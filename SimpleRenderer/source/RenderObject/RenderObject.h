@@ -23,9 +23,15 @@ namespace SimpleRender
 	class RenderObject : SimpleRenderPure::Disposable
 	{
 	public:
-		RenderObject(RenderScene* scene, RenderShaderProgram* program, const std::string path = "");
+		RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const std::string path = "");
 		~RenderObject();
 		void Draw(RenderCamera* camera);
+
+		/// <summary>
+		/// Draw call for object selection
+		/// </summary>
+		/// <param name="camera"></param>
+		void DrawID(RenderCamera* camera, RenderShaderProgram* selectionProgram);
 
 
 		glm::vec3 Position;
@@ -79,7 +85,24 @@ namespace SimpleRender
 			}
 		}
 
+		
+		glm::mat4& Matrix = matrix;
+		std::string& Name = name;
+
+		const int& ID = id;
+
+
+		inline void SetID(int newID)
+		{
+			id = newID;
+		}
+
 	private:
+
+		int id;
+		std::string name;
+		glm::mat4 matrix = glm::mat4(1.0f);
+
 		std::vector<RenderMesh> meshes;
 		std::vector<RenderTexture*> textures;
 		RenderScene* scene;

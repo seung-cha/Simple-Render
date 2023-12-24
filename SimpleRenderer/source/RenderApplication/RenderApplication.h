@@ -26,13 +26,32 @@ namespace SimpleRenderPure
 
 namespace SimpleRender
 {
+	struct MouseStatus
+	{
+		MouseStatus()
+		{
+			xPos = yPos = 0;
+			leftClick = rightClick = false;
+		}
+		int xPos;
+		int yPos;
+		bool leftClick;
+		bool rightClick;
+	};
 
 	struct AppStatus
 	{
 		int Width;
 		int Height;
+
+		int FixedWidth = 1920;
+		int FixedHeight = 1080;
+
 		bool SleepMode;
 		std::string Title = "Simple Render";
+
+		MouseStatus* Mouse = &mouse;
+
 
 		inline void UpdateWindowSizeStatus(int newWidth, int newHeight)
 		{
@@ -55,9 +74,12 @@ namespace SimpleRender
 			Height = 1080;
 			SleepMode = false;
 		}
-		
 
+
+	private:
+		MouseStatus mouse;
 	};
+
 	
 
 	class RenderScene;
@@ -99,6 +121,11 @@ namespace SimpleRender
 		/// DO NOT WRITE TO THIS
 		/// </summary>
 		AppStatus* const Status = &status;
+		
+		/// <summary>
+		/// DO NOT WRITE TO THIS
+		/// </summary>
+
 		RenderScene*& Scene = scene;
 
 

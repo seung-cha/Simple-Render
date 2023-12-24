@@ -5,6 +5,15 @@
 
 namespace SimpleRenderUI
 {
+	struct SelectionBuffer
+	{
+		GLuint framebuffer;
+		GLuint renderTexture;
+		GLuint renderbuffer;
+	};
+
+
+
 	class ScreenUI : public RenderUI
 	{
 	public:
@@ -17,10 +26,15 @@ namespace SimpleRenderUI
 	private:
 		void RenderScene();
 		void RenderGizmo();
+		void InitialiseSelectionBuffer();
+
 
 
 		GLuint framebuffer;
-		GLuint texture;
+		GLuint screenTexture;
+		GLuint screenRenderbuffer;
+
+		SelectionBuffer selectionBuffer;
 
 		SimpleRender::RenderViewportCamera camera;
 		

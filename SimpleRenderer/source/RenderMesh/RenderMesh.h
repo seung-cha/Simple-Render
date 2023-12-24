@@ -34,7 +34,13 @@ namespace SimpleRender
 		/// <param name="textureIndices">texture slots to use, mapped onto the texture vector in the object class</param>
 		RenderMesh(const aiScene* scene, const aiMesh* mesh, const std::vector<unsigned int> textureIndices);
 		~RenderMesh();
-		void Draw(RenderShaderProgram* program, std::vector<RenderTexture*>* textureMap);
+		void Draw(RenderShaderProgram* program, const std::vector<RenderTexture*>& textureMap);
+
+		/// <summary>
+		/// Draw call for object selection. This is really just glDrawElements.
+		/// </summary>
+		/// <param name="program"></param>
+		void DrawID(RenderShaderProgram* program);
 
 		void Dispose() override
 		{

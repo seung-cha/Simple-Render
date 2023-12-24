@@ -6,6 +6,7 @@
 #include "RenderApplication/RenderApplication.h"
 #include "RenderScene/RenderScene.h"
 
+#include <string>
 
 using namespace SimpleRenderUI;
 using namespace SimpleRender;
@@ -25,7 +26,7 @@ void HierarchyUI::UpdateWidget()
 	{
 		string path = FileReader::OpenFileDialogue();
 
-		RenderObject* obj = new RenderObject(application->Scene, (*application->Scene->SceneShaderPrograms)[0], path);
+		RenderObject* obj = new RenderObject(application->Scene, (*application->Scene->SceneShaderPrograms)[0], (*application->Scene->SceneObjects).size() + 1, path);
 		application->Scene->SceneObjects->push_back(obj);
 		application->Scene->ActiveObject = obj;
 	}
@@ -33,7 +34,13 @@ void HierarchyUI::UpdateWidget()
 	for(unsigned int i = 0; i < application->Scene->SceneObjects->size(); i++)
 	{
 		ostringstream s;
-		s << "Object" << i;
+		
+
+		if((*application->Scene->SceneObjects)[i]->Name == "")
+			s << "Object" << i;
+		else
+			s << (*application->Scene->SceneObjects)[i]->Name;
+
 
 		if(ImGui::Button(s.str().c_str()))
 		{

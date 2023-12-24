@@ -45,6 +45,19 @@ RenderScene::RenderScene(RenderApplication* application)
 
 	this->application = application;
 
+
+
+	RenderShader vertShader(ShaderType::Vertex, "shaders/object_selection/selection.vert");
+	RenderShader fragShader(ShaderType::Fragment, "shaders/object_selection/selection.frag");
+
+	objectSelectionShaderProgram = RenderShaderProgram();
+	objectSelectionShaderProgram.AttachShader(&vertShader);
+	objectSelectionShaderProgram.AttachShader(&fragShader);
+	objectSelectionShaderProgram.LinkProgram();
+
+
+	
+
 }
 
 void RenderScene::DrawScene(RenderCamera* camera, GLuint framebuffer)
@@ -58,9 +71,29 @@ void RenderScene::DrawScene(RenderCamera* camera, GLuint framebuffer)
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);	
+}
 
-	
+void RenderScene::DrawIDScene(RenderCamera* camera, GLuint framebuffer)
+{
+	//Store colour value
+	float col[4];
+	glGetFloatv(GL_COLOR_CLEAR_VALUE, col);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	for(auto& obj : *SceneObjects)
+	{
+		obj->DrawID(camera, &objectSelectionShaderProgram);
+	}
+
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClearColor(col[0], col[1], col[2], col[3]);
+
 }
 
 void RenderScene::LoadDefaultScene()
@@ -77,11 +110,44 @@ void RenderScene::LoadDefaultScene()
 
 	prog->LinkProgram();
 
-	SceneObjects->push_back(new RenderObject(this, (*SceneShaderPrograms)[0], ""));
-	ActiveObject = (*SceneObjects)[0];
+	AddObject(shaderPrograms[0]);
+	ActiveObject = objects[0];
 
 	SceneCameras->push_back(new RenderCamera());
 	ActiveCamera = (*SceneCameras)[0];
+}
 
+
+void RenderScene::AddObject(RenderShaderProgram*& program, std::string path)
+{
+	objects.push_back(new RenderObject(this, program, objects.size() + 1, path));
+
+}
+
+
+void RenderScene::DeleteObject(RenderObject* object)
+{
+	if(object == nullptr)
+		return;
+
+	object->Dispose();
+	objects.erase(objects.begin() + object->ID - 1);
+	
+	delete object;
+
+	// Reassign the IDs afterwads
+
+	for(int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->SetID(i + 1);
+	}
+
+}
+
+void RenderScene::DeleteActiveObject()
+{
+	
+	DeleteObject(ActiveObject);
+	ActiveObject = nullptr;
 
 }

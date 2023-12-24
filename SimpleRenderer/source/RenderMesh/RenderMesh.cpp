@@ -109,9 +109,19 @@ void RenderMesh::InitBuffers()
 
 }
 
+void RenderMesh::DrawID(RenderShaderProgram* program)
+{
+	glUseProgram(program->ID());
+	glBindVertexArray(vertexArray);
 
+	glDrawElements(GL_TRIANGLES, elementIndices.size(), GL_UNSIGNED_INT, 0);
 
-void RenderMesh::Draw(RenderShaderProgram* program, std::vector<RenderTexture*>* textureMap)
+	glBindVertexArray(0);
+	glUseProgram(0);
+	
+}
+
+void RenderMesh::Draw(RenderShaderProgram* program, const std::vector<RenderTexture*>& textureMap)
 {
 	glUseProgram(program->ID());
 	
@@ -123,7 +133,7 @@ void RenderMesh::Draw(RenderShaderProgram* program, std::vector<RenderTexture*>*
 	for(unsigned int& index : textureIndices)
 	{
 
-		RenderTexture* texture = (* textureMap)[index];
+		RenderTexture* texture =  textureMap[index];
 		unsigned int texNo;
 
 		if(texture->Type() == TextureType::Diffuse)
@@ -143,6 +153,9 @@ void RenderMesh::Draw(RenderShaderProgram* program, std::vector<RenderTexture*>*
 		glBindTexture(GL_TEXTURE_2D, texture->ID());		
 
 	}
+
+	// Reset active texture
+	glActiveTexture(GL_TEXTURE0);
 
 	//char log[512];
 	//glGetProgramInfoLog(program->ID(), 512, 0, log);

@@ -68,6 +68,9 @@ SimpleRender::RenderApplication::RenderApplication()
 	auto mousePosFunc = [](GLFWwindow* window, double x, double y)
 	{
 		RenderApplication* app = static_cast<RenderApplication*>(glfwGetWindowUserPointer(window));
+		
+		app->Status->Mouse->xPos = x;
+		app->Status->Mouse->yPos = y;
 
 		for(auto& input : *app->MousePositionInputs)
 		{
@@ -127,6 +130,8 @@ SimpleRender::RenderApplication::RenderApplication()
 	AddUI(new ShaderUI(this));
 	AddUI(new HierarchyUI(this));
 	AddUI(new ScreenUI(this));
+
+
 
 	glEnable(GL_DEPTH_TEST);
 

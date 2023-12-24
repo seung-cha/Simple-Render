@@ -5,6 +5,9 @@
 #include "RenderApplication/RenderApplication.h"
 #include "RenderScene/RenderScene.h"
 
+#include "ImGuizmo.h"
+#include "misc/cpp/imgui_stdlib.h"
+
 using namespace SimpleRenderUI;
 using namespace SimpleRender;
 using namespace std;
@@ -53,17 +56,7 @@ void ObjectUI::UpdateWidget()
 
 	if(ImGui::Button("DELETE THIS OBJECT"))
 	{
-		for(unsigned int i = 0; i < application->Scene->SceneObjects->size(); i++)
-		{
-			if(application->Scene->ActiveObject == (*application->Scene->SceneObjects)[i])
-			{
-				application->Scene->SceneObjects->erase(application->Scene->SceneObjects->begin() + i);
-				break;
-			}
-		}
-
-		application->Scene->ActiveObject->Dispose();
-		application->Scene->ActiveObject = nullptr;
+		application->Scene->DeleteActiveObject();
 	}
 
 
@@ -73,12 +66,31 @@ void ObjectUI::UpdateWidget()
 
 void ObjectUI::TransformWidget()
 {
+	
+	ImGui::InputText("Name", &application->Scene->ActiveObject->Name);
+
 	// Render Object Transformation
 	ImGui::SeparatorText("Transform");
+
+	ImGuizmo::DecomposeMatrixToComponents(&application->Scene->ActiveObject->Matrix[0][0],
+		&application->Scene->ActiveObject->Position[0],
+		&application->Scene->ActiveObject->Rotation[0],
+		&application->Scene->ActiveObject->Scale[0]);
+
+
 
 	ImGui::DragFloat3("Position", &application->Scene->ActiveObject->Position[0], 0.5f);
 	ImGui::DragFloat3("Rotation", &application->Scene->ActiveObject->Rotation[0], 0.5f);
 	ImGui::DragFloat3("Scale", &application->Scene->ActiveObject->Scale[0], 0.01f);
+	
+
+	ImGuizmo::RecomposeMatrixFromComponents(
+		&application->Scene->ActiveObject->Position[0],
+		 &application->Scene->ActiveObject->Rotation[0], 
+		&application->Scene->ActiveObject->Scale[0],
+		&application->Scene->ActiveObject->Matrix[0][0]);
+
+
 }
 
 void ObjectUI::TextureWidget()

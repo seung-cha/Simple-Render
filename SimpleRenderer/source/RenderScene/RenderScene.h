@@ -28,6 +28,13 @@ namespace SimpleRender
 		void DrawScene(RenderCamera* camera, GLuint framebuffer);
 
 		/// <summary>
+		/// Draw the scene for object selection.
+		/// </summary>
+		/// <param name="camera"></param>
+		/// <param name="framebuffer"></param>
+		void DrawIDScene(RenderCamera* camera, GLuint framebuffer);
+
+		/// <summary>
 		/// Free allocated memory.
 		/// As of now does nothing.
 		/// Should implement an interface to release OpenGL IDs of each class.
@@ -48,15 +55,35 @@ namespace SimpleRender
 				return SceneGeometryShaders;
 		}
 
-		std::vector<RenderObject*>* SceneObjects = &objects;
-		std::vector<RenderCamera*>* SceneCameras = &cameras;
-
-		std::vector<RenderShader*>* SceneVertexShaders = &vertexShaders;
-		std::vector<RenderShader*>* SceneFragmentShaders = &fragmentShaders;
-		std::vector<RenderShader*>* SceneGeometryShaders = &geometryShaders;
-
-		std::vector<RenderShaderProgram*>* SceneShaderPrograms = &shaderPrograms;
 		
+		/// <summary>
+		/// Add a render object to the scene, managing its ID
+		/// </summary>
+		/// <param name="program"></param>
+		/// <param name="path"></param>
+		void AddObject(RenderShaderProgram*& program, std::string path = "");
+
+		/// <summary>
+		/// Delete the specified object. Manage the IDs afterwards.
+		/// </summary>
+		/// <param name="object"></param>
+		void DeleteObject(RenderObject* object);
+
+		/// <summary>
+		/// Delete the active object. Equivalent to calling DeleteObject with arg = ActiveObject
+		/// </summary>
+		void DeleteActiveObject();
+
+
+		std::vector<RenderObject*>* const SceneObjects = &objects;
+		std::vector<RenderCamera*>* const SceneCameras = &cameras;
+
+		std::vector<RenderShader*>* const SceneVertexShaders = &vertexShaders;
+		std::vector<RenderShader*>* const SceneFragmentShaders = &fragmentShaders;
+		std::vector<RenderShader*>* const SceneGeometryShaders = &geometryShaders;
+
+		std::vector<RenderShaderProgram*>* const SceneShaderPrograms = &shaderPrograms;
+
 		RenderCamera* ActiveCamera = nullptr;
 		RenderObject* ActiveObject = nullptr;
 		RenderShaderProgram* ActiveShaderProgram = nullptr;
@@ -65,13 +92,15 @@ namespace SimpleRender
 		GLuint* SceneFrameBuffer = &framebuffer;
 		GLuint* SceneTexture = &screenTexture;
 
-		
+
 		const RenderApplication* Application = application;
+
+		RenderShaderProgram* const ObjectIDShaderProgram = &objectSelectionShaderProgram;
 
 
 	private:
 		RenderApplication* application;
-		
+
 
 		std::vector<RenderObject*> objects;
 		std::vector<RenderCamera*> cameras;
@@ -84,6 +113,8 @@ namespace SimpleRender
 
 		GLuint framebuffer = 0;
 		GLuint screenTexture = 0;
+
+		RenderShaderProgram objectSelectionShaderProgram;
 	};
 
 

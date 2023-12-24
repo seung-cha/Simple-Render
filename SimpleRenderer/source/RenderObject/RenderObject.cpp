@@ -11,7 +11,7 @@ using namespace SimpleRender;
 using namespace std;
 using namespace Assimp;
 
-RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, const string path)
+RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const string path) : id(ID)
 {
 
 	shaderProgram = program;
@@ -164,24 +164,12 @@ void RenderObject::Draw(RenderCamera* camera)
 
 	glUseProgram(shaderProgram->ID());
 
-	// Apply transformation
-	// Consider changing order of effects
-	glm::mat4 transform(1.0f);
-	
-	transform = glm::translate(transform, Position);
 
-	transform = glm::scale(transform, Scale);
-
-	transform = glm::rotate(transform, glm::radians(Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	transform = glm::rotate(transform, glm::radians(Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	transform = glm::rotate(transform, glm::radians(Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Model"), 1, GL_FALSE, &transform[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Model"), 1, GL_FALSE, &matrix[0][0]);
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.View"), 1,
 		GL_FALSE, &camera->ViewMatrix()[0][0]);
-
+	
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Perspective"), 1,
 		GL_FALSE, &camera->PerspectiveMatrix()[0][0]);
 
@@ -191,10 +179,35 @@ void RenderObject::Draw(RenderCamera* camera)
 
 	for(auto& mesh : meshes)
 	{
-		mesh.Draw(shaderProgram, TextureMap);
+		mesh.Draw(shaderProgram, textures);
 	}
 
 }
 
 
+void RenderObject::DrawID(RenderCamera* camera, RenderShaderProgram* selectionProgram)
+{
+	//Do not draw if the shader program is invalid.
+	if(!shaderProgram)
+		return;
 
+
+	glUseProgram(selectionProgram->ID());
+
+
+	glUniformMatrix4fv(glGetUniformLocation(selectionProgram->ID(), "transform.Model"), 1, GL_FALSE, &matrix[0][0]);
+
+	glUniformMatrix4fv(glGetUniformLocation(selectionProgram->ID(), "transform.View"), 1,
+		GL_FALSE, &camera->ViewMatrix()[0][0]);
+
+	glUniformMatrix4fv(glGetUniformLocation(selectionProgram->ID(), "transform.Perspective"), 1,
+		GL_FALSE, &camera->PerspectiveMatrix()[0][0]);
+
+	glUniform1i(glGetUniformLocation(selectionProgram->ID(), "objectID"), id);
+	glUseProgram(0);
+
+	for(auto& mesh : meshes)
+	{
+		mesh.DrawID(selectionProgram);
+	}
+}

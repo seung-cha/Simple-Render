@@ -14,6 +14,9 @@ ContiguousKeyInput(application), DiscreteKeyInput(application), MousePositionInp
 
 void SimpleRender::RenderViewportCamera::OnContiguousKeyInput(GLFWwindow* window)
 {
+	if(!Active)
+		return;
+
 	if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		position += speed * forward;
@@ -40,6 +43,9 @@ void SimpleRender::RenderViewportCamera::OnContiguousKeyInput(GLFWwindow* window
 
 void SimpleRender::RenderViewportCamera::OnDiscreteKeyInput(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	if(!Active)
+		return;
+
 	if(key == GLFW_KEY_C && action == GLFW_PRESS)
 	{
 
@@ -49,7 +55,7 @@ void SimpleRender::RenderViewportCamera::OnDiscreteKeyInput(GLFWwindow* window, 
 
 void SimpleRender::RenderViewportCamera::OnMousePositionInput(GLFWwindow* window, double x, double y)
 {
-	if(focused)
+	if(focused && Active)
 	{
 		float dX = static_cast<float>(x - lastX);
 		// Reverse Y coords since it's from bottom to top

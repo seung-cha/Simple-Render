@@ -132,6 +132,9 @@
     <ClCompile Include="imguizmo\ImCurveEdit.cpp">
       <Filter>Resource Files\ImGuizmo</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Resource Files\ImGUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="imguizmo\GraphEditor.h">
       <Filter>Resource Files\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h">
+      <Filter>Resource Files\ImGUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
