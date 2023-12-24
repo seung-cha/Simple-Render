@@ -135,6 +135,9 @@
     <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp">
       <Filter>Resource Files\ImGUI</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderPure\DiscreteMouseInput.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h">
       <Filter>Resource Files\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderPure\DiscreteMouseInput.h">
+      <Filter>Header Files\Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

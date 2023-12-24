@@ -3,22 +3,22 @@
 
 SimpleRenderPure::ContiguousKeyInput::ContiguousKeyInput(SimpleRender::RenderApplication* application)
 {
-	this->application = application;
+	this->_application = application;
 	RegisterContiguousKeyInput();
 }
 
 
 SimpleRenderPure::ContiguousKeyInput::~ContiguousKeyInput()
 {
-	application->UnregisterContiguousKeyInput(this);
+	_application->UnregisterContiguousKeyInput(this);
 }
 
 void SimpleRenderPure::ContiguousKeyInput::RegisterContiguousKeyInput()
 {
-	application->RegisterContiguousKeyInput(this);
+	_application->RegisterContiguousKeyInput(this);
 }
 
 void SimpleRenderPure::ContiguousKeyInput::UnregisterContiguousKeyInput()
 {
-	application->UnregisterContiguousKeyInput(this);
+	_application->UnregisterContiguousKeyInput(this);
 }

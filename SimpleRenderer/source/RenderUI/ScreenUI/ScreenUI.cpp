@@ -10,7 +10,7 @@
 using namespace SimpleRenderUI; 
 using namespace std;
 
-ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string title) : RenderUI(title, application), camera(application)
+ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string title) : RenderUI(title, application), camera(application), DiscreteMouseInput(application)
 {
 
 	// Initialise the frame buffer for this viewport
@@ -65,28 +65,34 @@ void ScreenUI::UpdateWidget()
 	int mousePos[2] = {application->Status->Mouse->xPos, application->Status->Mouse->yPos};
 	ImVec2 windowSize = { size.x + pos.x, size.y + pos.y };
 
-	if(mousePos[0] >= pos.x && mousePos[1] >= pos.y && mousePos[0] <= windowSize.x && mousePos[1] <=windowSize.y)
+
+	if(pressed)
 	{
+		pressed = false;
+		if(mousePos[0] >= pos.x && mousePos[1] >= pos.y && mousePos[0] <= windowSize.x && mousePos[1] <=windowSize.y)
+		{
 
-		ImVec2 progress = { (mousePos[0] - pos.x) / size.x, (mousePos[1] - pos.y) / size.y};
-
-
-		std::cout << "T: " << progress.x << ", " << progress.y << std::endl;
-
-		int res[2] = { progress.x * application->Status->FixedWidth, progress.y * application->Status->FixedHeight };
-		//std::cout << "Mapped: " << res[0] << ", " << res[1] << std::endl;
+				ImVec2 progress = { (mousePos[0] - pos.x) / size.x, (mousePos[1] - pos.y) / size.y};
 
 
-		unsigned char col[4];
+				std::cout << "T: " << progress.x << ", " << progress.y << std::endl;
+
+				int res[2] = { progress.x * application->Status->FixedWidth, progress.y * application->Status->FixedHeight };
+				//std::cout << "Mapped: " << res[0] << ", " << res[1] << std::endl;
 
 
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, selectionBuffer.framebuffer);
-		glReadPixels(res[0], application->Status->FixedHeight - res[1], 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &col);
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+				unsigned char col[4];
 
 
-		cout << "Pixel data at < " << res[0] << ", " << application->Status->FixedHeight - res[1] << " >:"
-			<< static_cast<int>(col[0]) << std::endl;
+				glBindFramebuffer(GL_READ_FRAMEBUFFER, selectionBuffer.framebuffer);
+				glReadPixels(res[0], application->Status->FixedHeight - res[1], 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &col);
+				glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+
+
+				cout << "Pixel data at < " << res[0] << ", " << application->Status->FixedHeight - res[1] << " >:"
+					<< static_cast<int>(col[0]) << std::endl;
+		}
+
 	}
 	
 
@@ -163,6 +169,16 @@ void ScreenUI::InitialiseSelectionBuffer()
 
 	}
 	
+
+}
+
+void SimpleRenderUI::ScreenUI::OnDiscreteMouseInput(GLFWwindow* window, int button, int action, int mods)
+{
+
+	if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+	{
+		pressed = true;
+	}
 
 }
 

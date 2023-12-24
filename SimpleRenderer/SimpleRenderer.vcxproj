@@ -42,6 +42,7 @@
     <ClCompile Include="source\RenderObject\RenderObject.cpp" />
     <ClCompile Include="source\RenderPure\ContiguousKeyInput.cpp" />
     <ClCompile Include="source\RenderPure\DiscreteKeyInput.cpp" />
+    <ClCompile Include="source\RenderPure\DiscreteMouseInput.cpp" />
     <ClCompile Include="source\RenderPure\MousePositionInput.cpp" />
     <ClCompile Include="source\RenderScene\RenderScene.cpp" />
     <ClCompile Include="source\RenderShaderProgram\RenderShaderProgram.cpp" />
@@ -78,6 +79,7 @@
     <ClInclude Include="source\RenderObject\RenderObject.h" />
     <ClInclude Include="source\RenderPure\ContiguousKeyInput.h" />
     <ClInclude Include="source\RenderPure\DiscreteKeyInput.h" />
+    <ClInclude Include="source\RenderPure\DiscreteMouseInput.h" />
     <ClInclude Include="source\RenderPure\Disposable.h" />
     <ClInclude Include="source\RenderPure\MousePositionInput.h" />
     <ClInclude Include="source\RenderScene\RenderScene.h" />

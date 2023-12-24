@@ -20,6 +20,7 @@
 #include "RenderPure/ContiguousKeyInput.h"
 #include "RenderPure/DiscreteKeyInput.h"
 #include "RenderPure/MousePositionInput.h"
+#include "RenderPure/DiscreteMouseInput.h"
 
 
 #include <iostream>
@@ -56,7 +57,7 @@ SimpleRender::RenderApplication::RenderApplication()
 	//Set up callbacks
 	glfwSetWindowUserPointer(window, this);
 
-
+	/// Window Resize Func
 	auto resizeFunc = [](GLFWwindow* window, int x, int y)
 	{ 
 		RenderApplication* app = static_cast<RenderApplication*>(glfwGetWindowUserPointer(window));
@@ -65,6 +66,10 @@ SimpleRender::RenderApplication::RenderApplication()
 	glfwSetFramebufferSizeCallback(window, resizeFunc);
 
 
+
+
+
+	// Mouse Position Func
 	auto mousePosFunc = [](GLFWwindow* window, double x, double y)
 	{
 		RenderApplication* app = static_cast<RenderApplication*>(glfwGetWindowUserPointer(window));
@@ -77,10 +82,12 @@ SimpleRender::RenderApplication::RenderApplication()
 			input->OnMousePositionInput(window, x, y);
 		}
 	};
-
 	glfwSetCursorPosCallback(window, mousePosFunc);
 
 
+
+
+	// Key Func
 	auto keyFunc = [](GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -100,6 +107,22 @@ SimpleRender::RenderApplication::RenderApplication()
 	glfwSetKeyCallback(window, keyFunc);
 
 
+
+	auto mouseClickFunc = [](GLFWwindow* window, int button, int action, int mods)
+	{
+		RenderApplication* app = static_cast<RenderApplication*>(glfwGetWindowUserPointer(window));
+
+		app->Status->Mouse->leftClick = (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS);
+		app->Status->Mouse->rightClick = (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS);
+
+		for(auto& input : *app->MouseButtonInputs)
+		{
+			input->OnDiscreteMouseInput(window, button, action, mods);
+		}
+
+
+	};
+	glfwSetMouseButtonCallback(window, mouseClickFunc);
 
 
 
@@ -257,11 +280,22 @@ void SimpleRender::RenderApplication::UnregisterDiscreteKeyInput(SimpleRenderPur
 
 void SimpleRender::RenderApplication::RegisterMousePositionInput(SimpleRenderPure::MousePositionInput* mouseInput)
 {
-	mousePositionInput.insert(mouseInput);
+	mousePositionInputs.insert(mouseInput);
 }
 
 void SimpleRender::RenderApplication::UnregisterMousePositionInput(SimpleRenderPure::MousePositionInput* mouseInput)
 {
-	mousePositionInput.erase(mouseInput);
+	mousePositionInputs.erase(mouseInput);
+}
 
+
+
+void SimpleRender::RenderApplication::RegisterDiscreteMouseInput(SimpleRenderPure::DiscreteMouseInput* mouseInput)
+{
+	mouseButtonInputs.insert(mouseInput);
+}
+
+void SimpleRender::RenderApplication::UnregisterDiscreteMouseInput(SimpleRenderPure::DiscreteMouseInput* mouseInput)
+{
+	mouseButtonInputs.erase(mouseInput);
 }

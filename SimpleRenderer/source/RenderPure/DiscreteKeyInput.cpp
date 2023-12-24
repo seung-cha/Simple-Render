@@ -5,19 +5,19 @@
 
 SimpleRenderPure::DiscreteKeyInput::DiscreteKeyInput(SimpleRender::RenderApplication* application)
 {
-	this->application = application;
+	this->_application = application;
 	RegisterDiscreteKeyInput();
 }
 
 
 void SimpleRenderPure::DiscreteKeyInput::RegisterDiscreteKeyInput()
 {
-	application->RegisterDiscreteKeyInput(this);
+	_application->RegisterDiscreteKeyInput(this);
 }
 
 void SimpleRenderPure::DiscreteKeyInput::UnregisterDiscreteKeyInput()
 {
-	application->UnregisterDiscreteKeyInput(this);
+	_application->UnregisterDiscreteKeyInput(this);
 }
 
 

@@ -24,7 +24,7 @@ namespace SimpleRenderPure
 		virtual void OnMousePositionInput(GLFWwindow* window, double x, double y) = 0;
 
 	private:
-		SimpleRender::RenderApplication* application;
+		SimpleRender::RenderApplication* _application;
 
 
 

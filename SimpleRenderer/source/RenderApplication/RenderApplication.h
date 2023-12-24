@@ -20,6 +20,7 @@ namespace SimpleRenderPure
 	class ContiguousKeyInput;
 	class DiscreteKeyInput;
 	class MousePositionInput;
+	class DiscreteMouseInput;
 
 }
 
@@ -112,9 +113,17 @@ namespace SimpleRender
 		void RegisterDiscreteKeyInput(SimpleRenderPure::DiscreteKeyInput* keyInput);
 		void UnregisterDiscreteKeyInput(SimpleRenderPure::DiscreteKeyInput* keyInput);
 
-
+		/// <summary>
+		/// Register an object to receive mouse position input.
+		/// </summary>
 		void RegisterMousePositionInput(SimpleRenderPure::MousePositionInput* mouseInput);
 		void UnregisterMousePositionInput(SimpleRenderPure::MousePositionInput* mouseInput);
+
+		/// <summary>
+		/// Register an object to receive discrete mouse button input
+		/// </summary>
+		 void RegisterDiscreteMouseInput(SimpleRenderPure::DiscreteMouseInput* mouseInput);
+		void UnregisterDiscreteMouseInput(SimpleRenderPure::DiscreteMouseInput* mouseInput);
 
 
 		/// <summary>
@@ -133,8 +142,14 @@ namespace SimpleRender
 		/// Do not use; needed to communicate in glfw callback
 		/// </summary>
 		std::unordered_set<SimpleRenderPure::DiscreteKeyInput*>* const DiscreteKeyInputs = &discreteKeyInputs;
-		std::unordered_set<SimpleRenderPure::MousePositionInput*>* const MousePositionInputs = &mousePositionInput;
-
+		/// <summary>
+		/// Do not use; needed to communicate in glfw callback
+		/// </summary>
+		std::unordered_set<SimpleRenderPure::MousePositionInput*>* const MousePositionInputs = &mousePositionInputs;
+		/// <summary>
+		/// Do not use; needed to communicate in glfw callback
+		/// </summary>
+		std::unordered_set<SimpleRenderPure::DiscreteMouseInput*>* const MouseButtonInputs = &mouseButtonInputs;
 
 	private:
 		void UpdateWidgets();
@@ -147,7 +162,8 @@ namespace SimpleRender
 
 		std::unordered_set<SimpleRenderPure::ContiguousKeyInput*> contiguousKeyInputs;
 		std::unordered_set<SimpleRenderPure::DiscreteKeyInput*> discreteKeyInputs;
-		std::unordered_set<SimpleRenderPure::MousePositionInput*> mousePositionInput;
+		std::unordered_set<SimpleRenderPure::MousePositionInput*> mousePositionInputs;
+		std::unordered_set<SimpleRenderPure::DiscreteMouseInput*> mouseButtonInputs;
 
 
 		AppStatus status;

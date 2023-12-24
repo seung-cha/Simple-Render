@@ -30,7 +30,7 @@ namespace SimpleRenderPure
 
 
 	private:
-		SimpleRender::RenderApplication* application;
+		SimpleRender::RenderApplication* _application;
 	};
 
 

@@ -3,7 +3,7 @@
 
 SimpleRenderPure::MousePositionInput::MousePositionInput(SimpleRender::RenderApplication* application)
 {
-	this->application = application;
+	this->_application = application;
 	RegisterMousePositionInput();
 
 }
@@ -15,10 +15,10 @@ SimpleRenderPure::MousePositionInput::~MousePositionInput()
 
 void SimpleRenderPure::MousePositionInput::RegisterMousePositionInput()
 {
-	application->RegisterMousePositionInput(this);
+	_application->RegisterMousePositionInput(this);
 }
 
 void SimpleRenderPure::MousePositionInput::UnregisterMousePositionInput()
 {
-	application->UnregisterMousePositionInput(this);
+	_application->UnregisterMousePositionInput(this);
 }

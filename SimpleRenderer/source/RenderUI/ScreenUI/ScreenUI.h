@@ -1,5 +1,6 @@
 #include "RenderUI/RenderUI.h"
 #include "RenderCamera/Viewport/RenderViewportCamera.h"
+#include "RenderPure/DiscreteMouseInput.h"
 
 
 
@@ -14,7 +15,7 @@ namespace SimpleRenderUI
 
 
 
-	class ScreenUI : public RenderUI
+	class ScreenUI : public RenderUI, public SimpleRenderPure::DiscreteMouseInput
 	{
 	public:
 		ScreenUI(SimpleRender::RenderApplication* application, std::string title="Scene Screen");
@@ -23,11 +24,15 @@ namespace SimpleRenderUI
 		virtual void ReflectUpdate() override;
 
 
+
+
 	private:
 		void RenderScene();
 		void RenderGizmo();
 		void InitialiseSelectionBuffer();
 
+		// Inherited via DiscreteMouseInput
+		virtual void OnDiscreteMouseInput(GLFWwindow* window, int button, int action, int mods) override;
 
 
 		GLuint framebuffer;
@@ -38,6 +43,8 @@ namespace SimpleRenderUI
 
 		SimpleRender::RenderViewportCamera camera;
 		
+		bool pressed = false;
+
 	};
 
 }
