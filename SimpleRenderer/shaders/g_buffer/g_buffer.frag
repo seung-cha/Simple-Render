@@ -20,7 +20,7 @@ uniform Material material;
 void main()
 {
     gPositionLayout = gPosition;
-    gNormalLayout = gNormal;
+    gNormalLayout = normalize(gNormal);
     gColorLayout.rgb = texture(material.Diffuse0, gTexturePosition).rgb;
     gColorLayout.a = texture(material.Specular0, gTexturePosition).r;
 

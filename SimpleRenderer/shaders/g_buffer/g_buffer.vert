@@ -25,7 +25,14 @@ void main()
 
     vec4 worldModel = transform.Model * vec4(Position, 1.0);
     gPosition =  worldModel.xyz;
-    gNormal = Normal;
+
+
+
+
+    mat3 normMat = transpose(inverse(mat3(transform.Model)));
+    gNormal = normMat * Normal;
+
+
     gTexturePosition = TexturePosition;
 }
 

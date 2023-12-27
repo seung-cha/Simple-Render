@@ -7,6 +7,10 @@
 
 #include "ImGuizmo.h"
 
+
+// To delete
+#include "RenderShader/RenderShader.h"
+
 using namespace SimpleRenderUI; 
 using namespace std;
 
@@ -47,6 +51,8 @@ ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string tit
 
 	InitialiseSelectionBuffer();
 	InitialiseGBuffer();
+
+	InitDeferredRender();
 
 }
 
@@ -107,7 +113,7 @@ void ScreenUI::UpdateWidget()
 
 	ImVec2 s = ImGui::GetWindowSize();
 
-	ImGui::Image(ImTextureID(screenTexture), s, {0, 1}, {1, 0});
+	ImGui::Image(ImTextureID(deferTexture), s, {0, 1}, {1, 0});
 	RenderScene();
 	RenderGizmo();
 
@@ -278,6 +284,8 @@ void ScreenUI::RenderScene()
 	application->Scene->DrawGBufferScene(&camera, gbuffer.framebuffer);
 	
 
+	DeferredRender();
+
 }
 
 void ScreenUI::RenderGizmo()
@@ -295,5 +303,139 @@ void ScreenUI::RenderGizmo()
 		ImGuizmo::Manipulate(&camera.ViewMatrix()[0][0], &camera.PerspectiveMatrix()[0][0],
 			ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &application->Scene->ActiveObject->Matrix[0][0]);
 	}
+
+}
+
+
+
+
+
+void ScreenUI::InitDeferredRender()
+{
+	SimpleRender::RenderShader vertShader(SimpleRender::ShaderType::Vertex, "shaders/deferred_render/deferred_render.vert");
+	SimpleRender::RenderShader fragShader(SimpleRender::ShaderType::Fragment, "shaders/deferred_render/deferred_render.frag");
+
+	deferShaderProgram.AttachShader(&vertShader);
+	deferShaderProgram.AttachShader(&fragShader);
+
+	deferShaderProgram.LinkProgram();
+
+
+	glGenFramebuffers(1, &deferFramebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, deferFramebuffer);
+
+
+	glGenTextures(1, &deferTexture);
+	glBindTexture(GL_TEXTURE_2D, deferTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, application->Status->FixedWidth,
+		application->Status->FixedHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, deferTexture, 0);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		cout << "Defer Buffer is not ready for this viewport!" << endl << endl;
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	else
+	{
+		cout << "Defer Buffer is ready for this viewport!" << endl << endl;
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	}
+
+
+	float quadVertices[] = {
+		// positions        // texture Coords
+		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+		 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+	};
+
+	unsigned int indices[] = { 0, 1, 2, 1, 2, 3 };
+
+
+	glGenVertexArrays(1, &deferVAO);
+	glBindVertexArray(deferVAO);
+
+	GLuint VBO, EBO;
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+
+	
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(sizeof(float) * 3));
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+
+	// USE EBO
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	
+
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+	//std::cout << "Error: " << glGetError() << std::endl;
+}
+
+
+void ScreenUI::DeferredRender()
+{
+
+	glBindFramebuffer(GL_FRAMEBUFFER, deferFramebuffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glDisable(GL_DEPTH_TEST);
+
+	glUseProgram(deferShaderProgram.ID());
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, gbuffer.positionTexture);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, gbuffer.normalTexture);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, gbuffer.colourTexture);
+
+	glUniform1i(glGetUniformLocation(deferShaderProgram.ID(), "position"), 0);
+	glUniform1i(glGetUniformLocation(deferShaderProgram.ID(), "normal"), 1);
+	glUniform1i(glGetUniformLocation(deferShaderProgram.ID(), "colour"), 2);
+
+	
+	glBindVertexArray(deferVAO);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindVertexArray(0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glEnable(GL_DEPTH_BUFFER_BIT);
+
+
+	//std::cout << "Error: " << glGetError() << std::endl;
 
 }

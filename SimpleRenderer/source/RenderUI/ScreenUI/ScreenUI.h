@@ -2,7 +2,8 @@
 #include "RenderCamera/Viewport/RenderViewportCamera.h"
 #include "RenderPure/DiscreteMouseInput.h"
 
-
+// To delete
+#include "RenderShaderProgram/RenderShaderProgram.h"
 
 namespace SimpleRenderUI
 {
@@ -42,6 +43,18 @@ namespace SimpleRenderUI
 		void InitialiseSelectionBuffer();
 
 		void InitialiseGBuffer();
+
+
+		/* Temp Func to experiment. To be deleted */
+
+		void InitDeferredRender();
+		void DeferredRender();
+
+		GLuint deferFramebuffer, deferTexture;
+		SimpleRender::RenderShaderProgram deferShaderProgram;
+		GLuint deferVAO;
+		/* ...................................... */
+
 
 		// Inherited via DiscreteMouseInput
 		virtual void OnDiscreteMouseInput(GLFWwindow* window, int button, int action, int mods) override;

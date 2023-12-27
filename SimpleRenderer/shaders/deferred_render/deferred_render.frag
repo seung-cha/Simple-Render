@@ -5,11 +5,10 @@ out vec4 FragColor;
 
 in vec2 TexCoords;
 
-sampler2D position;
-sampler2D normal;
-sampler2D colour;
+uniform sampler2D position;
+uniform sampler2D normal;
+uniform sampler2D colour;
 
-uniform Material material;
 
 void main()
 {
@@ -19,7 +18,7 @@ void main()
     float specular = texture(colour, TexCoords).a;
 
 
-    FragColor = vec4(diff, 1.0);
+    FragColor = vec4(norm, 1.0);
 
 
 }
