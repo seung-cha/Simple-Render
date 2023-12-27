@@ -25,14 +25,30 @@ namespace SimpleRender
 		RenderScene(SimpleRender::RenderApplication* application);
 		void LoadDefaultScene();
 
-		void DrawScene(RenderCamera* camera, GLuint framebuffer);
+		void DrawScene(RenderCamera* camera, GLuint& framebuffer);
+
+		/// <summary>
+		/// Draw the scene with selected shader program, instead of each object's program.
+		/// </summary>
+		/// <param name="camera"></param>
+		/// <param name="framebuffer"></param>
+		/// <param name="shaderProgram"></param>
+		void DrawScene(RenderCamera* camera, GLuint& framebuffer, RenderShaderProgram* shaderProgram);
+
+
+		/// <summary>
+		/// Draw the scene for Gbuffer
+		/// </summary>
+		/// <param name="camera"></param>
+		/// <param name="framebuffer"></param>
+		void DrawGBufferScene(RenderCamera* camera, GLuint& framebuffer);
 
 		/// <summary>
 		/// Draw the scene for object selection.
 		/// </summary>
 		/// <param name="camera"></param>
 		/// <param name="framebuffer"></param>
-		void DrawIDScene(RenderCamera* camera, GLuint framebuffer);
+		void DrawIDScene(RenderCamera* camera, GLuint& framebuffer);
 
 		/// <summary>
 		/// Free allocated memory.
@@ -96,6 +112,7 @@ namespace SimpleRender
 		const RenderApplication* Application = application;
 
 		RenderShaderProgram* const ObjectIDShaderProgram = &objectSelectionShaderProgram;
+		RenderShaderProgram* const GBufferShaderProgram = &gbufferShaderProgram;
 
 
 	private:
@@ -115,6 +132,7 @@ namespace SimpleRender
 		GLuint screenTexture = 0;
 
 		RenderShaderProgram objectSelectionShaderProgram;
+		RenderShaderProgram gbufferShaderProgram;
 	};
 
 

@@ -56,11 +56,19 @@ RenderScene::RenderScene(RenderApplication* application)
 	objectSelectionShaderProgram.LinkProgram();
 
 
+
+	RenderShader gvertShader(ShaderType::Vertex, "shaders/g_buffer/g_buffer.vert");
+	RenderShader gfragShader(ShaderType::Fragment, "shaders/g_buffer/g_buffer.frag");
+
+	gbufferShaderProgram = RenderShaderProgram();
+	gbufferShaderProgram.AttachShader(&gvertShader);
+	gbufferShaderProgram.AttachShader(&gfragShader);
+	gbufferShaderProgram.LinkProgram();
 	
 
 }
 
-void RenderScene::DrawScene(RenderCamera* camera, GLuint framebuffer)
+void RenderScene::DrawScene(RenderCamera* camera, GLuint& framebuffer)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -74,7 +82,39 @@ void RenderScene::DrawScene(RenderCamera* camera, GLuint framebuffer)
 	glClear(GL_COLOR_BUFFER_BIT);	
 }
 
-void RenderScene::DrawIDScene(RenderCamera* camera, GLuint framebuffer)
+void RenderScene::DrawScene(RenderCamera* camera, GLuint& framebuffer, RenderShaderProgram* shaderProgram)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	for(auto& object : *SceneObjects)
+	{
+		object->Draw(camera, shaderProgram);
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+
+void RenderScene::DrawGBufferScene(RenderCamera* camera, GLuint& framebuffer)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	for(auto& object : *SceneObjects)
+	{
+		object->Draw(camera, &gbufferShaderProgram);
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+
+
+
+void RenderScene::DrawIDScene(RenderCamera* camera, GLuint& framebuffer)
 {
 	//Store colour value
 	float col[4];

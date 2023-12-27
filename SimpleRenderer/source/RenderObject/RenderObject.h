@@ -28,6 +28,14 @@ namespace SimpleRender
 		void Draw(RenderCamera* camera);
 
 		/// <summary>
+		/// Draw the object with given shader program instead. Assumes the program is valid.
+		/// </summary>
+		/// <param name="camera"></param>
+		/// <param name="shaderProgram"></param>
+		void Draw(RenderCamera* camera, RenderShaderProgram* shaderProgram);
+
+
+		/// <summary>
 		/// Draw call for object selection
 		/// </summary>
 		/// <param name="camera"></param>

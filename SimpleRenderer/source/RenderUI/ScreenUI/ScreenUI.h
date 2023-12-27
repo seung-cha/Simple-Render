@@ -12,7 +12,15 @@ namespace SimpleRenderUI
 		GLuint renderTexture;
 		GLuint renderbuffer;
 	};
-
+	
+	struct GBuffer
+	{
+		GLuint framebuffer;
+		GLuint positionTexture;
+		GLuint normalTexture;
+		GLuint colourTexture;
+		GLuint depthTexture;
+	};
 
 
 	class ScreenUI : public RenderUI, public SimpleRenderPure::DiscreteMouseInput
@@ -29,7 +37,11 @@ namespace SimpleRenderUI
 	private:
 		void RenderScene();
 		void RenderGizmo();
+
+
 		void InitialiseSelectionBuffer();
+
+		void InitialiseGBuffer();
 
 		// Inherited via DiscreteMouseInput
 		virtual void OnDiscreteMouseInput(GLFWwindow* window, int button, int action, int mods) override;
@@ -40,6 +52,7 @@ namespace SimpleRenderUI
 		GLuint screenRenderbuffer;
 
 		SelectionBuffer selectionBuffer;
+		GBuffer gbuffer;
 
 		SimpleRender::RenderViewportCamera camera;
 		

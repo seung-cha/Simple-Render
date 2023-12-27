@@ -22,7 +22,7 @@ ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string tit
 
 
 	// Make width/height customisable.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, application->Status->FixedWidth, application->Status->FixedHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -33,7 +33,7 @@ ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string tit
 	glGenRenderbuffers(1, &screenRenderbuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, screenRenderbuffer);
 
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1920, 1080);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, application->Status->FixedWidth, application->Status->FixedHeight);
 
 
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, screenRenderbuffer);
@@ -44,7 +44,9 @@ ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string tit
 		cout << "Frame buffer is not ready for this viewport!" << endl << endl;
 	}
 
+
 	InitialiseSelectionBuffer();
+	InitialiseGBuffer();
 
 }
 
@@ -69,7 +71,7 @@ void ScreenUI::UpdateWidget()
 	if(pressed)
 	{
 		pressed = false;
-		if(mousePos[0] >= pos.x && mousePos[1] >= pos.y && mousePos[0] <= windowSize.x && mousePos[1] <=windowSize.y)
+		if(mousePos[0] >= pos.x && mousePos[1] >= pos.y && mousePos[0] <= windowSize.x && mousePos[1] <=windowSize.y && !ImGuizmo::IsOver())
 		{
 
 				ImVec2 progress = { (mousePos[0] - pos.x) / size.x, (mousePos[1] - pos.y) / size.y};
@@ -91,6 +93,11 @@ void ScreenUI::UpdateWidget()
 
 				cout << "Pixel data at < " << res[0] << ", " << application->Status->FixedHeight - res[1] << " >:"
 					<< static_cast<int>(col[0]) << std::endl;
+
+				if(static_cast<int>(col[0]) != 0)
+					application->Scene->ActiveObject = (*application->Scene->SceneObjects)[static_cast<int>(col[0] - 1)];
+				else
+					application->Scene->ActiveObject = nullptr;
 		}
 
 	}
@@ -100,7 +107,7 @@ void ScreenUI::UpdateWidget()
 
 	ImVec2 s = ImGui::GetWindowSize();
 
-	ImGui::Image(ImTextureID(screenTexture), s, { 0, 1 }, {1, 0});
+	ImGui::Image(ImTextureID(screenTexture), s, {0, 1}, {1, 0});
 	RenderScene();
 	RenderGizmo();
 
@@ -127,6 +134,80 @@ void ScreenUI::ReflectUpdate()
 }
 
 
+void ScreenUI::InitialiseGBuffer()
+{
+	glGenFramebuffers(1, &gbuffer.framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, gbuffer.framebuffer);
+
+
+	// Generate position texture
+	glGenTextures(1, &gbuffer.positionTexture);
+	glBindTexture(GL_TEXTURE_2D, gbuffer.positionTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, application->Status->FixedWidth, application->Status->FixedHeight, 0, GL_RGBA, GL_FLOAT, 0);
+	
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbuffer.positionTexture, 0);
+
+	// Generate normal texture
+	glGenTextures(1, &gbuffer.normalTexture);
+	glBindTexture(GL_TEXTURE_2D, gbuffer.normalTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, application->Status->FixedWidth, application->Status->FixedHeight, 0, GL_RGBA, GL_FLOAT, 0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gbuffer.normalTexture, 0);
+
+	// Generate color + specular texture
+	glGenTextures(1, &gbuffer.colourTexture);
+	glBindTexture(GL_TEXTURE_2D, gbuffer.colourTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, application->Status->FixedWidth, application->Status->FixedHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gbuffer.colourTexture, 0);
+
+	
+	// Generate depth texture
+	glGenTextures(1, &gbuffer.depthTexture);
+	glBindTexture(GL_TEXTURE_2D, gbuffer.depthTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, application->Status->FixedWidth, application->Status->FixedHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gbuffer.depthTexture, 0);
+
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		cout << "G Buffer is not ready for this viewport!" << endl << endl;
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	else
+	{
+		cout << "G Buffer is ready for this viewport!" << endl << endl;
+
+		GLenum attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+		glDrawBuffers(3, attachments);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+
+
+}
+
+
 void ScreenUI::InitialiseSelectionBuffer()
 {
 	glGenFramebuffers(1, &selectionBuffer.framebuffer);
@@ -138,8 +219,8 @@ void ScreenUI::InitialiseSelectionBuffer()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, application->Status->FixedWidth,
 		application->Status->FixedHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, selectionBuffer.renderTexture, 0);
 
@@ -189,10 +270,13 @@ void ScreenUI::RenderScene()
 	camera.Active = ImGui::IsWindowFocused();
 	camera.Update();
 
-	// Draw the scene first and then ID scene
+	// Draw the scene first and then ID scene and then G buffer
 	application->Scene->DrawScene(&camera, framebuffer);
 
 	application->Scene->DrawIDScene(&camera, selectionBuffer.renderbuffer);
+
+	application->Scene->DrawGBufferScene(&camera, gbuffer.framebuffer);
+	
 
 }
 

@@ -184,6 +184,31 @@ void RenderObject::Draw(RenderCamera* camera)
 
 }
 
+void RenderObject::Draw(RenderCamera* camera, RenderShaderProgram* shaderProgram)
+{
+	glUseProgram(shaderProgram->ID());
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Model"), 1, GL_FALSE, &matrix[0][0]);
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.View"), 1,
+		GL_FALSE, &camera->ViewMatrix()[0][0]);
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Perspective"), 1,
+		GL_FALSE, &camera->PerspectiveMatrix()[0][0]);
+
+
+	glUseProgram(0);
+
+	for(auto& mesh : meshes)
+	{
+		mesh.Draw(shaderProgram, textures);
+	}
+
+}
+
+
+
+
 
 void RenderObject::DrawID(RenderCamera* camera, RenderShaderProgram* selectionProgram)
 {
