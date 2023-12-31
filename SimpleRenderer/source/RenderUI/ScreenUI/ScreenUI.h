@@ -5,6 +5,10 @@
 // To delete
 #include "RenderShaderProgram/RenderShaderProgram.h"
 
+#include "RenderBuffer/SelectionBuffer.h"
+#include "RenderBuffer/GBuffer.h"
+
+
 namespace SimpleRenderUI
 {
 	struct SelectionBuffer
@@ -40,10 +44,6 @@ namespace SimpleRenderUI
 		void RenderGizmo();
 
 
-		void InitialiseSelectionBuffer();
-
-		void InitialiseGBuffer();
-
 
 		/* Temp Func to experiment. To be deleted */
 
@@ -64,8 +64,10 @@ namespace SimpleRenderUI
 		GLuint screenTexture;
 		GLuint screenRenderbuffer;
 
-		SelectionBuffer selectionBuffer;
-		GBuffer gbuffer;
+
+		SimpleRenderBuffer::SelectionBuffer selectionBuffer;
+		SimpleRenderBuffer::GBuffer gBuffer;
+
 
 		SimpleRender::RenderViewportCamera camera;
 		

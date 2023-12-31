@@ -73,6 +73,9 @@
     <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="source\FileReader\FileReader.h" />
     <ClInclude Include="source\RenderApplication\RenderApplication.h" />
+    <ClInclude Include="source\RenderBuffer\GBuffer.h" />
+    <ClInclude Include="source\RenderBuffer\RenderBuffer.h" />
+    <ClInclude Include="source\RenderBuffer\SelectionBuffer.h" />
     <ClInclude Include="source\RenderCamera\RenderCamera.h" />
     <ClInclude Include="source\RenderCamera\Viewport\RenderViewportCamera.h" />
     <ClInclude Include="source\RenderMesh\RenderMesh.h" />

@@ -31,6 +31,9 @@
     <Filter Include="Resource Files\ImGuizmo">
       <UniqueIdentifier>{866ad8ad-a966-41a0-accf-3554e1e0bef8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Buffers">
+      <UniqueIdentifier>{2dc4525c-7170-49f4-b31a-4a559c01f6a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -253,6 +256,15 @@
     </ClInclude>
     <ClInclude Include="source\RenderPure\DiscreteMouseInput.h">
       <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderBuffer\RenderBuffer.h">
+      <Filter>Header Files\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderBuffer\GBuffer.h">
+      <Filter>Header Files\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderBuffer\SelectionBuffer.h">
+      <Filter>Header Files\Buffers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

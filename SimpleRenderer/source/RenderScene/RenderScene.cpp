@@ -100,6 +100,7 @@ void RenderScene::DrawScene(RenderCamera* camera, GLuint& framebuffer, RenderSha
 void RenderScene::DrawGBufferScene(RenderCamera* camera, GLuint& framebuffer)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for(auto& object : *SceneObjects)

@@ -14,7 +14,12 @@
 using namespace SimpleRenderUI; 
 using namespace std;
 
-ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string title) : RenderUI(title, application), camera(application), DiscreteMouseInput(application)
+ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string title) :
+	RenderUI(title, application), 
+	camera(application), 
+	DiscreteMouseInput(application), 
+	selectionBuffer(application->Status->FixedWidth, application->Status->FixedHeight),
+	gBuffer(application->Status->FixedWidth, application->Status->FixedHeight)
 {
 
 	// Initialise the frame buffer for this viewport
@@ -49,10 +54,10 @@ ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string tit
 	}
 
 
-	InitialiseSelectionBuffer();
-	InitialiseGBuffer();
-
 	InitDeferredRender();
+
+
+
 
 }
 
@@ -74,6 +79,8 @@ void ScreenUI::UpdateWidget()
 	ImVec2 windowSize = { size.x + pos.x, size.y + pos.y };
 
 
+
+	// Object selection
 	if(pressed)
 	{
 		pressed = false;
@@ -92,7 +99,7 @@ void ScreenUI::UpdateWidget()
 				unsigned char col[4];
 
 
-				glBindFramebuffer(GL_READ_FRAMEBUFFER, selectionBuffer.framebuffer);
+				glBindFramebuffer(GL_READ_FRAMEBUFFER, selectionBuffer.Framebuffer);
 				glReadPixels(res[0], application->Status->FixedHeight - res[1], 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &col);
 				glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 
@@ -140,125 +147,6 @@ void ScreenUI::ReflectUpdate()
 }
 
 
-void ScreenUI::InitialiseGBuffer()
-{
-	glGenFramebuffers(1, &gbuffer.framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, gbuffer.framebuffer);
-
-
-	// Generate position texture
-	glGenTextures(1, &gbuffer.positionTexture);
-	glBindTexture(GL_TEXTURE_2D, gbuffer.positionTexture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, application->Status->FixedWidth, application->Status->FixedHeight, 0, GL_RGBA, GL_FLOAT, 0);
-	
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbuffer.positionTexture, 0);
-
-	// Generate normal texture
-	glGenTextures(1, &gbuffer.normalTexture);
-	glBindTexture(GL_TEXTURE_2D, gbuffer.normalTexture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, application->Status->FixedWidth, application->Status->FixedHeight, 0, GL_RGBA, GL_FLOAT, 0);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gbuffer.normalTexture, 0);
-
-	// Generate color + specular texture
-	glGenTextures(1, &gbuffer.colourTexture);
-	glBindTexture(GL_TEXTURE_2D, gbuffer.colourTexture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, application->Status->FixedWidth, application->Status->FixedHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gbuffer.colourTexture, 0);
-
-	
-	// Generate depth texture
-	glGenTextures(1, &gbuffer.depthTexture);
-	glBindTexture(GL_TEXTURE_2D, gbuffer.depthTexture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, application->Status->FixedWidth, application->Status->FixedHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gbuffer.depthTexture, 0);
-
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		cout << "G Buffer is not ready for this viewport!" << endl << endl;
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-	else
-	{
-		cout << "G Buffer is ready for this viewport!" << endl << endl;
-
-		GLenum attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
-		glDrawBuffers(3, attachments);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-
-
-
-}
-
-
-void ScreenUI::InitialiseSelectionBuffer()
-{
-	glGenFramebuffers(1, &selectionBuffer.framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, selectionBuffer.framebuffer);
-
-	glGenTextures(1, &selectionBuffer.renderTexture);
-	glBindTexture(GL_TEXTURE_2D, selectionBuffer.renderTexture);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, application->Status->FixedWidth,
-		application->Status->FixedHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, selectionBuffer.renderTexture, 0);
-
-
-	// Gen renderbuffer
-	glGenRenderbuffers(1, &selectionBuffer.renderbuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, selectionBuffer.renderbuffer);
-
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, application->Status->FixedWidth, application->Status->FixedHeight);
-
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, selectionBuffer.renderbuffer);
-
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		cout << "Selection Buffer is not ready for this viewport!" << endl << endl;
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-	else
-	{
-		cout << "Selection Buffer is ready for this viewport!" << endl << endl;
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	}
-	
-
-}
-
 void SimpleRenderUI::ScreenUI::OnDiscreteMouseInput(GLFWwindow* window, int button, int action, int mods)
 {
 
@@ -279,9 +167,9 @@ void ScreenUI::RenderScene()
 	// Draw the scene first and then ID scene and then G buffer
 	application->Scene->DrawScene(&camera, framebuffer);
 
-	application->Scene->DrawIDScene(&camera, selectionBuffer.renderbuffer);
+	application->Scene->DrawIDScene(&camera, selectionBuffer.Framebuffer);
 
-	application->Scene->DrawGBufferScene(&camera, gbuffer.framebuffer);
+	application->Scene->DrawGBufferScene(&camera, gBuffer.Framebuffer);
 	
 
 	DeferredRender();
@@ -409,13 +297,13 @@ void ScreenUI::DeferredRender()
 	glUseProgram(deferShaderProgram.ID());
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, gbuffer.positionTexture);
+	glBindTexture(GL_TEXTURE_2D, gBuffer.PositionTexture);
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, gbuffer.normalTexture);
+	glBindTexture(GL_TEXTURE_2D, gBuffer.NormalTexture);
 
 	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, gbuffer.colourTexture);
+	glBindTexture(GL_TEXTURE_2D, gBuffer.ColourTexture);
 
 	glUniform1i(glGetUniformLocation(deferShaderProgram.ID(), "position"), 0);
 	glUniform1i(glGetUniformLocation(deferShaderProgram.ID(), "normal"), 1);
