@@ -2,30 +2,14 @@
 #include "RenderCamera/Viewport/RenderViewportCamera.h"
 #include "RenderPure/DiscreteMouseInput.h"
 
-// To delete
-#include "RenderShaderProgram/RenderShaderProgram.h"
 
 #include "RenderBuffer/SelectionBuffer.h"
-#include "RenderBuffer/GBuffer.h"
+#include "RenderDeferredRender/RenderDeferredRender.h"
 
 
 namespace SimpleRenderUI
 {
-	struct SelectionBuffer
-	{
-		GLuint framebuffer;
-		GLuint renderTexture;
-		GLuint renderbuffer;
-	};
-	
-	struct GBuffer
-	{
-		GLuint framebuffer;
-		GLuint positionTexture;
-		GLuint normalTexture;
-		GLuint colourTexture;
-		GLuint depthTexture;
-	};
+
 
 
 	class ScreenUI : public RenderUI, public SimpleRenderPure::DiscreteMouseInput
@@ -45,16 +29,7 @@ namespace SimpleRenderUI
 
 
 
-		/* Temp Func to experiment. To be deleted */
-
-		void InitDeferredRender();
-		void DeferredRender();
-
-		GLuint deferFramebuffer, deferTexture;
-		SimpleRender::RenderShaderProgram deferShaderProgram;
-		GLuint deferVAO;
-		/* ...................................... */
-
+		SimpleRender::RenderDeferredRender deferredRender;
 
 		// Inherited via DiscreteMouseInput
 		virtual void OnDiscreteMouseInput(GLFWwindow* window, int button, int action, int mods) override;
@@ -66,7 +41,6 @@ namespace SimpleRenderUI
 
 
 		SimpleRenderBuffer::SelectionBuffer selectionBuffer;
-		SimpleRenderBuffer::GBuffer gBuffer;
 
 
 		SimpleRender::RenderViewportCamera camera;

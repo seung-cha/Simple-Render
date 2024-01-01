@@ -38,6 +38,7 @@
     <ClCompile Include="source\RenderApplication\RenderApplication.cpp" />
     <ClCompile Include="source\RenderCamera\RenderCamera.cpp" />
     <ClCompile Include="source\RenderCamera\Viewport\RenderViewportCamera.cpp" />
+    <ClCompile Include="source\RenderDeferredRender\RenderDeferredRender.cpp" />
     <ClCompile Include="source\RenderMesh\RenderMesh.cpp" />
     <ClCompile Include="source\RenderObject\RenderObject.cpp" />
     <ClCompile Include="source\RenderPure\ContiguousKeyInput.cpp" />
@@ -78,6 +79,7 @@
     <ClInclude Include="source\RenderBuffer\SelectionBuffer.h" />
     <ClInclude Include="source\RenderCamera\RenderCamera.h" />
     <ClInclude Include="source\RenderCamera\Viewport\RenderViewportCamera.h" />
+    <ClInclude Include="source\RenderDeferredRender\RenderDeferredRender.h" />
     <ClInclude Include="source\RenderMesh\RenderMesh.h" />
     <ClInclude Include="source\RenderObject\RenderObject.h" />
     <ClInclude Include="source\RenderPure\ContiguousKeyInput.h" />

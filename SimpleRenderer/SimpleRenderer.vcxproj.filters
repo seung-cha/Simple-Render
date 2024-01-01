@@ -141,6 +141,9 @@
     <ClCompile Include="source\RenderPure\DiscreteMouseInput.cpp">
       <Filter>Source Files\Interface</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderDeferredRender\RenderDeferredRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="source\RenderBuffer\SelectionBuffer.h">
       <Filter>Header Files\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderDeferredRender\RenderDeferredRender.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

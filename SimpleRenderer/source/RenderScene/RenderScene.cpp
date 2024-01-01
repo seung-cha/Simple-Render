@@ -80,10 +80,12 @@ void RenderScene::DrawScene(RenderCamera* camera, GLuint& framebuffer)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT);	
+
 }
 
 void RenderScene::DrawScene(RenderCamera* camera, GLuint& framebuffer, RenderShaderProgram* shaderProgram)
 {
+
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -110,6 +112,8 @@ void RenderScene::DrawGBufferScene(RenderCamera* camera, GLuint& framebuffer)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+
 }
 
 
@@ -117,7 +121,6 @@ void RenderScene::DrawGBufferScene(RenderCamera* camera, GLuint& framebuffer)
 
 void RenderScene::DrawIDScene(RenderCamera* camera, GLuint& framebuffer)
 {
-	//Store colour value
 	float col[4];
 	glGetFloatv(GL_COLOR_CLEAR_VALUE, col);
 
@@ -130,11 +133,9 @@ void RenderScene::DrawIDScene(RenderCamera* camera, GLuint& framebuffer)
 	{
 		obj->DrawID(camera, &objectSelectionShaderProgram);
 	}
-
-
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClearColor(col[0], col[1], col[2], col[3]);
 
+	glClearColor(col[0], col[1], col[2], col[3]);
 }
 
 void RenderScene::LoadDefaultScene()

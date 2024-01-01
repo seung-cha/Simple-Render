@@ -4,6 +4,9 @@
 
 namespace SimpleRenderBuffer
 {
+
+
+
 	class RenderBuffer
 	{
 
@@ -30,7 +33,9 @@ namespace SimpleRenderBuffer
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
 
 			glBindTexture(GL_TEXTURE_2D, 0);
+
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 
 
 		}
@@ -49,5 +54,10 @@ namespace SimpleRenderBuffer
 		GLuint framebuffer, texture;
 	};
 
+	/// <summary>
+	/// Buffer class for deferred rendering.
+	/// it is just a typedef for RenderBuffer class.
+	/// </summary>
+	using DeferBuffer = RenderBuffer;
 
 }
