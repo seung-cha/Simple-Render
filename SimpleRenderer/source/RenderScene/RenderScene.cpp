@@ -1,6 +1,9 @@
 #include "RenderScene.h"
 #include "RenderObject/RenderObject.h"
 #include "RenderApplication/RenderApplication.h"
+#include "RenderDeferredRender/RenderDeferredRender.h"
+
+#include "RenderShaderProgram/ShaderProgramData.h"
 
 #include "imgui.h"
 
@@ -47,24 +50,19 @@ RenderScene::RenderScene(RenderApplication* application)
 
 
 
-	RenderShader vertShader(ShaderType::Vertex, "shaders/object_selection/selection.vert");
-	RenderShader fragShader(ShaderType::Fragment, "shaders/object_selection/selection.frag");
-
 	objectSelectionShaderProgram = RenderShaderProgram();
-	objectSelectionShaderProgram.AttachShader(&vertShader);
-	objectSelectionShaderProgram.AttachShader(&fragShader);
+	objectSelectionShaderProgram.AttachShader(new RenderShader(ShaderType::Vertex, "shaders/object_selection/selection.vert"));
+	objectSelectionShaderProgram.AttachShader(new RenderShader(ShaderType::Fragment, "shaders/object_selection/selection.frag"));
 	objectSelectionShaderProgram.LinkProgram();
 
 
-
-	RenderShader gvertShader(ShaderType::Vertex, "shaders/g_buffer/g_buffer.vert");
-	RenderShader gfragShader(ShaderType::Fragment, "shaders/g_buffer/g_buffer.frag");
-
 	gbufferShaderProgram = RenderShaderProgram();
-	gbufferShaderProgram.AttachShader(&gvertShader);
-	gbufferShaderProgram.AttachShader(&gfragShader);
+	gbufferShaderProgram.AttachShader(new RenderShader(ShaderType::Vertex, "shaders/g_buffer/g_buffer.vert"));
+	gbufferShaderProgram.AttachShader(new RenderShader(ShaderType::Fragment, "shaders/g_buffer/g_buffer.frag"));
 	gbufferShaderProgram.LinkProgram();
-	
+
+	//Initiate deferred render
+	deferredRender = new RenderDeferredRender(this);
 
 }
 
@@ -89,6 +87,8 @@ void RenderScene::DrawScene(RenderCamera* camera, GLuint& framebuffer, RenderSha
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	shaderProgram->ApplyUniformVariables();
+
 	for(auto& object : *SceneObjects)
 	{
 		object->Draw(camera, shaderProgram);
@@ -104,6 +104,8 @@ void RenderScene::DrawGBufferScene(RenderCamera* camera, GLuint& framebuffer)
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	gbufferShaderProgram.ApplyUniformVariables();
 
 	for(auto& object : *SceneObjects)
 	{
@@ -191,5 +193,21 @@ void RenderScene::DeleteActiveObject()
 	
 	DeleteObject(ActiveObject);
 	ActiveObject = nullptr;
+
+}
+
+
+void RenderScene::UpdateDeferredRender()
+{
+
+	auto render = new RenderDeferredRender(this);
+
+	for(auto item : *deferredRender->ShaderProgram->UniformData)
+	{
+		render->ShaderProgram->UniformData->push_back(item);
+	}
+
+	delete deferredRender;
+	deferredRender = render;
 
 }

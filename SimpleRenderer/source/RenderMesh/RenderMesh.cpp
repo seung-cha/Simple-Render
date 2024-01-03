@@ -130,6 +130,7 @@ void RenderMesh::Draw(RenderShaderProgram* program, const std::vector<RenderText
 	unsigned int specNo = 0;
 	unsigned int globalTexID = 0;
 
+
 	for(unsigned int& index : textureIndices)
 	{
 
@@ -154,8 +155,7 @@ void RenderMesh::Draw(RenderShaderProgram* program, const std::vector<RenderText
 
 	}
 
-	// Reset active texture
-	glActiveTexture(GL_TEXTURE0);
+
 
 	//char log[512];
 	//glGetProgramInfoLog(program->ID(), 512, 0, log);
@@ -167,6 +167,18 @@ void RenderMesh::Draw(RenderShaderProgram* program, const std::vector<RenderText
 
 	glBindVertexArray(0);
 	glUseProgram(0);
+
+	// Unbind textures
+	for(int i = 0; i < textureIndices.size(); i++)
+	{
+
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+	}
+
+
+
 }
 
 

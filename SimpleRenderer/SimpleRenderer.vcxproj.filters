@@ -144,6 +144,9 @@
     <ClCompile Include="source\RenderDeferredRender\RenderDeferredRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderUI\RenderingUI\RenderingUI.cpp">
+      <Filter>Source Files\RenderUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -271,6 +274,12 @@
     </ClInclude>
     <ClInclude Include="source\RenderDeferredRender\RenderDeferredRender.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderShaderProgram\ShaderProgramData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderUI\RenderingUI\RenderingUI.h">
+      <Filter>Header Files\RenderUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,8 +3,8 @@
 #include "RenderPure/DiscreteMouseInput.h"
 
 
+#include "RenderBuffer/RenderBuffer.h"
 #include "RenderBuffer/SelectionBuffer.h"
-#include "RenderDeferredRender/RenderDeferredRender.h"
 
 
 namespace SimpleRenderUI
@@ -27,10 +27,6 @@ namespace SimpleRenderUI
 		void RenderScene();
 		void RenderGizmo();
 
-
-
-		SimpleRender::RenderDeferredRender deferredRender;
-
 		// Inherited via DiscreteMouseInput
 		virtual void OnDiscreteMouseInput(GLFWwindow* window, int button, int action, int mods) override;
 
@@ -41,6 +37,8 @@ namespace SimpleRenderUI
 
 
 		SimpleRenderBuffer::SelectionBuffer selectionBuffer;
+		SimpleRenderBuffer::DeferBuffer deferBuffer;
+
 
 
 		SimpleRender::RenderViewportCamera camera;

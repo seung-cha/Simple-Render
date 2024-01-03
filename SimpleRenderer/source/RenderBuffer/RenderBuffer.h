@@ -1,13 +1,15 @@
 #pragma once
 
 #include <glad/glad.h>
+#include "RenderPure/Disposable.h"
+
 
 namespace SimpleRenderBuffer
 {
 
 
 
-	class RenderBuffer
+	class RenderBuffer : public SimpleRenderPure::Disposable
 	{
 
 	public:
@@ -49,6 +51,14 @@ namespace SimpleRenderBuffer
 	public:
 		 GLuint& Framebuffer = framebuffer;
 		 GLuint& Texture = texture;
+
+	public:
+		virtual void Dispose()
+		{
+			glDeleteFramebuffers(1, &framebuffer);
+			glDeleteTextures(1, &texture);
+		}
+
 
 	protected:
 		GLuint framebuffer, texture;

@@ -16,11 +16,15 @@
 #include "RenderUI/ShaderUI/ShaderUI.h"
 #include "RenderUI/HierarchyUI/HierarchyUI.h"
 #include "RenderUI/ScreenUI/ScreenUI.h"
+#include "RenderUI/RenderingUI/RenderingUI.h"
+
 
 #include "RenderPure/ContiguousKeyInput.h"
 #include "RenderPure/DiscreteKeyInput.h"
 #include "RenderPure/MousePositionInput.h"
 #include "RenderPure/DiscreteMouseInput.h"
+
+#include "RenderDeferredRender/RenderDeferredRender.h"
 
 
 #include <iostream>
@@ -153,8 +157,7 @@ SimpleRender::RenderApplication::RenderApplication()
 	AddUI(new ShaderUI(this));
 	AddUI(new HierarchyUI(this));
 	AddUI(new ScreenUI(this));
-
-
+	AddUI(new RenderingUI(this));
 
 
 	glEnable(GL_DEPTH_TEST);
@@ -300,3 +303,4 @@ void SimpleRender::RenderApplication::UnregisterDiscreteMouseInput(SimpleRenderP
 {
 	mouseButtonInputs.erase(mouseInput);
 }
+

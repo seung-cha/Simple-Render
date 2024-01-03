@@ -63,3 +63,15 @@ void RenderShaderProgram::Dispose()
 	glDeleteProgram(programID);
 }
 
+void RenderShaderProgram::ApplyUniformVariables()
+{
+	glUseProgram(programID);
+
+	for(auto& data : programData)
+	{
+		data->Apply(programID);
+
+	}
+
+	glUseProgram(0);
+}

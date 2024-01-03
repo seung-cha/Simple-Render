@@ -3,11 +3,13 @@
 #include <string>
 #include <glad/glad.h>
 #include "RenderShader/RenderShader.h"
-
 #include "RenderPure/Disposable.h"
+
+#include "ShaderProgramData.h"
 
 #include <iostream>
 #include <unordered_set>
+
 
 namespace SimpleRender 
 {
@@ -111,12 +113,23 @@ namespace SimpleRender
 				return "Error";
 		}
 
+		
+		std::vector<ShaderProgramData*>* UniformData = &programData;
 
+		/// <summary>
+		/// Apply all data in UniformData to this GLSL shader.
+		/// shader program is unbound afterwards.
+		/// </summary>
+		void ApplyUniformVariables();
 		
 	private:
 
 
 		std::unordered_set<RenderObject*> associatedObjects;
+
+		std::vector<ShaderProgramData*> programData;
+
+
 
 		enum ShaderProgramState state = ShaderProgramNew;
 		GLuint programID;

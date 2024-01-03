@@ -4,6 +4,8 @@
 #include "RenderBuffer.h"
 #include <iostream>
 
+
+
 namespace SimpleRenderBuffer
 {
 	class GBuffer : public RenderBuffer
@@ -83,7 +85,6 @@ namespace SimpleRenderBuffer
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-
 		}
 
 
@@ -93,6 +94,20 @@ namespace SimpleRenderBuffer
 		GLuint& NormalTexture = normalTexture;
 		GLuint& ColourTexture = colourTexture;
 		GLuint& DepthTexture = depthTexture;
+
+
+		void Dispose() override
+		{
+			RenderBuffer::Dispose();
+
+			glDeleteTextures(1, &positionTexture);
+			glDeleteTextures(1, &normalTexture);
+			glDeleteTextures(1, &colourTexture);
+			glDeleteTextures(1, &depthTexture);
+
+
+		}
+
 
 	protected:
 		GLuint positionTexture, normalTexture, colourTexture, depthTexture;

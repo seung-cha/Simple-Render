@@ -17,6 +17,7 @@ namespace SimpleRender
 	class RenderObject;
 	class RenderApplication;
 	class RenderCamera;
+	class RenderDeferredRender;
 
 
 	class RenderScene
@@ -55,7 +56,7 @@ namespace SimpleRender
 		/// As of now does nothing.
 		/// Should implement an interface to release OpenGL IDs of each class.
 		/// </summary>
-		inline void Dispose()
+		void Dispose()
 		{
 
 		}
@@ -91,6 +92,14 @@ namespace SimpleRender
 		void DeleteActiveObject();
 
 
+		/// <summary>
+		/// Update the deferred render class.
+		/// This is really just deleting the current one
+		/// and then assigning a new one.
+		/// </summary>
+		void UpdateDeferredRender();
+
+
 		std::vector<RenderObject*>* const SceneObjects = &objects;
 		std::vector<RenderCamera*>* const SceneCameras = &cameras;
 
@@ -109,11 +118,12 @@ namespace SimpleRender
 		GLuint* SceneTexture = &screenTexture;
 
 
-		const RenderApplication* Application = application;
+		RenderApplication*& Application = application;
 
 		RenderShaderProgram* const ObjectIDShaderProgram = &objectSelectionShaderProgram;
 		RenderShaderProgram* const GBufferShaderProgram = &gbufferShaderProgram;
 
+		RenderDeferredRender*& DeferredRender = deferredRender;
 
 	private:
 		RenderApplication* application;
@@ -133,6 +143,9 @@ namespace SimpleRender
 
 		RenderShaderProgram objectSelectionShaderProgram;
 		RenderShaderProgram gbufferShaderProgram;
+
+
+		RenderDeferredRender* deferredRender;
 	};
 
 

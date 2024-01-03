@@ -45,6 +45,11 @@ namespace SimpleRender
 			return perspective;
 		}
 
+		inline glm::vec3 Position()
+		{
+			return position;
+		}
+
 	protected:
 		glm::mat4 perspective;
 		glm::mat4 viewMat;

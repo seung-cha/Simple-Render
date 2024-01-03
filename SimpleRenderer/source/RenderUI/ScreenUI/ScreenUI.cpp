@@ -7,6 +7,7 @@
 
 #include "ImGuizmo.h"
 
+#include "RenderDeferredRender/RenderDeferredRender.h"
 
 // To delete
 #include "RenderShader/RenderShader.h"
@@ -19,7 +20,7 @@ ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string tit
 	camera(application), 
 	DiscreteMouseInput(application), 
 	selectionBuffer(application->Status->FixedWidth, application->Status->FixedHeight),
-	deferredRender(application->Status->FixedWidth, application->Status->FixedHeight)
+	deferBuffer(application->Status->FixedWidth, application->Status->FixedHeight)
 {
 
 	// Initialise the frame buffer for this viewport
@@ -52,7 +53,6 @@ ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string tit
 	{
 		cout << "Frame buffer is not ready for this viewport!" << endl << endl;
 	}
-
 
 }
 
@@ -115,7 +115,14 @@ void ScreenUI::UpdateWidget()
 
 	ImVec2 s = ImGui::GetWindowSize();
 
-	ImGui::Image(ImTextureID(deferredRender.DeferBuffer.Texture), s, {0, 1}, {1, 0});
+	ImGui::Image(ImTextureID(deferBuffer.Texture), s, {0, 1}, {1, 0});
+
+	if(ImGui::Button("Reload deferred buffer"))
+	{
+		application->Scene->UpdateDeferredRender();
+
+	}
+
 	RenderScene();
 	RenderGizmo();
 
@@ -164,9 +171,8 @@ void ScreenUI::RenderScene()
 
 	application->Scene->DrawIDScene(&camera, selectionBuffer.Framebuffer);
 
-	application->Scene->DrawGBufferScene(&camera, deferredRender.GBuffer.Framebuffer);
-	
-	deferredRender.Draw();
+
+	application->Scene->DeferredRender->Draw(&camera, deferBuffer.Framebuffer);
 
 
 }

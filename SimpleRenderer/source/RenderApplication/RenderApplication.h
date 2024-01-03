@@ -84,7 +84,7 @@ namespace SimpleRender
 	
 
 	class RenderScene;
-	class SimpleRenderUI::RenderUI;
+	class RenderDeferredRender;
 
 	class RenderApplication : public SimpleRenderPure::Disposable
 	{
@@ -122,7 +122,7 @@ namespace SimpleRender
 		/// <summary>
 		/// Register an object to receive discrete mouse button input
 		/// </summary>
-		 void RegisterDiscreteMouseInput(SimpleRenderPure::DiscreteMouseInput* mouseInput);
+		void RegisterDiscreteMouseInput(SimpleRenderPure::DiscreteMouseInput* mouseInput);
 		void UnregisterDiscreteMouseInput(SimpleRenderPure::DiscreteMouseInput* mouseInput);
 
 
@@ -136,7 +136,9 @@ namespace SimpleRender
 		/// </summary>
 
 		RenderScene*& Scene = scene;
+		
 
+	
 
 		/// <summary>
 		/// Do not use; needed to communicate in glfw callback
@@ -164,7 +166,6 @@ namespace SimpleRender
 		std::unordered_set<SimpleRenderPure::DiscreteKeyInput*> discreteKeyInputs;
 		std::unordered_set<SimpleRenderPure::MousePositionInput*> mousePositionInputs;
 		std::unordered_set<SimpleRenderPure::DiscreteMouseInput*> mouseButtonInputs;
-
 
 		AppStatus status;
 	};

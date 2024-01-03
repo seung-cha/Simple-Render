@@ -39,7 +39,16 @@ namespace SimpleRenderBuffer
 		}
 
 
+
+	public:
 		 GLuint& DepthTexture = depthTexture;
+
+		 void Dispose() override
+		 {
+			 RenderBuffer::Dispose();
+			 glDeleteTextures(1, &depthTexture);
+
+		 }
 
 	protected:
 		GLuint depthTexture;

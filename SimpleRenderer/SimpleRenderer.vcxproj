@@ -53,6 +53,7 @@
     <ClCompile Include="source\RenderUI\CameraUI\CameraUI.cpp" />
     <ClCompile Include="source\RenderUI\HierarchyUI\HierarchyUI.cpp" />
     <ClCompile Include="source\RenderUI\ObjectUI\ObjectUI.cpp" />
+    <ClCompile Include="source\RenderUI\RenderingUI\RenderingUI.cpp" />
     <ClCompile Include="source\RenderUI\ScreenUI\ScreenUI.cpp" />
     <ClCompile Include="source\RenderUI\ShaderUI\ShaderUI.cpp" />
   </ItemGroup>
@@ -89,12 +90,14 @@
     <ClInclude Include="source\RenderPure\MousePositionInput.h" />
     <ClInclude Include="source\RenderScene\RenderScene.h" />
     <ClInclude Include="source\RenderShaderProgram\RenderShaderProgram.h" />
+    <ClInclude Include="source\RenderShaderProgram\ShaderProgramData.h" />
     <ClInclude Include="source\RenderShader\RenderShader.h" />
     <ClInclude Include="source\RenderTexture\RenderTexture.h" />
     <ClInclude Include="source\RenderUI\BackgroundUI\BackgroundUI.h" />
     <ClInclude Include="source\RenderUI\CameraUI\CameraUI.h" />
     <ClInclude Include="source\RenderUI\HierarchyUI\HierarchyUI.h" />
     <ClInclude Include="source\RenderUI\ObjectUI\ObjectUI.h" />
+    <ClInclude Include="source\RenderUI\RenderingUI\RenderingUI.h" />
     <ClInclude Include="source\RenderUI\RenderUI.h" />
     <ClInclude Include="source\RenderUI\ScreenUI\ScreenUI.h" />
     <ClInclude Include="source\RenderUI\ShaderUI\ShaderUI.h" />

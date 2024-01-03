@@ -116,7 +116,7 @@ void ObjectUI::TextureTable(enum TextureType type)
 	{
 		if(texture->Status() == TextureStatus::NotReady)
 		{
-			if(ImGui::Button("NO IMAGE", textureButtonSize))
+			if(ImGui::Button(SimpleRender::RenderTexture::TextureTypeToString(type).c_str(), textureButtonSize))
 			{
 				if(selectedTexture == texture)
 					selectedTexture = nullptr;

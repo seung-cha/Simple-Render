@@ -1,11 +1,14 @@
 #include "RenderDeferredRender.h"
+#include "RenderCamera/RenderCamera.h"
+
+#include "RenderScene/RenderScene.h"
+#include "RenderApplication/RenderApplication.h"
 
 
-
-SimpleRender::RenderDeferredRender::RenderDeferredRender(int width, int height) :
-	deferBuffer(width, height),
-	gBuffer(width, height)
+SimpleRender::RenderDeferredRender::RenderDeferredRender(RenderScene* scene) :
+	gBuffer(scene->Application->Status->FixedWidth, scene->Application->Status->FixedHeight)
 {
+	this->scene = scene;
 
 	SimpleRender::RenderShader vertShader(SimpleRender::ShaderType::Vertex, "shaders/deferred_render/deferred_render.vert");
 	SimpleRender::RenderShader fragShader(SimpleRender::ShaderType::Fragment, "shaders/deferred_render/deferred_render.frag");
@@ -59,9 +62,13 @@ SimpleRender::RenderDeferredRender::RenderDeferredRender(int width, int height) 
 }
 
 
-void SimpleRender::RenderDeferredRender::Draw()
+void SimpleRender::RenderDeferredRender::Draw(SimpleRender::RenderCamera* camera, GLuint& framebuffer)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, deferBuffer.Framebuffer);
+	scene->DrawGBufferScene(camera, gBuffer.Framebuffer);
+	
+	program.ApplyUniformVariables();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(program.ID());
@@ -78,6 +85,8 @@ void SimpleRender::RenderDeferredRender::Draw()
 	glUniform1i(glGetUniformLocation(program.ID(), "position"), 0);
 	glUniform1i(glGetUniformLocation(program.ID(), "normal"), 1);
 	glUniform1i(glGetUniformLocation(program.ID(), "colour"), 2);
+	
+	glUniform3fv(glGetUniformLocation(program.ID(), "viewPos"), 1, &camera->Position()[0]);
 
 
 	glBindVertexArray(VAO);
