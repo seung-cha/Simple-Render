@@ -51,6 +51,23 @@ namespace SimpleRender
 		bool SleepMode;
 		std::string Title = "Simple Render";
 
+
+		/// <summary>
+		/// Time in double; default type
+		/// </summary>
+		double Time = 0.0;
+
+		/// <summary>
+		/// Time in float
+		/// </summary>
+		float Timef = 0.0f;
+
+		/// <summary>
+		/// Time in int
+		/// </summary>
+		int Timei = 0;
+
+
 		MouseStatus* Mouse = &mouse;
 
 

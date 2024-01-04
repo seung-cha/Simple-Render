@@ -27,11 +27,30 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 	for(auto item : *application->Scene->DeferredRender->ShaderProgram->UniformData)
 	{
 		item->DrawUI();
+
 		ImGui::SameLine();
 
 		std::stringstream s;
 		s << item->ID;
 		ImGui::InputText(item->idstr2.c_str(), &item->name);
+
+		if(ImGui::BeginPopupContextItem())
+		{
+			if(ImGui::Button("Select Constant"))
+			{
+				// Let the data pointer point to its value again
+				item->ToConstant();
+
+				ImGui::CloseCurrentPopup();
+
+			}
+
+			item->VariablePopup(application->Scene);
+
+			ImGui::EndPopup();
+		}
+
+
 	}
 
 	if(ImGui::Button("Add Uniform Int"))
@@ -64,6 +83,11 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 
 	}
 
+
+	if(ImGui::Button("Reload Shader"))
+	{
+		application->Scene->UpdateDeferredRender();
+	}
 
 	ImGui::End();
 

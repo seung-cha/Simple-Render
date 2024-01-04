@@ -11,7 +11,7 @@ uniform sampler2D colour;
 
 uniform vec3 viewPos;
 
-uniform vec3 lightPosition;
+uniform vec3 LightPosition;
 
 void main()
 {
@@ -29,7 +29,7 @@ void main()
 
     // Light Location
     vec3 lightPos = vec3(5.0, -10.0, 0.0);
-    lightPos = lightPosition;
+    lightPos = LightPosition;
 
     // Diffuse lighting calculation
     vec3 lightDir = normalize(lightPos - pos);
@@ -55,8 +55,6 @@ void main()
     // Add specular light to the final colour
     colour += vec3(specular) * spec_intensity;
 
-    //FragColor = vec4( colour, 1.0);
     FragColor = vec4( colour, 1.0);
-
-
+    //FragColor = vec4( diff, 1.0);
 }

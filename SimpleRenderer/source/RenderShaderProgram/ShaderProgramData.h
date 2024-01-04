@@ -5,15 +5,16 @@
 #include "imgui.h"
 #include <glm/glm.hpp>
 
-
 namespace SimpleRender
 {
+	class RenderScene;
+
 	class ShaderProgramData
 	{
 	public:
 		
 		void* data = 0;
-		bool readOnly = false;
+		bool ReadOnly = false;
 		std::string name = "";
 
 		/// <summary>
@@ -45,12 +46,36 @@ namespace SimpleRender
 		/// Assumes shaderProgram is in use prior to calling this function.
 		/// </summary>
 		virtual void Apply(GLuint shaderProgram) = 0;
-		
+
+		/// <summary>
+		/// Let the data pointer point to its internal variable (i.e make it constant)
+		/// </summary>
+		virtual void ToConstant()
+		{
+			ReadOnly = false;
+			// Logic to change data pointer will be wrritten by child classes
+		}
+
+		virtual void ToVariable(void* data)
+		{
+			ReadOnly = true;
+			this->data = data;
+		}
+
+
 		/// <summary>
 		/// Draw UI to manipulate this value. Assumes ImGui::Begin() is called beforehand.
 		/// </summary>
 		virtual void DrawUI() = 0;
 
+
+		/// <summary>
+		/// Draw ImGui pop up to select variable pointers.
+		/// Assumes this is called between ImGui::BeginPopupContextItem() and ImGui::EndPopup().
+		/// This may call ImGui::CloseCurrentPopup() to close the popup.
+		/// </summary>
+		/// <param name="scene"></param>
+		virtual void VariablePopup(RenderScene* scene) = 0;
 		
 
 
@@ -61,7 +86,7 @@ namespace SimpleRender
 	public:
 		ShaderDataFloat(int ID) : ShaderProgramData(ID)
 		{
-			data = static_cast<void*>(&value);
+			ToConstant();
 		}
 
 		void Apply(GLuint shaderProgram) override
@@ -71,14 +96,22 @@ namespace SimpleRender
 
 		void DrawUI() override
 		{
-			ImGui::BeginDisabled(readOnly);
+			ImGui::BeginDisabled(ReadOnly);
 
 
-			ImGui::DragFloat(idstr.c_str(), readOnly ? static_cast<float*>(data) : &value, 0.05f);
+			ImGui::DragFloat(idstr.c_str(), ReadOnly ? static_cast<float*>(data) : &value, 0.05f);
 
 			ImGui::EndDisabled();
 
 		}
+
+		void ToConstant() override
+		{
+			ShaderProgramData::ToConstant();
+			data = static_cast<void*>(&value);
+		}
+
+		void VariablePopup(RenderScene* scene) override;
 
 	private:
 		float value = 0.0f;
@@ -90,7 +123,7 @@ namespace SimpleRender
 	public:
 		ShaderDataInt(int ID) : ShaderProgramData(ID)
 		{
-			data = static_cast<void*>(&value);
+			ToConstant();
 		}
 
 		void Apply(GLuint shaderProgram) override
@@ -100,13 +133,21 @@ namespace SimpleRender
 
 		void DrawUI() override
 		{
-			ImGui::BeginDisabled(readOnly);
+			ImGui::BeginDisabled(ReadOnly);
 
-			ImGui::DragInt(idstr.c_str(), readOnly ? static_cast<int*>(data) : &value, 0.05f);
+			ImGui::DragInt(idstr.c_str(), ReadOnly ? static_cast<int*>(data) : &value, 0.05f);
 
 			ImGui::EndDisabled();
 
 		}
+
+		void ToConstant() override
+		{
+			ShaderProgramData::ToConstant();
+			data = static_cast<void*>(&value);
+		}
+
+		void VariablePopup(RenderScene* scene) override;
 
 	private:
 		int value = 0.0f;
@@ -118,7 +159,7 @@ namespace SimpleRender
 	public:
 		ShaderDataVec2(int ID) : ShaderProgramData(ID)
 		{
-			data = static_cast<void*>(&value);
+			ToConstant();
 		}
 
 		void Apply(GLuint shaderProgram) override
@@ -128,14 +169,22 @@ namespace SimpleRender
 
 		void DrawUI() override
 		{
-			ImGui::BeginDisabled(readOnly);
+			ImGui::BeginDisabled(ReadOnly);
 
 	
-			ImGui::DragFloat2(idstr.c_str(), readOnly ? &(*static_cast<glm::vec2*>(data))[0] : &value[0], 0.05f);
+			ImGui::DragFloat2(idstr.c_str(), ReadOnly ? &(*static_cast<glm::vec2*>(data))[0] : &value[0], 0.05f);
 
 			ImGui::EndDisabled();
 
 		}
+
+		void ToConstant() override
+		{
+			ShaderProgramData::ToConstant();
+			data = static_cast<void*>(&value);
+		}
+
+		void VariablePopup(RenderScene* scene) override;
 
 	private:
 		glm::vec2 value = glm::vec2(0.0f);
@@ -147,7 +196,7 @@ namespace SimpleRender
 	public:
 		ShaderDataVec3(int ID) : ShaderProgramData(ID)
 		{
-			data = static_cast<void*>(&value);
+			ToConstant();
 		}
 
 		void Apply(GLuint shaderProgram) override
@@ -157,13 +206,21 @@ namespace SimpleRender
 
 		void DrawUI() override
 		{
-			ImGui::BeginDisabled(readOnly);
+			ImGui::BeginDisabled(ReadOnly);
 
-			ImGui::DragFloat3(idstr.c_str(), readOnly ? &(*static_cast<glm::vec3*>(data))[0] : &value[0], 0.05f);
+			ImGui::DragFloat3(idstr.c_str(), ReadOnly ? &(*static_cast<glm::vec3*>(data))[0] : &value[0], 0.05f);
 
 			ImGui::EndDisabled();
 
 		}
+
+		void ToConstant() override
+		{
+			ShaderProgramData::ToConstant();
+			data = static_cast<void*>(&value);
+		}
+
+		void VariablePopup(RenderScene* scene) override;
 
 	private:
 		glm::vec3 value = glm::vec3(0.0f);

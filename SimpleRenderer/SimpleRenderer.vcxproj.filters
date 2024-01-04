@@ -147,6 +147,9 @@
     <ClCompile Include="source\RenderUI\RenderingUI\RenderingUI.cpp">
       <Filter>Source Files\RenderUI</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderShaderProgram\ShaderProgramData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">

@@ -117,12 +117,6 @@ void ScreenUI::UpdateWidget()
 
 	ImGui::Image(ImTextureID(deferBuffer.Texture), s, {0, 1}, {1, 0});
 
-	if(ImGui::Button("Reload deferred buffer"))
-	{
-		application->Scene->UpdateDeferredRender();
-
-	}
-
 	RenderScene();
 	RenderGizmo();
 

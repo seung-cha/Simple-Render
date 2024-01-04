@@ -172,6 +172,13 @@ bool SimpleRender::RenderApplication::Run()
 	if(!window || !scene || glfwWindowShouldClose(window))
 		return false;
 
+	// Update Timer
+	status.Time = glfwGetTime();
+	status.Timef = static_cast<float>(status.Time);
+	status.Timei = static_cast<int>(status.Timef);
+
+
+
 	// Do not do anything if the program is in sleep mode (i.e minimised)
 	if(status.SleepMode)
 	{
@@ -182,8 +189,6 @@ bool SimpleRender::RenderApplication::Run()
 	//Update the screen. Do so so that when no viewports are present the screen keeps refreshing
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	//scene->DrawScene(nullptr, 0);		// Draw Scene (Will be removed)
 	
 	UpdateWidgets();		// Update widget
 

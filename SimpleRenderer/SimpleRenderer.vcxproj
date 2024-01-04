@@ -47,6 +47,7 @@
     <ClCompile Include="source\RenderPure\MousePositionInput.cpp" />
     <ClCompile Include="source\RenderScene\RenderScene.cpp" />
     <ClCompile Include="source\RenderShaderProgram\RenderShaderProgram.cpp" />
+    <ClCompile Include="source\RenderShaderProgram\ShaderProgramData.cpp" />
     <ClCompile Include="source\RenderShader\RenderShader.cpp" />
     <ClCompile Include="source\RenderTexture\RenderTexture.cpp" />
     <ClCompile Include="source\RenderUI\BackgroundUI\BackgroundUI.cpp" />
