@@ -12,6 +12,18 @@ void SimpleRender::ShaderDataInt::VariablePopup(RenderScene* scene)
 		ImGui::CloseCurrentPopup();
 	}
 
+	if(ImGui::Button("Left Click (Continuous)"))
+	{
+		ToVariable(&scene->Application->Status->Mouse->LeftClick);
+		ImGui::CloseCurrentPopup();
+	}
+
+	if(ImGui::Button("Right Click (Continuous)"))
+	{
+		ToVariable(&scene->Application->Status->Mouse->RightClick);
+		ImGui::CloseCurrentPopup();
+	}
+
 }
 
 void SimpleRender::ShaderDataFloat::VariablePopup(RenderScene* scene)
@@ -36,6 +48,18 @@ void SimpleRender::ShaderDataVec2::VariablePopup(RenderScene* scene)
 	if(ImGui::Button("Fixed Resolution"))
 	{
 		ToVariable(&scene->Application->Status->FixedResolution);
+		ImGui::CloseCurrentPopup();
+	}
+
+	if(ImGui::Button("Mouse Position"))
+	{
+		ToVariable(&scene->Application->Status->Mouse->MouseCoordinates);
+		ImGui::CloseCurrentPopup();
+	}
+
+	if(ImGui::Button("Mouse Delta"))
+	{
+		ToVariable(&scene->Application->Status->Mouse->MouseDelta);
 		ImGui::CloseCurrentPopup();
 	}
 

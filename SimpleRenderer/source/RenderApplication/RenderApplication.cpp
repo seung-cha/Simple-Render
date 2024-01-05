@@ -78,8 +78,30 @@ SimpleRender::RenderApplication::RenderApplication()
 	{
 		RenderApplication* app = static_cast<RenderApplication*>(glfwGetWindowUserPointer(window));
 		
-		app->Status->Mouse->xPos = x;
-		app->Status->Mouse->yPos = y;
+
+
+		app->Status->Mouse->xPos = static_cast<int>(x);
+		app->Status->Mouse->yPos = static_cast<int>(y);
+
+		app->Status->Mouse->deltaXPos = static_cast<int>(app->Status->Mouse->xPos - app->Status->Mouse->lastX);
+		app->Status->Mouse->deltaYPos = static_cast<int>(app->Status->Mouse->lastY - app->Status->Mouse->yPos);
+
+		app->Status->Mouse->lastX = app->Status->Mouse->xPos;
+		app->Status->Mouse->lastY = app->Status->Mouse->yPos;
+
+
+		app->Status->Mouse->MouseCoordinates.x = app->Status->Mouse->xPos;
+		app->Status->Mouse->MouseCoordinates.y = app->Status->Mouse->yPos;
+
+		app->Status->Mouse->MouseDelta.x = app->Status->Mouse->deltaXPos;
+		app->Status->Mouse->MouseDelta.y = app->Status->Mouse->deltaYPos;
+
+		app->Status->Mouse->MouseLastCoordinates.x = app->Status->Mouse->lastX;
+		app->Status->Mouse->MouseLastCoordinates.y = app->Status->Mouse->lastY;
+
+
+
+
 
 		for(auto& input : *app->MousePositionInputs)
 		{
@@ -116,8 +138,8 @@ SimpleRender::RenderApplication::RenderApplication()
 	{
 		RenderApplication* app = static_cast<RenderApplication*>(glfwGetWindowUserPointer(window));
 
-		app->Status->Mouse->leftClick = (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS);
-		app->Status->Mouse->rightClick = (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS);
+		app->Status->Mouse->LeftClick = (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS);
+		app->Status->Mouse->RightClick = (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS);
 
 		for(auto& input : *app->MouseButtonInputs)
 		{
@@ -178,7 +200,6 @@ bool SimpleRender::RenderApplication::Run()
 	status.Timei = static_cast<int>(status.Timef);
 
 
-
 	// Do not do anything if the program is in sleep mode (i.e minimised)
 	if(status.SleepMode)
 	{
@@ -193,6 +214,14 @@ bool SimpleRender::RenderApplication::Run()
 	UpdateWidgets();		// Update widget
 
 	ProcessInput();			// Process key inputs
+
+
+	// Reset the mouse delta values since they don't update unless mouse moves
+	status.Mouse->deltaXPos = 0;
+	status.Mouse->deltaYPos = 0;
+	status.Mouse->MouseDelta.x = 0;
+	status.Mouse->MouseDelta.y = 0;
+
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();

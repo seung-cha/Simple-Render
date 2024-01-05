@@ -70,8 +70,6 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 	
 
 
-
-
 	if(ImGui::Button("Add Uniform Int"))
 	{
 		application->Scene->DeferredRender->

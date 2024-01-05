@@ -102,8 +102,10 @@ void ScreenUI::UpdateWidget()
 				cout << "Pixel data at < " << res[0] << ", " << application->Status->FixedHeight - res[1] << " >:"
 					<< static_cast<int>(col[0]) << std::endl;
 
-				if(static_cast<int>(col[0]) != 0)
-					application->Scene->ActiveObject = (*application->Scene->SceneObjects)[static_cast<int>(col[0] - 1)];
+				int num = static_cast<int>(col[0]);
+
+				if(num > 0 && num <= application->Scene->SceneObjects->size())
+					application->Scene->ActiveObject = (*application->Scene->SceneObjects)[static_cast<int>(num - 1)];
 				else
 					application->Scene->ActiveObject = nullptr;
 		}

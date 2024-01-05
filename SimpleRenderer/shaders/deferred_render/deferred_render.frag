@@ -21,6 +21,7 @@ struct screen
 in screen Screen;
 uniform rendering Rendering;
 
+
 void main()
 {
     
@@ -32,5 +33,4 @@ void main()
     /* ************************************************************************* */
 
     FragColor = vec4(diff, 1.0);
-
 }

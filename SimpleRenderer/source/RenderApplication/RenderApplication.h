@@ -32,13 +32,49 @@ namespace SimpleRender
 	{
 		MouseStatus()
 		{
-			xPos = yPos = 0;
-			leftClick = rightClick = false;
+			xPos = yPos = lastX = lastY = 0;
+			LeftClick = RightClick = false;
 		}
 		int xPos;
 		int yPos;
-		bool leftClick;
-		bool rightClick;
+
+		int deltaXPos;
+		int deltaYPos;
+
+		/// <summary>
+		/// True for as long as LMB is held
+		/// </summary>
+		int LeftClick;
+		/// <summary>
+		/// True for as long as RMB is held
+		/// </summary>
+		int RightClick;
+
+		/// <summary>
+		/// The last X coordinate of the mouse
+		/// </summary>
+		int lastX;
+
+		/// <summary>
+		/// The last Y coordinate of the mouse
+		/// </summary>
+		int lastY;
+
+		/// <summary>
+		/// Equivalent to <xPos, yPos>
+		/// </summary>
+		glm::vec2 MouseCoordinates;
+
+		/// <summary>
+		/// Equivalent to <deltaXPos, deltaYPos>
+		/// </summary>
+		glm::vec2 MouseDelta;
+
+		/// <summary>
+		/// Equivalent to <lastX, lastY>
+		/// </summary>
+		glm::vec2 MouseLastCoordinates;
+
 	};
 
 	struct AppStatus
