@@ -24,14 +24,16 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 {
 	ImGui::Begin(title.c_str());
 
-	for(auto item : *application->Scene->DeferredRender->ShaderProgram->UniformData)
+
+	int removeIndex = -1;		// Specify the index of the variable to remove
+	for(int i = 0; i < application->Scene->DeferredRender->ShaderProgram->UniformData->size(); i++)
 	{
+		auto item = (*application->Scene->DeferredRender->ShaderProgram->UniformData)[i];
+
 		item->DrawUI();
 
 		ImGui::SameLine();
 
-		std::stringstream s;
-		s << item->ID;
 		ImGui::InputText(item->idstr2.c_str(), &item->name);
 
 		if(ImGui::BeginPopupContextItem())
@@ -47,11 +49,28 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 
 			item->VariablePopup(application->Scene);
 
+
+			if(ImGui::Button("Delete This Variable"))
+			{
+				removeIndex = i;
+			}
+
 			ImGui::EndPopup();
 		}
+	}
 
+	// Delete the object
+	if(removeIndex >= 0)
+	{
+		delete (*application->Scene->DeferredRender->ShaderProgram->UniformData)[removeIndex];
+		application->Scene->DeferredRender->ShaderProgram->UniformData->erase
+		(application->Scene->DeferredRender->ShaderProgram->UniformData->begin() + removeIndex);
 
 	}
+	
+
+
+
 
 	if(ImGui::Button("Add Uniform Int"))
 	{

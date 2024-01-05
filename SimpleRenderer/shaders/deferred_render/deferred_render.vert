@@ -10,16 +10,19 @@ struct Transform
 
 };
 
-out vec2 TexCoords;
+struct screen
+{
+    vec2 UV;
+};
 
-
+out screen Screen;
 
 uniform Transform transform;
 
 void main()
 {
     gl_Position = vec4(Position, 1.0);
-    TexCoords = TextureCoordinates;
+    Screen.UV = TextureCoordinates;
 
 }
 

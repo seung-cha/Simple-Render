@@ -5,10 +5,11 @@
 #include <string>
 
 #include "RenderPure/Disposable.h"
-
 #include <unordered_set>
 #include <memory>		// unique ptr
 #include <iostream>
+
+#include <glm/glm.hpp>
 
 namespace SimpleRenderUI
 {
@@ -45,8 +46,13 @@ namespace SimpleRender
 		int Width;
 		int Height;
 
+		glm::vec2 Resolution;
+
+
 		int FixedWidth = 1920;
 		int FixedHeight = 1080;
+
+		glm::vec2 FixedResolution = glm::vec2(FixedWidth, FixedHeight);
 
 		bool SleepMode;
 		std::string Title = "Simple Render";
@@ -75,6 +81,8 @@ namespace SimpleRender
 		{
 			Width = newWidth;
 			Height = newHeight;
+			Resolution.x = Width;
+			Resolution.y = Height;
 			SleepMode = Width == Height && Width == 0;
 
 		}
@@ -90,6 +98,7 @@ namespace SimpleRender
 		{
 			Width = 1920;
 			Height = 1080;
+			Resolution = glm::vec2(Width, Height);
 			SleepMode = false;
 		}
 

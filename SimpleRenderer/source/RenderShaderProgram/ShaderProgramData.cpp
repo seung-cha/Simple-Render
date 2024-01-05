@@ -27,7 +27,17 @@ void SimpleRender::ShaderDataFloat::VariablePopup(RenderScene* scene)
 
 void SimpleRender::ShaderDataVec2::VariablePopup(RenderScene* scene)
 {
+	if(ImGui::Button("Resolution"))
+	{
+		ToVariable(&scene->Application->Status->Resolution);
+		ImGui::CloseCurrentPopup();
+	}
 
+	if(ImGui::Button("Fixed Resolution"))
+	{
+		ToVariable(&scene->Application->Status->FixedResolution);
+		ImGui::CloseCurrentPopup();
+	}
 
 }
 
