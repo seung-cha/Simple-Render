@@ -34,6 +34,18 @@ void SimpleRender::ShaderDataFloat::VariablePopup(RenderScene* scene)
 		ImGui::CloseCurrentPopup();
 	}
 
+	if(ImGui::Button("Aspect Ratio"))
+	{
+		ToVariable(&scene->Application->Status->AspectRatio);
+		ImGui::CloseCurrentPopup();
+	}
+
+	if(ImGui::Button("Aspect Ratio (Fixed)"))
+	{
+		ToVariable(&scene->Application->Status->FixedAspectRatio);
+		ImGui::CloseCurrentPopup();
+	}
+
 }
 
 

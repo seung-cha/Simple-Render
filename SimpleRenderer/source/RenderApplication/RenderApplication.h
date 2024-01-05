@@ -84,9 +84,12 @@ namespace SimpleRender
 
 		glm::vec2 Resolution;
 
+		float AspectRatio = 0.0f;
 
 		int FixedWidth = 1920;
 		int FixedHeight = 1080;
+
+		float FixedAspectRatio = FixedWidth / static_cast<float>(FixedHeight);
 
 		glm::vec2 FixedResolution = glm::vec2(FixedWidth, FixedHeight);
 
@@ -121,12 +124,17 @@ namespace SimpleRender
 			Resolution.y = Height;
 			SleepMode = Width == Height && Width == 0;
 
+			AspectRatio = newHeight == 0 ? 0.0f : newWidth / static_cast<float>(newHeight);
+
 		}
 
 		AppStatus(int width, int height)
 		{
 			Width = width;
 			Height = height;
+
+			AspectRatio = Width / static_cast<float>(Height);
+
 			SleepMode = false;
 		}
 
@@ -134,6 +142,9 @@ namespace SimpleRender
 		{
 			Width = 1920;
 			Height = 1080;
+
+			AspectRatio = 1920 / 1080.0f;
+
 			Resolution = glm::vec2(Width, Height);
 			SleepMode = false;
 		}
