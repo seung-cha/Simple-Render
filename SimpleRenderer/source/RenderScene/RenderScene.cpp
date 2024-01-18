@@ -7,6 +7,8 @@
 
 #include "imgui.h"
 
+#include "RenderCubemap/RenderCubemap.h"
+
 
 using namespace SimpleRender;
 using namespace std;
@@ -64,6 +66,16 @@ RenderScene::RenderScene(RenderApplication* application)
 	//Initiate deferred render
 	deferredRender = new RenderDeferredRender(this);
 
+
+	cubemap = new RenderCubemap();
+	cubemap->SetSide(CubemapSide::Left, "imgs/left.jpg");
+	cubemap->SetSide(CubemapSide::Right, "imgs/right.jpg");
+	cubemap->SetSide(CubemapSide::Top, "imgs/top.jpg");
+	cubemap->SetSide(CubemapSide::Bottom, "imgs/bottom.jpg");
+	cubemap->SetSide(CubemapSide::Back, "imgs/back.jpg");
+	cubemap->SetSide(CubemapSide::Front, "imgs/front.jpg");
+
+
 }
 
 void RenderScene::DrawScene(RenderCamera* camera, GLuint& framebuffer)
@@ -104,6 +116,8 @@ void RenderScene::DrawGBufferScene(RenderCamera* camera, GLuint& framebuffer)
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	cubemap->Draw(camera);
 
 	gbufferShaderProgram.ApplyUniformVariables();
 
@@ -159,6 +173,7 @@ void RenderScene::LoadDefaultScene()
 
 	SceneCameras->push_back(new RenderCamera());
 	ActiveCamera = (*SceneCameras)[0];
+
 }
 
 

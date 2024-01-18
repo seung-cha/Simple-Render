@@ -82,10 +82,15 @@ void SimpleRender::RenderDeferredRender::Draw(SimpleRender::RenderCamera* camera
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, gBuffer.ColourTexture);
 
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, gBuffer.ObjectTexture);
+
 	glUniform1i(glGetUniformLocation(program.ID(), "Rendering.Position"), 0);
 	glUniform1i(glGetUniformLocation(program.ID(), "Rendering.Normal"), 1);
 	glUniform1i(glGetUniformLocation(program.ID(), "Rendering.Colour"), 2);
-	
+	glUniform1i(glGetUniformLocation(program.ID(), "Rendering.Object"), 3);
+
+
 	glUniform3fv(glGetUniformLocation(program.ID(), "Rendering.ViewPosition"), 1, &camera->Position()[0]);
 
 

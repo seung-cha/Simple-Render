@@ -18,6 +18,7 @@ namespace SimpleRender
 	class RenderApplication;
 	class RenderCamera;
 	class RenderDeferredRender;
+	class RenderCubemap;
 
 
 	class RenderScene
@@ -144,6 +145,7 @@ namespace SimpleRender
 		RenderShaderProgram objectSelectionShaderProgram;
 		RenderShaderProgram gbufferShaderProgram;
 
+		RenderCubemap* cubemap;
 
 		RenderDeferredRender* deferredRender;
 	};

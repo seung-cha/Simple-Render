@@ -80,6 +80,5 @@ bool RenderTexture::LoadTexture(const char* path)
 	stbi_image_free(img);
 	status = TextureStatus::Ready;
 	return true;
-
 }
 

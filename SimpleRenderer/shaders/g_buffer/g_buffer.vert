@@ -14,6 +14,7 @@ struct Transform
 out vec3 gPosition;
 out vec3 gNormal;
 out vec2 gTexturePosition;
+out float gObject;      // 0.0 if a geometry exists.
 
 
 
@@ -34,6 +35,8 @@ void main()
 
 
     gTexturePosition = TexturePosition;
+
+    gObject = 1.0;
 }
 
 

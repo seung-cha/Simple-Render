@@ -17,24 +17,17 @@ namespace SimpleRender
 		bool ReadOnly = false;
 		std::string name = "";
 
-		/// <summary>
-		/// Required for ImGui
-		/// </summary>
-		int ID = 0;
-		std::string idstr = "idstr1 ";
-		std::string idstr2 = "idstr2 ";
 
 		virtual ~ShaderProgramData()
 		{
 
 		}
 
-		ShaderProgramData(int ID)
+		ShaderProgramData()
 		{
-			this->ID = ID;
-			idstr += ID;
-			idstr2 += ID + 1;
+
 		}
+
 
 		ShaderProgramData(std::string name) : name(name)
 		{
@@ -84,7 +77,7 @@ namespace SimpleRender
 	class ShaderDataFloat : public ShaderProgramData
 	{
 	public:
-		ShaderDataFloat(int ID) : ShaderProgramData(ID)
+		ShaderDataFloat()
 		{
 			ToConstant();
 		}
@@ -99,7 +92,7 @@ namespace SimpleRender
 			ImGui::BeginDisabled(ReadOnly);
 
 
-			ImGui::DragFloat(idstr.c_str(), ReadOnly ? static_cast<float*>(data) : &value, 0.05f);
+			ImGui::DragFloat("", ReadOnly ? static_cast<float*>(data) : &value, 0.05f);
 
 			ImGui::EndDisabled();
 
@@ -121,7 +114,7 @@ namespace SimpleRender
 	class ShaderDataInt : public ShaderProgramData
 	{
 	public:
-		ShaderDataInt(int ID) : ShaderProgramData(ID)
+		ShaderDataInt()
 		{
 			ToConstant();
 		}
@@ -135,7 +128,7 @@ namespace SimpleRender
 		{
 			ImGui::BeginDisabled(ReadOnly);
 
-			ImGui::DragInt(idstr.c_str(), ReadOnly ? static_cast<int*>(data) : &value, 0.05f);
+			ImGui::DragInt("", ReadOnly ? static_cast<int*>(data) : &value, 0.05f);
 
 			ImGui::EndDisabled();
 
@@ -157,7 +150,7 @@ namespace SimpleRender
 	class ShaderDataVec2 : public ShaderProgramData
 	{
 	public:
-		ShaderDataVec2(int ID) : ShaderProgramData(ID)
+		ShaderDataVec2()
 		{
 			ToConstant();
 		}
@@ -172,7 +165,7 @@ namespace SimpleRender
 			ImGui::BeginDisabled(ReadOnly);
 
 	
-			ImGui::DragFloat2(idstr.c_str(), ReadOnly ? &(*static_cast<glm::vec2*>(data))[0] : &value[0], 0.05f);
+			ImGui::DragFloat2("", ReadOnly ? &(*static_cast<glm::vec2*>(data))[0] : &value[0], 0.05f);
 
 			ImGui::EndDisabled();
 
@@ -194,7 +187,7 @@ namespace SimpleRender
 	class ShaderDataVec3 : public ShaderProgramData
 	{
 	public:
-		ShaderDataVec3(int ID) : ShaderProgramData(ID)
+		ShaderDataVec3()
 		{
 			ToConstant();
 		}
@@ -208,7 +201,7 @@ namespace SimpleRender
 		{
 			ImGui::BeginDisabled(ReadOnly);
 
-			ImGui::DragFloat3(idstr.c_str(), ReadOnly ? &(*static_cast<glm::vec3*>(data))[0] : &value[0], 0.05f);
+			ImGui::DragFloat3("", ReadOnly ? &(*static_cast<glm::vec3*>(data))[0] : &value[0], 0.05f);
 
 			ImGui::EndDisabled();
 

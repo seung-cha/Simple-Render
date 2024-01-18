@@ -176,7 +176,7 @@ SimpleRender::RenderApplication::RenderApplication()
 	AddUI(new BackgroundUI(this));
 	AddUI(new CameraUI(this));
 	AddUI(new ObjectUI(this));
-	AddUI(new ShaderUI(this));
+	// AddUI(new ShaderUI(this));	// Commented out since it has no use as of now.
 	AddUI(new HierarchyUI(this));
 	AddUI(new ScreenUI(this));
 	AddUI(new RenderingUI(this));

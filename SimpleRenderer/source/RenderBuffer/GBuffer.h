@@ -60,10 +60,24 @@ namespace SimpleRenderBuffer
 			glGenTextures(1, &depthTexture);
 			glBindTexture(GL_TEXTURE_2D, depthTexture);
 
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height,
 				0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
 
+
+
+			// Generate and bind object + skybox texture
+			glGenTextures(1, &objectTexture);
+			glBindTexture(GL_TEXTURE_2D, objectTexture);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, objectTexture, 0);
 
 
 
@@ -80,8 +94,8 @@ namespace SimpleRenderBuffer
 			}
 
 
-			GLenum enums[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
-			glDrawBuffers(3, enums);
+			GLenum enums[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+			glDrawBuffers(4, enums);
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -94,6 +108,7 @@ namespace SimpleRenderBuffer
 		GLuint& NormalTexture = normalTexture;
 		GLuint& ColourTexture = colourTexture;
 		GLuint& DepthTexture = depthTexture;
+		GLuint& ObjectTexture = objectTexture;
 
 
 		void Dispose() override
@@ -110,7 +125,7 @@ namespace SimpleRenderBuffer
 
 
 	protected:
-		GLuint positionTexture, normalTexture, colourTexture, depthTexture;
+		GLuint positionTexture, normalTexture, colourTexture, depthTexture, objectTexture;
 	};
 
 

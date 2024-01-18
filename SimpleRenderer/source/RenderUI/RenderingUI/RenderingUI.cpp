@@ -29,12 +29,15 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 	for(int i = 0; i < application->Scene->DeferredRender->ShaderProgram->UniformData->size(); i++)
 	{
 		auto item = (*application->Scene->DeferredRender->ShaderProgram->UniformData)[i];
+		ImGui::PushID(i);
+
+
 
 		item->DrawUI();
-
 		ImGui::SameLine();
+		ImGui::InputText("Name", &item->name);
 
-		ImGui::InputText(item->idstr2.c_str(), &item->name);
+
 
 		if(ImGui::BeginPopupContextItem())
 		{
@@ -42,10 +45,10 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 			{
 				// Let the data pointer point to its value again
 				item->ToConstant();
-
 				ImGui::CloseCurrentPopup();
 
 			}
+
 
 			item->VariablePopup(application->Scene);
 
@@ -53,10 +56,14 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 			if(ImGui::Button("Delete This Variable"))
 			{
 				removeIndex = i;
+				ImGui::CloseCurrentPopup();
 			}
 
 			ImGui::EndPopup();
 		}
+
+
+		ImGui::PopID();
 	}
 
 	// Delete the object
@@ -73,30 +80,26 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 	if(ImGui::Button("Add Uniform Int"))
 	{
 		application->Scene->DeferredRender->
-			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataInt(application->Scene->DeferredRender->
-				ShaderProgram->UniformData->size()));
+			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataInt());
 	}
 
 	if(ImGui::Button("Add Uniform Float"))
 	{
 		application->Scene->DeferredRender->
-			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataFloat(application->Scene->DeferredRender->
-				ShaderProgram->UniformData->size()));
+			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataFloat());
 	}
 
 	if(ImGui::Button("Add Uniform Vec2"))
 	{
 		application->Scene->DeferredRender->
-			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataVec2(application->Scene->DeferredRender->
-				ShaderProgram->UniformData->size()));
+			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataVec2());
 
 	}
 
 	if(ImGui::Button("Add Uniform Vec3"))
 	{
 		application->Scene->DeferredRender->
-			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataVec3(application->Scene->DeferredRender->
-				ShaderProgram->UniformData->size()));
+			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataVec3());
 
 	}
 

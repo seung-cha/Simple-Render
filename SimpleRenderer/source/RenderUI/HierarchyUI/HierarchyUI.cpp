@@ -33,19 +33,23 @@ void HierarchyUI::UpdateWidget()
 
 	for(unsigned int i = 0; i < application->Scene->SceneObjects->size(); i++)
 	{
-		ostringstream s;
+		string s;
 		
 
 		if((*application->Scene->SceneObjects)[i]->Name == "")
-			s << "Object" << i;
+			s = "Object";
 		else
-			s << (*application->Scene->SceneObjects)[i]->Name;
+			s = (*application->Scene->SceneObjects)[i]->Name;
 
 
-		if(ImGui::Button(s.str().c_str()))
+		ImGui::PushID(i);
+
+		if(ImGui::Button(s.c_str()))
 		{
 			application->Scene->ActiveObject = (*application->Scene->SceneObjects)[i];
 		}
+
+		ImGui::PopID();
 
 
 	}
