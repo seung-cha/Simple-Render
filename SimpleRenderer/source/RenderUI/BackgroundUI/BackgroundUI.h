@@ -17,12 +17,11 @@ namespace SimpleRenderUI
 
 		virtual inline void ReflectUpdate() override
 		{
-			glClearColor(background.r, background.g, background.b, 1.0f);
+
 		}
 
 	private:
 		glm::vec3 background;
-		unsigned int colourFlags;
 
 
 	};

@@ -92,16 +92,29 @@ void SimpleRender::RenderCubemap::SetSide(enum SimpleRender::CubemapSide side, s
 {
 	glBindTexture(GL_TEXTURE_CUBE_MAP, id);
 
-	// Free the image previously allocated. Valid since freeing a nullptr does nothing.
-	stbi_image_free(imgData[side]);
 
+    stbi_set_flip_vertically_on_load(false);
 	int x, y, channel; 
 	unsigned char* data = stbi_load(path.c_str(), &x, &y, &channel, 0);
 
 	if(data)
 	{
-		imgData[side] = data;
+	    // Free the image previously allocated. Valid since freeing a nullptr does nothing.
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + side, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+        int a;
+        if(a = glGetError() != 0)
+        {
+            std::cout << "Unable to change the cubemap image. Verify that the height and width of the image are equal." << std::endl;
+            std::cout << "Error code: " << a << std::endl << std::endl;
+            stbi_image_free(data);
+        }
+        else
+        {
+	        stbi_image_free(imgData[side]);
+		    imgData[side] = data;
+        }
+
 	}
 	else
 	{

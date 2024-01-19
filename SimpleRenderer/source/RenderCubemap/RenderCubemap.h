@@ -51,7 +51,8 @@ namespace SimpleRender
 		RenderCubemap();
 
 		/// <summary>
-		/// Set given side with the provided image
+		/// Set given side with the provided image.
+		/// Does nothing if path is not an image.
 		/// </summary>
 		/// <param name=""></param>
 		/// <param name="path"></param>

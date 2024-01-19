@@ -50,11 +50,13 @@ void RenderObject::LoadMesh(const std::string path)
 	const aiScene* scene = importer.ReadFile(path, flags);
 
 
+
 	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
 	{
 		cerr << "Import was unsuccessful: " << endl;
 		cerr << importer.GetErrorString() << endl << endl;
 		LoadDefaultMesh();
+
 		return;
 	}
 
@@ -87,6 +89,9 @@ vector<unsigned int> RenderObject::LoadTexturesFromMesh(aiMaterial* material)
 
 	vector<unsigned int> diffuseIndices = LoadTexture(material, aiTextureType_DIFFUSE);
 	vector<unsigned int> specularIndices = LoadTexture(material, aiTextureType_SPECULAR);
+	//vector<unsigned int> normalIndices = LoadTexture(material, aiTextureType_HEIGHT);
+
+	//std::cout << "Normal map size: " << normalIndices.size() << std::endl << std::endl;
 
 	indices.insert(indices.end(), diffuseIndices.begin(), diffuseIndices.end());
 	indices.insert(indices.end(), specularIndices.begin(), specularIndices.end());

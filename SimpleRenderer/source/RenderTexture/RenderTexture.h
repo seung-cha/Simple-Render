@@ -65,6 +65,8 @@ namespace SimpleRender
 				return Diffuse;
 			else if(type == aiTextureType_SPECULAR)
 				return Specular;
+			else
+				return Specular;
 		}
 
 		static inline std::string TextureTypeToString(TextureType type)

@@ -126,6 +126,8 @@ namespace SimpleRender
 
 		RenderDeferredRender*& DeferredRender = deferredRender;
 
+		RenderCubemap*& Cubemap = cubemap;
+
 	private:
 		RenderApplication* application;
 
