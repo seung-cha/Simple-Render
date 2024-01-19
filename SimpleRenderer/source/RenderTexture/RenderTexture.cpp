@@ -1,6 +1,7 @@
 #include "RenderTexture.h"
 #include <iostream>
 
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
 
@@ -8,7 +9,7 @@
 using namespace SimpleRender;
 using namespace std;
 
-RenderTexture::RenderTexture(const char* path, const TextureType type)
+RenderTexture::RenderTexture(const TextureType type, std::string path)
 {
 	// To do:
 	// Gotta find a place  to put this.
@@ -19,19 +20,22 @@ RenderTexture::RenderTexture(const char* path, const TextureType type)
 	this->type = type;
 	glGenTextures(1, &id);
 
+	if(path == "")	// Don't try to load texture if path is not provided
+		return;
+
 	if(LoadTexture(path))
 		this->path = path;
 }
 
 
-bool RenderTexture::LoadTexture(const char* path)
+bool RenderTexture::LoadTexture(std::string path)
 {
 
 	cout << "Generating a new texture:" << endl;
 	cout << path << endl;
 
 	int x, y, chan;
-	unsigned char* img = stbi_load(path, &x, &y, &chan, 0);
+	unsigned char* img = stbi_load(path.c_str(), &x, &y, &chan, 0);
 
 	glBindTexture(GL_TEXTURE_2D, id);
 

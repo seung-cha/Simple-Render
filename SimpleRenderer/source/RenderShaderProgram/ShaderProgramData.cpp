@@ -85,19 +85,19 @@ void SimpleRender::ShaderDataVec3::VariablePopup(RenderScene* scene)
 
 	if(ImGui::Button("Active Object Position"))
 	{
-		ToVariable(&scene->ActiveObject->Position);
+		ToVariable(&scene->ActiveObject->Transform->Position);
 		ImGui::CloseCurrentPopup();
 	}
 
 	if(ImGui::Button("Active Object Rotation"))
 	{
-		ToVariable(&scene->ActiveObject->Rotation);
+		ToVariable(&scene->ActiveObject->Transform->Rotation);
 		ImGui::CloseCurrentPopup();
 	}
 
 	if(ImGui::Button("Active Object Scale"))
 	{
-		ToVariable(&scene->ActiveObject->Scale);
+		ToVariable(&scene->ActiveObject->Transform->Scale);
 		ImGui::CloseCurrentPopup();
 	}
 

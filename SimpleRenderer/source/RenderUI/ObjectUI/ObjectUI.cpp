@@ -73,21 +73,21 @@ void ObjectUI::TransformWidget()
 	ImGui::SeparatorText("Transform");
 
 	ImGuizmo::DecomposeMatrixToComponents(&application->Scene->ActiveObject->Matrix[0][0],
-		&application->Scene->ActiveObject->Position[0],
-		&application->Scene->ActiveObject->Rotation[0],
-		&application->Scene->ActiveObject->Scale[0]);
+		&application->Scene->ActiveObject->Transform->Position[0],
+		&application->Scene->ActiveObject->Transform->Rotation[0],
+		&application->Scene->ActiveObject->Transform->Scale[0]);
 
 
 
-	ImGui::DragFloat3("Position", &application->Scene->ActiveObject->Position[0], 0.5f);
-	ImGui::DragFloat3("Rotation", &application->Scene->ActiveObject->Rotation[0], 0.5f);
-	ImGui::DragFloat3("Scale", &application->Scene->ActiveObject->Scale[0], 0.01f);
+	ImGui::DragFloat3("Position", &application->Scene->ActiveObject->Transform->Position[0], 0.5f);
+	ImGui::DragFloat3("Rotation", &application->Scene->ActiveObject->Transform->Rotation[0], 0.5f);
+	ImGui::DragFloat3("Scale", &application->Scene->ActiveObject->Transform->Scale[0], 0.01f);
 	
 
 	ImGuizmo::RecomposeMatrixFromComponents(
-		&application->Scene->ActiveObject->Position[0],
-		 &application->Scene->ActiveObject->Rotation[0], 
-		&application->Scene->ActiveObject->Scale[0],
+		&application->Scene->ActiveObject->Transform->Position[0],
+		 &application->Scene->ActiveObject->Transform->Rotation[0], 
+		&application->Scene->ActiveObject->Transform->Scale[0],
 		&application->Scene->ActiveObject->Matrix[0][0]);
 
 

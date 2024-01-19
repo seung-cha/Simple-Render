@@ -11,18 +11,16 @@ using namespace SimpleRender;
 using namespace std;
 using namespace Assimp;
 
-RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const string path) : id(ID)
+RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const string path)
 {
-
+	this->id = ID;
 	shaderProgram = program;
 	shaderProgram->AssociatedObjects->insert(this);
 
 	this->scene = scene;
 
-	Position = glm::vec3(0.0f);
-	Rotation = glm::vec3(0.0f);
-	Scale = glm::vec3(1.0f);
-	if(strcmp(path.c_str(), "") == 0)
+
+	if(path == "")
 	{
 		// Load Default Mesh
 		LoadDefaultMesh();
@@ -113,7 +111,7 @@ vector<unsigned int> RenderObject::LoadTexture(aiMaterial* material, aiTextureTy
 
 		for(unsigned int i = 0; i < textures.size(); i++)
 		{
-			if(textures[i]->Equal(path.c_str()))
+			if(textures[i]->Equal(path))
 			{
 				// Duplicate texture found.
 				// Simply get the index of that texture.
@@ -126,7 +124,7 @@ vector<unsigned int> RenderObject::LoadTexture(aiMaterial* material, aiTextureTy
 		if(!exists)
 		{
 			enum TextureType textureType = RenderTexture::aiTextureTypeToTextureType(type);
-			textures.push_back(new RenderTexture(path.c_str(), textureType));
+			textures.push_back(new RenderTexture(textureType, path.c_str()));
 			// Get the index of the recently-pushed texture since the mesh depends on it.
 			vec.push_back(textures.size() - 1);
 		}
@@ -151,7 +149,6 @@ void RenderObject::LoadDefaultMesh()
 	// Get the default model
 	// and set transforms specific to this model
 	LoadMesh("models/default/Gibson A1.obj"); 
-	Position.z = -50.0f;
 	
 }
 

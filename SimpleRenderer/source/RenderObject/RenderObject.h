@@ -20,6 +20,15 @@ namespace SimpleRender
 	class RenderScene;
 	class RenderCamera;
 
+	struct Transform
+	{
+	public:
+		glm::vec3 Position = glm::vec3(0.0f);
+		glm::vec3 Rotation = glm::vec3(0.0f);
+		glm::vec3 Scale = glm::vec3(1.0f);
+	};
+
+
 	class RenderObject : SimpleRenderPure::Disposable
 	{
 	public:
@@ -42,10 +51,7 @@ namespace SimpleRender
 		void DrawID(RenderCamera* camera, RenderShaderProgram* selectionProgram);
 
 
-		glm::vec3 Position;
-		glm::vec3 Rotation;
-		glm::vec3 Scale;
-		std::vector<RenderTexture*>* TextureMap = &textures;
+
 
 		inline std::vector<RenderTexture*> TextureMapOfType(enum TextureType type)
 		{
@@ -93,7 +99,11 @@ namespace SimpleRender
 			}
 		}
 
+
+
+		std::vector<RenderTexture*>* TextureMap = &textures;
 		
+		Transform* Transform = &transform;
 		glm::mat4& Matrix = matrix;
 		std::string& Name = name;
 
@@ -106,6 +116,7 @@ namespace SimpleRender
 		}
 
 	private:
+		SimpleRender::Transform transform;
 
 		int id;
 		std::string name;

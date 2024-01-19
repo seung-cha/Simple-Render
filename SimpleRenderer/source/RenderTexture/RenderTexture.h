@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 #include <assimp/scene.h>
-#include <string>
 
 #include <iostream>
+#include <string>
 
 #include "RenderPure/Disposable.h"
 
@@ -33,7 +33,7 @@ namespace SimpleRender
 		std::string path;
 
 	public:
-		RenderTexture(const char* path, const TextureType type);
+		RenderTexture(const TextureType type, std::string path = "");
 
 		inline std::string* Path()
 		{
@@ -54,10 +54,16 @@ namespace SimpleRender
 			return type;
 		}
 
-		inline bool Equal(const char* path)
+		/// <summary>
+		/// True if the provided path is the same as this texture source
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		inline bool Equal(const std::string& path)
 		{
-			return std::strcmp(this->path.c_str(), path) == 0;
+			return this->path == path;
 		}
+
 
 		static inline enum TextureType aiTextureTypeToTextureType(aiTextureType type)
 		{
@@ -75,11 +81,24 @@ namespace SimpleRender
 				return "Specular";
 		}
 
+
+		/// <summary>
+		/// Send this texture to GLSL program at given location.
+		/// Assumes the program is bound.
+		/// </summary>
+		inline void Apply(const GLuint& program, const int index = 0)
+		{
+			const std::string s = "material." + TextureTypeToString(type) + std::to_string(index);
+			glActiveTexture(GL_TEXTURE0 + index);
+			glBindTexture(GL_TEXTURE_2D, id);
+
+			glUniform1i(glGetUniformLocation(program, s.c_str()), index);
+		}
+
 		void Dispose() override
 		{
 			glDeleteTextures(1, &id);
 		}
-
 
 		/// <summary>
 		/// Replace the current texture with the provided one.
@@ -88,14 +107,14 @@ namespace SimpleRender
 		/// If not, nothing occurs.
 		/// </summary>
 		/// <param name="path"></param>
-		inline void Replace(const char* path)
+		inline void Replace(std::string path)
 		{
 			if(LoadTexture(path))
 				this->path = path;
 		}
 
 	private:
-		bool LoadTexture(const char* path);
+		bool LoadTexture(std::string path);
 	};
 
 }
