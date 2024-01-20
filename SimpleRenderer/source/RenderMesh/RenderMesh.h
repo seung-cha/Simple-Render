@@ -26,6 +26,7 @@ namespace SimpleRender
 	class RenderMesh : SimpleRenderPure::Disposable
 	{
 	public:
+		RenderMesh() {};
 		/// <summary>
 		/// Initialise Mesh
 		/// </summary>

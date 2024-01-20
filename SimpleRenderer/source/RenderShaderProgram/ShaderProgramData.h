@@ -49,6 +49,11 @@ namespace SimpleRender
 			// Logic to change data pointer will be wrritten by child classes
 		}
 
+		/// <summary>
+		/// Convert this program data to track a variable.
+		/// Becomes readonly.
+		/// </summary>
+		/// <param name="data"></param>
 		virtual void ToVariable(void* data)
 		{
 			ReadOnly = true;

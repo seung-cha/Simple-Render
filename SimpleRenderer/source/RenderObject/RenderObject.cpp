@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 #include "RenderScene/RenderScene.h"
 #include "RenderCamera/RenderCamera.h"
@@ -11,18 +12,28 @@ using namespace SimpleRender;
 using namespace std;
 using namespace Assimp;
 
-RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const string path) : id(ID)
+RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const aiScene* aiScene, const aiNode* node, RenderObject* parent)
 {
+	this->id = ID;
+	this->scene = scene;
+	this->parent = parent;
+	this->shaderProgram = program;
 
+
+	InitMeshes(aiScene, node);
+
+}
+
+RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const string path)
+{
+	this->id = ID;
 	shaderProgram = program;
 	shaderProgram->AssociatedObjects->insert(this);
 
 	this->scene = scene;
 
-	Position = glm::vec3(0.0f);
-	Rotation = glm::vec3(0.0f);
-	Scale = glm::vec3(1.0f);
-	if(strcmp(path.c_str(), "") == 0)
+
+	if(path == "")
 	{
 		// Load Default Mesh
 		LoadDefaultMesh();
@@ -37,6 +48,19 @@ RenderObject::~RenderObject()
 {
 
 }
+
+void RenderObject::LoadDefaultMesh()
+{
+	cout << "Loading a default mesh" << endl << endl;
+
+	// Get the default model
+	// and set transforms specific to this model
+	LoadMesh("models/default/Gibson A1.obj");
+	Transform->Position.z = -50.0f;
+
+}
+
+
 
 void RenderObject::LoadMesh(const std::string path)
 {
@@ -70,15 +94,68 @@ void RenderObject::InitMeshes(const aiScene* scene, const aiNode* node)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		auto indices = LoadTexturesFromMesh(scene->mMaterials[mesh->mMaterialIndex]);
-
 		meshes.push_back(RenderMesh(scene, mesh, indices));
-		
 	}
-
+	
+	
 	for(unsigned int i = 0; i < node->mNumChildren; i++)
 	{
-		//Recursively add meshes for child meshes
-		InitMeshes(scene, node->mChildren[i]);
+		//Recursively create children
+		if(i > 0)
+		{
+			RenderObject* obj = new RenderObject(this->scene, this->shaderProgram,
+				this->scene->SceneObjects->size() + 1, scene, node->mChildren[i], this);
+
+			aiVector3D scale, translate;
+			aiQuaternion rotation;
+			
+			obj->name = node->mChildren[i]->mName.C_Str();
+			node->mChildren[i]->mTransformation.Decompose(scale, rotation, translate);
+			
+			
+			// Convert quaternion to Euler
+			glm::quat q(rotation.w, rotation.x, rotation.y, rotation.z);
+			glm::vec3 eulerRot = glm::eulerAngles(q);
+
+			printf("%f, %f, %f\n", eulerRot.x, eulerRot.y, eulerRot.z);
+
+			printf(node->mChildren[i]->mParent == nullptr ? "No parent\n" : "Parent\n");
+
+
+			obj->Transform->Position = glm::vec3(translate.x, translate.y, translate.z);
+			obj->Transform->Scale = glm::vec3(scale.x, scale.y, scale.z);
+			obj->Transform->Rotation = eulerRot * (180.0f / 3.141592f);
+
+
+			this->scene->SceneObjects->push_back(obj);
+			children.push_back(obj);
+		}
+		else
+		{
+
+			aiVector3D scale, translate;
+			aiQuaternion rotation;
+
+			name = node->mChildren[i]->mName.C_Str();
+			node->mChildren[i]->mTransformation.Decompose(scale, rotation, translate);
+
+
+			// Convert quaternion to Euler
+			glm::quat q(rotation.w, rotation.x, rotation.y, rotation.z);
+			glm::vec3 eulerRot = glm::eulerAngles(q);
+			printf("%f, %f, %f\n", eulerRot.x, eulerRot.y, eulerRot.z);
+
+
+			transform.Position = glm::vec3(translate.x, translate.y, translate.z);
+			transform.Scale = glm::vec3(scale.x, scale.y, scale.z);
+			transform.Rotation = eulerRot * (180.0f / 3.141592f);
+
+
+
+
+
+			InitMeshes(scene, node->mChildren[i]);
+		}
 	}
 
 }
@@ -118,7 +195,7 @@ vector<unsigned int> RenderObject::LoadTexture(aiMaterial* material, aiTextureTy
 
 		for(unsigned int i = 0; i < textures.size(); i++)
 		{
-			if(textures[i]->Equal(path.c_str()))
+			if(textures[i]->Equal(path))
 			{
 				// Duplicate texture found.
 				// Simply get the index of that texture.
@@ -131,7 +208,7 @@ vector<unsigned int> RenderObject::LoadTexture(aiMaterial* material, aiTextureTy
 		if(!exists)
 		{
 			enum TextureType textureType = RenderTexture::aiTextureTypeToTextureType(type);
-			textures.push_back(new RenderTexture(path.c_str(), textureType));
+			textures.push_back(new RenderTexture(textureType, path.c_str()));
 			// Get the index of the recently-pushed texture since the mesh depends on it.
 			vec.push_back(textures.size() - 1);
 		}
@@ -149,22 +226,29 @@ RenderMesh RenderObject::CreateMesh(const aiScene* scene, const aiMesh* mesh)
 	return RenderMesh(scene, mesh, vector<unsigned int>());
 }
 
-void RenderObject::LoadDefaultMesh()
-{
-	cout << "Loading a default mesh" << endl << endl;
-
-	// Get the default model
-	// and set transforms specific to this model
-	LoadMesh("models/default/Gibson A1.obj"); 
-	Position.z = -50.0f;
-	
-}
-
 void RenderObject::Draw(RenderCamera* camera)
 {
 	//Do not draw if the shader program is invalid.
 	if(!shaderProgram)
 		return;
+
+
+	glm::mat4 matrix(1.0f);
+
+	if(parent)
+	{
+		matrix = parent->Transform->LocalMatrix() * Transform->LocalMatrix();
+	}
+	else
+		matrix = Transform->LocalMatrix();
+
+
+
+	/*for(auto& i : children)
+	{
+		i->Draw(camera);
+	}*/
+
 
 
 	glUseProgram(shaderProgram->ID());
@@ -191,6 +275,17 @@ void RenderObject::Draw(RenderCamera* camera)
 
 void RenderObject::Draw(RenderCamera* camera, RenderShaderProgram* shaderProgram)
 {
+	glm::mat4 matrix(1.0f);
+
+	if(parent)
+	{
+		matrix = parent->Transform->LocalMatrix() * Transform->LocalMatrix();
+	}
+	else
+		matrix = Transform->LocalMatrix();
+
+
+
 	glUseProgram(shaderProgram->ID());
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram->ID(), "transform.Model"), 1, GL_FALSE, &matrix[0][0]);
@@ -220,6 +315,13 @@ void RenderObject::DrawID(RenderCamera* camera, RenderShaderProgram* selectionPr
 	//Do not draw if the shader program is invalid.
 	if(!shaderProgram)
 		return;
+
+	if(parent)
+	{
+		matrix = parent->Transform->LocalMatrix() * Transform->LocalMatrix();
+	}
+	else
+		matrix = Transform->LocalMatrix();
 
 
 	glUseProgram(selectionProgram->ID());
