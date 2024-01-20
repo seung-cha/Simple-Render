@@ -24,7 +24,7 @@ namespace SimpleRender
 		void Apply(const GLuint& program);
 
 
-		const std::vector<std::unique_ptr<RenderTexture>>& TextureList = textureList;
+		 const std::vector<std::unique_ptr<RenderTexture>>* const TextureList = &textureList;
 	private:
 		std::vector<std::unique_ptr<RenderTexture>> textureList;
 
