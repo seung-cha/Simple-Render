@@ -2,6 +2,10 @@
 
 #include "RenderUI/RenderUI.h"
 
+namespace SimpleRender
+{
+	class RenderObject;
+}
 
 namespace SimpleRenderUI
 {
@@ -12,6 +16,8 @@ namespace SimpleRenderUI
 
 
 
+	private:
+		void DrawObjectHierarchy(SimpleRender::RenderObject* obj);
 		// Inherited via RenderUI
 		virtual void UpdateWidget() override;
 

@@ -8,6 +8,7 @@
 #include "imgui.h"
 
 #include "RenderCubemap/RenderCubemap.h"
+#include <algorithm>
 
 
 using namespace SimpleRender;
@@ -189,9 +190,25 @@ void RenderScene::DeleteObject(RenderObject* object)
 	if(object == nullptr)
 		return;
 
-	object->Dispose();
+	if(object->Children->size() != 0)
+	{
+		std::cout << "Deletion of parent object is not supported as of now!" << std::endl << std::endl;
+		return;
+	}
+
+	if(object->Parent)
+	{
+		// Remove a reference to this from the parent's children vector
+		auto it = std::find(object->Parent->Children->begin(), 
+			object->Parent->Children->end(), object);
+		object->Parent->Children->erase(it);
+	}
+
+	std::cout << "Deleting: " << object->Name << std::endl;
+
 	objects.erase(objects.begin() + object->ID - 1);
 	
+	object->Dispose();
 	delete object;
 
 	// Reassign the IDs afterwads
@@ -200,6 +217,7 @@ void RenderScene::DeleteObject(RenderObject* object)
 	{
 		objects[i]->SetID(i + 1);
 	}
+
 
 }
 

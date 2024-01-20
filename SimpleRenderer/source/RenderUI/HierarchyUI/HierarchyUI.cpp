@@ -26,32 +26,26 @@ void HierarchyUI::UpdateWidget()
 	{
 		string path = FileReader::OpenFileDialogue();
 
-		RenderObject* obj = new RenderObject(application->Scene, (*application->Scene->SceneShaderPrograms)[0], (*application->Scene->SceneObjects).size() + 1, path);
+		RenderObject* obj = new RenderObject(application->Scene, (*application->Scene->SceneShaderPrograms)[0], application->Scene->SceneObjects->size() + 1, path);
 		application->Scene->SceneObjects->push_back(obj);
 		application->Scene->ActiveObject = obj;
 	}
 
 	for(unsigned int i = 0; i < application->Scene->SceneObjects->size(); i++)
 	{
-		string s;
-		
+		RenderObject* obj = (*application->Scene->SceneObjects)[i];
 
-		if((*application->Scene->SceneObjects)[i]->Name == "")
-			s = "Object";
-		else
-			s = (*application->Scene->SceneObjects)[i]->Name;
-
+		// If the object is a child, do not draw
+		if(obj->Parent)
+			continue;
 
 		ImGui::PushID(i);
 
-		if(ImGui::Button(s.c_str()))
-		{
-			application->Scene->ActiveObject = (*application->Scene->SceneObjects)[i];
-		}
+
+		DrawObjectHierarchy(obj);
+		
 
 		ImGui::PopID();
-
-
 	}
 
 
@@ -60,3 +54,29 @@ void HierarchyUI::UpdateWidget()
 
 }
 
+void SimpleRenderUI::HierarchyUI::DrawObjectHierarchy(RenderObject* obj)
+{
+	// If the object has no child, render it as a leaf
+	ImGuiTreeNodeFlags flag = obj->Children->size() == 0 ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_None;
+
+	flag |= application->Scene->ActiveObject == obj ? ImGuiTreeNodeFlags_Selected : 0;
+
+	if(ImGui::TreeNodeEx(obj->Name.c_str(), flag))
+	{
+
+
+			// Select object on click
+		if(ImGui::IsItemClicked() || ImGui::IsItemToggledOpen())
+			application->Scene->ActiveObject = obj;
+
+		for(int i = 0; i < obj->Children->size(); i++)
+		{
+			DrawObjectHierarchy((*obj->Children)[i]);
+		}
+		
+		ImGui::TreePop();
+	}
+
+
+
+}

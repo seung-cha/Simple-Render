@@ -185,8 +185,31 @@ void ScreenUI::RenderGizmo()
 
 	if(application->Scene->ActiveObject)
 	{
+		glm::mat4 mat(1.0f);
+
+		// Get the world coordinate matrix if there is parent
+		if(application->Scene->ActiveObject->Parent)
+			mat = application->Scene->ActiveObject->Parent->Transform->LocalMatrix()
+					* application->Scene->ActiveObject->Transform->LocalMatrix();
+		else
+			mat = application->Scene->ActiveObject->Transform->LocalMatrix();
+
+
 		ImGuizmo::Manipulate(&camera.ViewMatrix()[0][0], &camera.PerspectiveMatrix()[0][0],
-			ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &application->Scene->ActiveObject->Matrix[0][0]);
+			ImGuizmo::TRANSLATE, ImGuizmo::MODE::WORLD, &mat[0][0]);
+
+
+		if(application->Scene->ActiveObject->Parent)	// Change back to local matrix
+			mat = glm::inverse(application->Scene->ActiveObject->Parent->Transform->LocalMatrix()) * mat;
+
+		glm::vec3 t, s, r;
+		ImGuizmo::DecomposeMatrixToComponents(&mat[0][0], &t[0], &r[0], &s[0]);
+
+		application->Scene->ActiveObject->Transform->Position = t;
+		application->Scene->ActiveObject->Transform->Scale = s;
+		application->Scene->ActiveObject->Transform->Rotation = r;
+
+
 	}
 
 }
