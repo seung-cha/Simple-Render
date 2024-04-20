@@ -10,15 +10,18 @@ SimpleRenderPure::MousePositionInput::MousePositionInput(SimpleRender::RenderApp
 
 SimpleRenderPure::MousePositionInput::~MousePositionInput()
 {
-	UnregisterMousePositionInput();
+	if(registered)
+		UnregisterMousePositionInput();
 }
 
 void SimpleRenderPure::MousePositionInput::RegisterMousePositionInput()
 {
 	_application->RegisterMousePositionInput(this);
+	registered = true;
 }
 
 void SimpleRenderPure::MousePositionInput::UnregisterMousePositionInput()
 {
 	_application->UnregisterMousePositionInput(this);
+	registered = false;
 }

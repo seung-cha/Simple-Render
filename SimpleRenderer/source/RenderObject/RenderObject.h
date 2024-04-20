@@ -5,7 +5,6 @@
 #include "RenderTexture/RenderTexture.h"
 #include "RenderShaderProgram/RenderShaderProgram.h"
 #include "RenderMesh/RenderMesh.h"
-#include "RenderPure/Disposable.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -16,6 +15,7 @@
 #include <vector>
 #include <string>
 #include <RenderMaterial/RenderMaterial.h>
+#include <memory>
 
 namespace SimpleRender
 {
@@ -49,7 +49,7 @@ namespace SimpleRender
 	};
 
 
-	class RenderObject : SimpleRenderPure::Disposable
+	class RenderObject
 	{
 	public:
 		/// <summary>
@@ -114,21 +114,6 @@ namespace SimpleRender
 		}
 
 
-		inline void Dispose() override
-		{
-			for(auto& texture : textures)
-			{
-				texture->Dispose();
-			}
-
-			for(auto& mesh : meshes)
-			{
-				mesh.Dispose();
-			}
-		}
-
-
-
 		std::vector<RenderTexture*>* TextureMap = &textures;
 		
 		Transform* Transform = &transform;
@@ -153,9 +138,8 @@ namespace SimpleRender
 		SimpleRender::Transform transform;
 		glm::mat4 matrix = glm::mat4(1.0f);
 
+		std::vector<std::unique_ptr<SimpleRender::RenderMesh>> meshes;
 
-
-		std::vector<RenderMesh> meshes;			// To delete
 		std::vector<RenderTexture*> textures;	// To delete
 
 
@@ -180,13 +164,7 @@ namespace SimpleRender
 		/// <param name="node">Initially the root node, scene->mRootNode</param>
 		/// <param name="scene">aiScene gathered from Importer.ReadFile</param>
 		void InitMeshes(const aiScene* scene, const aiNode* node);
-		/// <summary>
-		/// Given an aiMesh, convert it into a useful RenderMesh.
-		/// </summary>
-		/// <param name="scene">aiScene from an instance of Importer</param>
-		/// <param name="node">aiMesh obtained from an instance of aiScene</param>
-		/// <returns></returns>
-		RenderMesh CreateMesh(const aiScene* scene, const aiMesh* mesh);
+
 
 		std::vector<unsigned int> LoadTexturesFromMesh(aiMaterial* material);
 		std::vector<unsigned int> LoadTexture(aiMaterial* material, aiTextureType type);

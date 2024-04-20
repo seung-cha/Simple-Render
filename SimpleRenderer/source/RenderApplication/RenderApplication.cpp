@@ -61,6 +61,12 @@ SimpleRender::RenderApplication::RenderApplication()
 	//Set up callbacks
 	glfwSetWindowUserPointer(window, this);
 
+
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	// Set up GLFW callback functions
+	//
+
+
 	/// Window Resize Func
 	auto resizeFunc = [](GLFWwindow* window, int x, int y)
 	{ 
@@ -174,8 +180,8 @@ SimpleRender::RenderApplication::RenderApplication()
 
 	// Add Widgets
 	AddUI(new BackgroundUI(this));
-	AddUI(new CameraUI(this));
 	AddUI(new ObjectUI(this));
+	// AddUI(new CameraUI(this));	// Commented out since it has no use as of now.
 	// AddUI(new ShaderUI(this));	// Commented out since it has no use as of now.
 	AddUI(new HierarchyUI(this));
 	AddUI(new ScreenUI(this));
@@ -185,6 +191,41 @@ SimpleRender::RenderApplication::RenderApplication()
 	glEnable(GL_DEPTH_TEST);
 
 
+}
+
+SimpleRender::RenderApplication::~RenderApplication()
+{
+	std::cout << "TO DO: FREE ALLOCATED RESOURCES IN RENDER_APPLICATION" << std::endl;
+	glfwDestroyWindow(window);
+
+	// Manually unregister binds
+	// Otherwise they cause access violation
+	auto contKeyInputs = contiguousKeyInputs;
+	auto discKeyInputs = discreteKeyInputs;
+	auto mousePosInputs = mousePositionInputs;
+	auto mouseButInputs = mouseButtonInputs;
+
+	for(auto& reg : contKeyInputs)
+	{
+		reg->UnregisterContiguousKeyInput();
+	}
+
+	for(auto& reg : discKeyInputs)
+	{
+		reg->UnregisterDiscreteKeyInput();
+	}
+
+	for(auto& reg : mousePosInputs)
+	{
+		reg->UnregisterMousePositionInput();
+	}
+
+	for(auto& reg : mouseButInputs)
+	{
+		reg->UnregisterDiscreteMouseInput();
+	}
+
+	delete(scene);
 }
 
 
@@ -253,7 +294,6 @@ void SimpleRender::RenderApplication::UpdateWidgets()
 	for(auto& widget : widgets)
 	{
 		widget->UpdateWidget();
-		widget->ReflectUpdate();
 	}
 
 	ImGui::Render();
@@ -266,31 +306,16 @@ void SimpleRender::RenderApplication::ProcessInput()
 	{
 		keys->OnContiguousKeyInput(window);
 	}
-
-
 }
 
 
 
-void SimpleRender::RenderApplication::AddUI(RenderUI* widget)
+void SimpleRender::RenderApplication::AddUI(RenderUI* const& widget)
 {
-	widgets.insert(widget);
+	widgets.insert(std::unique_ptr<SimpleRenderUI::RenderUI>(widget));
 }
 
 
-void SimpleRender::RenderApplication::Dispose()
-{
-	glfwTerminate();
-
-	for(auto& widget : widgets)
-	{
-		delete(widget);
-	}
-
-	scene->Dispose();
-	delete(scene);
-
-}
 
 void SimpleRender::RenderApplication::RegisterContiguousKeyInput(SimpleRenderPure::ContiguousKeyInput* keyInput)
 {
@@ -303,12 +328,10 @@ void SimpleRender::RenderApplication::UnregisterContiguousKeyInput(SimpleRenderP
 }
 
 
-
 void SimpleRender::RenderApplication::RegisterDiscreteKeyInput(SimpleRenderPure::DiscreteKeyInput* keyInput)
 {
 	discreteKeyInputs.insert(keyInput);
 }
-
 
 
 void SimpleRender::RenderApplication::UnregisterDiscreteKeyInput(SimpleRenderPure::DiscreteKeyInput* keyInput)

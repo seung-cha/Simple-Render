@@ -10,15 +10,18 @@ SimpleRenderPure::ContiguousKeyInput::ContiguousKeyInput(SimpleRender::RenderApp
 
 SimpleRenderPure::ContiguousKeyInput::~ContiguousKeyInput()
 {
-	_application->UnregisterContiguousKeyInput(this);
+	if(registered)
+		_application->UnregisterContiguousKeyInput(this);
 }
 
 void SimpleRenderPure::ContiguousKeyInput::RegisterContiguousKeyInput()
 {
 	_application->RegisterContiguousKeyInput(this);
+	registered = true;
 }
 
 void SimpleRenderPure::ContiguousKeyInput::UnregisterContiguousKeyInput()
 {
 	_application->UnregisterContiguousKeyInput(this);
+	registered = false;
 }

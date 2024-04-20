@@ -3,6 +3,8 @@
 #include <iostream>
 #include "RenderCamera/RenderCamera.h"
 
+
+
 SimpleRender::RenderCubemap::RenderCubemap()
 {
 	glGenTextures(1, &id);
@@ -78,14 +80,29 @@ SimpleRender::RenderCubemap::RenderCubemap()
     glBindVertexArray(0);
 
     // Create cubemap shaders
+	shaderProgram = std::make_unique<SimpleRender::RenderShaderProgram>();
 
-	shaderProgram = new SimpleRender::RenderShaderProgram();
-	shaderProgram->AttachShader(new SimpleRender::RenderShader(SimpleRender::ShaderType::Vertex, "shaders/cubemap/cubemap.vert"));
-	shaderProgram->AttachShader(new SimpleRender::RenderShader(SimpleRender::ShaderType::Fragment, "shaders/cubemap/cubemap.frag"));
+    vert = std::make_unique<SimpleRender::RenderShader>(SimpleRender::ShaderType::Vertex, "shaders/cubemap/cubemap.vert");
+    frag = std::make_unique<SimpleRender::RenderShader>(SimpleRender::ShaderType::Fragment, "shaders/cubemap/cubemap.frag");
+
+	shaderProgram->AttachShader(vert.get());
+	shaderProgram->AttachShader(frag.get());
 	shaderProgram->LinkProgram();
 
 }
 
+SimpleRender::RenderCubemap::~RenderCubemap()
+{
+    glDeleteTextures(1, &id);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+
+    for(int i = 0; i < 6; i++)
+    {
+        stbi_image_free(imgData[i]);
+    }
+
+}
 
 
 void SimpleRender::RenderCubemap::SetSide(enum SimpleRender::CubemapSide side, std::string path)

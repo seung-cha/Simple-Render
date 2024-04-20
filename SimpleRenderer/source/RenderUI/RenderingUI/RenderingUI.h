@@ -9,11 +9,11 @@ namespace SimpleRenderUI
 	class RenderingUI : public RenderUI
 	{
 	public:
-		RenderingUI(SimpleRender::RenderApplication* application, std::string title = "Rendering");
+		RenderingUI(SimpleRender::RenderApplication* const& application, const std::string& title = "Rendering");
 
 
 		void UpdateWidget() override;
-		void ReflectUpdate() override;
+
 
 
 	};

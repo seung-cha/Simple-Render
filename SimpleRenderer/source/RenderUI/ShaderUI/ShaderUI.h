@@ -14,15 +14,10 @@ namespace SimpleRenderUI
 	class ShaderUI : public RenderUI
 	{
 	public:
-		ShaderUI(SimpleRender::RenderApplication* application, std::string title = "Shaders");
+		ShaderUI(SimpleRender::RenderApplication* const& application, const std::string& title = "Shaders");
 
 		virtual void UpdateWidget() override;
 		
-
-		virtual inline void ReflectUpdate() override
-		{
-
-		}
 
 	private:
 		void ShadersWidget(enum SimpleRender::ShaderType type);

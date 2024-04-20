@@ -37,7 +37,7 @@ namespace SimpleRender
 
 			int width, height;
 			glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
-			perspective = glm::perspective(glm::radians(fov), width / (float)height, 0.1f, 1000.0f);
+			perspective = glm::perspective(glm::radians(fov), width / (float)height, 0.1f, 100000.0f);
 		}
 
 		inline glm::mat4 PerspectiveMatrix() const

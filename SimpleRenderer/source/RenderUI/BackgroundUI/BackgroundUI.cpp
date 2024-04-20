@@ -8,7 +8,7 @@
 using namespace SimpleRenderUI;
 
 
-BackgroundUI::BackgroundUI(SimpleRender::RenderApplication* application, std::string title) : RenderUI(title, application)
+BackgroundUI::BackgroundUI(SimpleRender::RenderApplication* const& application, const std::string& title) : RenderUI(title, application)
 {
 
 

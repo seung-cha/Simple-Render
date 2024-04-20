@@ -15,7 +15,7 @@
 using namespace SimpleRenderUI; 
 using namespace std;
 
-ScreenUI::ScreenUI(SimpleRender::RenderApplication* application, std::string title) :
+ScreenUI::ScreenUI(SimpleRender::RenderApplication* const& application, const std::string& title) :
 	RenderUI(title, application), 
 	camera(application), 
 	DiscreteMouseInput(application), 
@@ -105,7 +105,7 @@ void ScreenUI::UpdateWidget()
 				int num = static_cast<int>(col[0]);
 
 				if(num > 0 && num <= application->Scene->SceneObjects->size())
-					application->Scene->ActiveObject = (*application->Scene->SceneObjects)[static_cast<int>(num - 1)];
+					application->Scene->ActiveObject = (*application->Scene->SceneObjects)[static_cast<int>(num - 1)].get();
 				else
 					application->Scene->ActiveObject = nullptr;
 		}
@@ -124,23 +124,6 @@ void ScreenUI::UpdateWidget()
 
 	
 	ImGui::End();
-
-}
-void ScreenUI::ReflectUpdate()
-{
-
-	
-	/*glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
-	unsigned char col[4];
-
-	glReadPixels(application->Status->Mouse->xPos, application->Status->Height - application->Status->Mouse->yPos, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &col);
-
-	cout << "Pixel data at < " << application->Status->Mouse->xPos << ", " << application->Status->Mouse->yPos << " >:"
-		<< static_cast<int>(col[0]) << std::endl;
-
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);*/
-
-
 
 }
 

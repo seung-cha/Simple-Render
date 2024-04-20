@@ -49,6 +49,7 @@ namespace SimpleRender
 	{
 	public:
 		RenderCubemap();
+		~RenderCubemap();
 
 		/// <summary>
 		/// Set given side with the provided image.
@@ -63,9 +64,10 @@ namespace SimpleRender
 
 
 	private:
-		unsigned char* imgData[6] = {0};
+		unsigned char* imgData[6] = {nullptr};
 		GLuint id;
-		RenderShaderProgram* shaderProgram;
+		std::unique_ptr<RenderShaderProgram> shaderProgram;
+		std::unique_ptr<SimpleRender::RenderShader> vert, frag;
 		GLuint VAO, VBO;
 
 	};

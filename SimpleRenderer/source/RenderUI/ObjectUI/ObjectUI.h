@@ -7,14 +7,11 @@ namespace SimpleRenderUI
 	class ObjectUI : public RenderUI
 	{
 	public:
-		ObjectUI(SimpleRender::RenderApplication* application, std::string title = "Objects");
+		ObjectUI(SimpleRender::RenderApplication* const& application, const std::string& title = "Objects");
 
 
 		virtual void UpdateWidget() override;
 
-		virtual inline void ReflectUpdate() override
-		{
-		}
 
 	private:
 		void TransformWidget();

@@ -5,6 +5,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include <memory>
+
 #include "RenderScene/RenderScene.h"
 #include "RenderCamera/RenderCamera.h"
 
@@ -46,7 +48,8 @@ RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int
 
 RenderObject::~RenderObject()
 {
-
+	// Unlink the parent
+	ReplaceShaderProgram(nullptr);
 }
 
 void RenderObject::LoadDefaultMesh()
@@ -70,7 +73,7 @@ void RenderObject::LoadMesh(const std::string path)
 
 	Importer importer;
 
-	unsigned int flags = aiProcess_Triangulate | aiProcess_GenNormals;
+	unsigned int flags = aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_CalcTangentSpace;
 	const aiScene* scene = importer.ReadFile(path, flags);
 
 
@@ -94,7 +97,7 @@ void RenderObject::InitMeshes(const aiScene* scene, const aiNode* node)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		auto indices = LoadTexturesFromMesh(scene->mMaterials[mesh->mMaterialIndex]);
-		meshes.push_back(RenderMesh(scene, mesh, indices));
+		meshes.push_back(std::make_unique<SimpleRender::RenderMesh>(scene, mesh, indices));
 	}
 	
 	
@@ -127,7 +130,7 @@ void RenderObject::InitMeshes(const aiScene* scene, const aiNode* node)
 			obj->Transform->Rotation = eulerRot * (180.0f / 3.141592f);
 
 
-			this->scene->SceneObjects->push_back(obj);
+			this->scene->SceneObjects->push_back(std::unique_ptr<SimpleRender::RenderObject>(obj));
 			children.push_back(obj);
 		}
 		else
@@ -143,7 +146,6 @@ void RenderObject::InitMeshes(const aiScene* scene, const aiNode* node)
 			// Convert quaternion to Euler
 			glm::quat q(rotation.w, rotation.x, rotation.y, rotation.z);
 			glm::vec3 eulerRot = glm::eulerAngles(q);
-			printf("%f, %f, %f\n", eulerRot.x, eulerRot.y, eulerRot.z);
 
 
 			transform.Position = glm::vec3(translate.x, translate.y, translate.z);
@@ -166,12 +168,14 @@ vector<unsigned int> RenderObject::LoadTexturesFromMesh(aiMaterial* material)
 
 	vector<unsigned int> diffuseIndices = LoadTexture(material, aiTextureType_DIFFUSE);
 	vector<unsigned int> specularIndices = LoadTexture(material, aiTextureType_SPECULAR);
-	//vector<unsigned int> normalIndices = LoadTexture(material, aiTextureType_HEIGHT);
+	vector<unsigned int> normalIndices = LoadTexture(material, aiTextureType_HEIGHT);
 
 	//std::cout << "Normal map size: " << normalIndices.size() << std::endl << std::endl;
 
 	indices.insert(indices.end(), diffuseIndices.begin(), diffuseIndices.end());
 	indices.insert(indices.end(), specularIndices.begin(), specularIndices.end());
+	indices.insert(indices.end(), normalIndices.begin(), normalIndices.end());
+
 
 	return indices;
 }
@@ -218,14 +222,6 @@ vector<unsigned int> RenderObject::LoadTexture(aiMaterial* material, aiTextureTy
 }
 
 
-
-
-RenderMesh RenderObject::CreateMesh(const aiScene* scene, const aiMesh* mesh)
-{
-
-	return RenderMesh(scene, mesh, vector<unsigned int>());
-}
-
 void RenderObject::Draw(RenderCamera* camera)
 {
 	//Do not draw if the shader program is invalid.
@@ -268,7 +264,7 @@ void RenderObject::Draw(RenderCamera* camera)
 
 	for(auto& mesh : meshes)
 	{
-		mesh.Draw(shaderProgram, textures);
+		mesh->Draw(shaderProgram, textures);
 	}
 
 }
@@ -301,7 +297,7 @@ void RenderObject::Draw(RenderCamera* camera, RenderShaderProgram* shaderProgram
 
 	for(auto& mesh : meshes)
 	{
-		mesh.Draw(shaderProgram, textures);
+		mesh->Draw(shaderProgram, textures);
 	}
 
 }
@@ -340,6 +336,6 @@ void RenderObject::DrawID(RenderCamera* camera, RenderShaderProgram* selectionPr
 
 	for(auto& mesh : meshes)
 	{
-		mesh.DrawID(selectionProgram);
+		mesh->DrawID(selectionProgram);
 	}
 }

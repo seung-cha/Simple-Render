@@ -12,7 +12,7 @@ using namespace SimpleRenderUI;
 using namespace SimpleRender;
 using namespace std;
 
-ObjectUI::ObjectUI(SimpleRender::RenderApplication* application, std::string title): RenderUI(title, application)
+ObjectUI::ObjectUI(SimpleRender::RenderApplication* const& application, const std::string& title): RenderUI(title, application)
 {
 	selectedTexture = nullptr;
 }
@@ -90,6 +90,7 @@ void ObjectUI::TextureWidget()
 	// ImTextureID is just GLuint that contains texture ID
 	TextureTable(TextureType::Diffuse);
 	TextureTable(TextureType::Specular);
+	TextureTable(TextureType::Normal);
 
 }
 

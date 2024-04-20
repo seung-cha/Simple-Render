@@ -9,7 +9,7 @@ namespace SimpleRenderBuffer
 
 
 
-	class RenderBuffer : public SimpleRenderPure::Disposable
+	class RenderBuffer
 	{
 
 	public:
@@ -18,7 +18,7 @@ namespace SimpleRenderBuffer
 		/// </summary>
 		/// <param name="width"></param>
 		/// <param name="height"></param>
-		RenderBuffer(int width, int height)
+		RenderBuffer(const int& width, const int& height)
 		{
 			glGenFramebuffers(1, &framebuffer);
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -42,22 +42,18 @@ namespace SimpleRenderBuffer
 
 		}
 
-		~RenderBuffer()
-		{
-
-		}
-
-
-	public:
-		 GLuint& Framebuffer = framebuffer;
-		 GLuint& Texture = texture;
-
-	public:
-		virtual void Dispose()
+		virtual ~RenderBuffer()
 		{
 			glDeleteFramebuffers(1, &framebuffer);
-			glDeleteTextures(1, &texture);
+			glDeleteFramebuffers(1, &texture);
 		}
+
+
+	public:
+		 const GLuint& Framebuffer = framebuffer;
+		 const GLuint& Texture = texture;
+
+	public:
 
 
 	protected:

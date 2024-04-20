@@ -11,21 +11,12 @@ namespace SimpleRenderUI
 	class CameraUI : public RenderUI
 	{
 	public:
-		CameraUI(SimpleRender::RenderApplication* application, std::string title = "Camera");
+		CameraUI(SimpleRender::RenderApplication* const& application, const std::string& title = "Camera");
 
 
 		virtual void UpdateWidget() override;
 		
 
-		virtual inline void ReflectUpdate() override
-		{
-			cam->SetFOV(fov);
-
-		}
-
-	private:
-		float fov;
-		SimpleRender::RenderCamera* cam;
 		
 
 

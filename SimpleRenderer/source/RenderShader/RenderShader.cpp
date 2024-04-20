@@ -23,16 +23,27 @@ RenderShader::RenderShader(enum ShaderType type, string path)
 	
 }
 
+SimpleRender::RenderShader::~RenderShader()
+{
+	auto copy = parentShaderPrograms;
+	// Necessary since DetachShader() modifies the vector by erasing the reference of itself.
+	for(auto& program : copy)
+	{
+		program->DetachShader(type);
+	}
+
+	glDeleteShader(shaderID);
+}
+
 void RenderShader::ShaderSource(std::string path)
 {
 	this->path = path;
 
-	const char* src = FileReader::ReadFile(path.c_str());
+	std::string src = FileReader::ReadFile(path);
 
 	// Free the source if it already exists
-	if(source)
+	if(source != "")
 	{
-		free((void*)source);
 		cout << "Replacing shader source" << endl << endl;
 	}
 	else
@@ -40,7 +51,9 @@ void RenderShader::ShaderSource(std::string path)
 
 	source = src;
 
-	glShaderSource(shaderID, 1, &source, 0);
+
+	const char* s = source.c_str();
+	glShaderSource(shaderID, 1, &s, 0);
 }
 
 
@@ -108,18 +121,6 @@ bool RenderShader::CompileShader()
 
 }
 
-void RenderShader::Dispose()
-{
-	auto copy = shaderPrograms;
-
-	for(auto& program : copy)
-	{
-		program->DetachShader(type);
-	}
-
-	free((void*)source);
-	glDeleteShader(shaderID);
-}
 
 
 

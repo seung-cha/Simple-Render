@@ -15,10 +15,9 @@ namespace SimpleRenderUI
 	class ScreenUI : public RenderUI, public SimpleRenderPure::DiscreteMouseInput
 	{
 	public:
-		ScreenUI(SimpleRender::RenderApplication* application, std::string title="Scene Screen");
+		ScreenUI(SimpleRender::RenderApplication* const& application, const std::string& title ="Scene Screen");
 
 		virtual void UpdateWidget() override;
-		virtual void ReflectUpdate() override;
 
 
 

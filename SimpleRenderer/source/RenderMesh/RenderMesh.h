@@ -6,7 +6,6 @@
 
 #include "RenderVertex/RenderVertex.h"
 #include "RenderTexture/RenderTexture.h"
-#include "RenderPure/Disposable.h"
 
 
 
@@ -23,7 +22,7 @@ namespace SimpleRender
 	};
 
 
-	class RenderMesh : SimpleRenderPure::Disposable
+	class RenderMesh
 	{
 	public:
 		RenderMesh() {};
@@ -33,27 +32,22 @@ namespace SimpleRender
 		/// <param name="scene">aiScene obtained from Assimp Importer</param>
 		/// <param name="mesh">aiMesh instance obtained from mRootNode</param>
 		/// <param name="textureIndices">texture slots to use, mapped onto the texture vector in the object class</param>
-		RenderMesh(const aiScene* scene, const aiMesh* mesh, const std::vector<unsigned int> textureIndices);
+		RenderMesh(const aiScene* const& scene, const aiMesh* const& mesh, const std::vector<unsigned int> & textureIndices);
 		~RenderMesh();
-		void Draw(RenderShaderProgram* program, const std::vector<RenderTexture*>& textureMap);
+		void Draw(RenderShaderProgram* const& program, const std::vector<RenderTexture*>& textureMap);
 
 		/// <summary>
 		/// Draw call for object selection. This is really just glDrawElements.
 		/// </summary>
 		/// <param name="program"></param>
-		void DrawID(RenderShaderProgram* program);
+		void DrawID(RenderShaderProgram* const& program);
 
-		void Dispose() override
-		{
-			glDeleteBuffers(BufferType::LEN, buffers);
-			glDeleteVertexArrays(1, &vertexArray);
-		}
 
 	private:
 		/// <summary>
 		/// Populate vertices
 		/// </summary>
-		void InitVertices(const aiMesh* mesh);
+		void InitVertices(const aiMesh* const& mesh);
 		/// <summary>
 		/// Initialise buffers
 		/// </summary>

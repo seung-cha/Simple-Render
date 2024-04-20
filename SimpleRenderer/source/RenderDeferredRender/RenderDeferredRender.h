@@ -6,8 +6,8 @@
 #include "RenderBuffer/RenderBuffer.h"
 
 #include "RenderShaderProgram/RenderShaderProgram.h"
+#include <memory>
 
-#include "RenderPure/Disposable.h"
 
 namespace SimpleRender
 {
@@ -19,39 +19,28 @@ namespace SimpleRender
 	/// Half-complete deferred Rendering class.
 	/// GBuffer needs to be populated with data prior to calling Draw().
 	/// </summary>
-	class RenderDeferredRender : public SimpleRenderPure::Disposable
+	class RenderDeferredRender
 	{
 	public:
 		RenderDeferredRender(RenderScene* scene);
+		~RenderDeferredRender();
 		/// <summary>
 		///  Draw the result in DeferBuffer
 		/// </summary>
 		/// <param name="camera">Camera. Required for its position data.</param>
-		void Draw(RenderCamera* camera, GLuint& framebuffer);
+		void Draw(RenderCamera* const& camera, const GLuint& framebuffer);
 
 	public:
-		SimpleRenderBuffer::GBuffer* GBuffer = &gBuffer;
 
-
-		void Dispose()
-		{
-			program.Dispose();
-			gBuffer.Dispose();
-			glDeleteVertexArrays(1, &VAO);
-			glDeleteBuffers(1, &VBO);
-			glDeleteBuffers(1, &EBO);
-
-		}
-
-
-		RenderShaderProgram* ShaderProgram = &program;
+		const std::unique_ptr<SimpleRenderBuffer::GBuffer>& GBuffer = gBuffer;
+		const std::unique_ptr<RenderShaderProgram>& ShaderProgram = program;
 
 
 	private:
-		SimpleRenderBuffer::GBuffer gBuffer;
+		std::unique_ptr<SimpleRenderBuffer::GBuffer> gBuffer;
+		std::unique_ptr<RenderShaderProgram> program;
 
 		GLuint VAO, VBO, EBO;
-		RenderShaderProgram program;
 
 		RenderScene* scene;
 

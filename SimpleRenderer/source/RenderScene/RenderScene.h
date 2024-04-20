@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 
+#include <memory>
+
 #include "RenderShaderProgram/RenderShaderProgram.h"
 #include "RenderShader/RenderShader.h"
 #include "RenderCamera/RenderCamera.h"
@@ -17,17 +19,18 @@ namespace SimpleRender
 	class RenderObject;
 	class RenderApplication;
 	class RenderCamera;
-	class RenderDeferredRender;
 	class RenderCubemap;
+	class RenderDeferredRender;
 
 
 	class RenderScene
 	{
 	public:
 		RenderScene(SimpleRender::RenderApplication* application);
+		~RenderScene();
 		void LoadDefaultScene();
 
-		void DrawScene(RenderCamera* camera, GLuint& framebuffer);
+		void DrawScene(RenderCamera* const& camera, const GLuint& framebuffer);
 
 		/// <summary>
 		/// Draw the scene with selected shader program, instead of each object's program.
@@ -35,7 +38,7 @@ namespace SimpleRender
 		/// <param name="camera"></param>
 		/// <param name="framebuffer"></param>
 		/// <param name="shaderProgram"></param>
-		void DrawScene(RenderCamera* camera, GLuint& framebuffer, RenderShaderProgram* shaderProgram);
+		void DrawScene(RenderCamera* const& camera, const GLuint& framebuffer, RenderShaderProgram* const& shaderProgram);
 
 
 		/// <summary>
@@ -43,14 +46,14 @@ namespace SimpleRender
 		/// </summary>
 		/// <param name="camera"></param>
 		/// <param name="framebuffer"></param>
-		void DrawGBufferScene(RenderCamera* camera, GLuint& framebuffer);
+		void DrawGBufferScene(RenderCamera* const& camera, const GLuint& framebuffer);
 
 		/// <summary>
 		/// Draw the scene for object selection.
 		/// </summary>
 		/// <param name="camera"></param>
 		/// <param name="framebuffer"></param>
-		void DrawIDScene(RenderCamera* camera, GLuint& framebuffer);
+		void DrawIDScene(RenderCamera* const& camera, const GLuint& framebuffer);
 
 		/// <summary>
 		/// Free allocated memory.
@@ -63,7 +66,7 @@ namespace SimpleRender
 		}
 
 
-		inline std::vector<RenderShader*>* GetShadersOfType(enum ShaderType type)
+		inline std::vector<std::unique_ptr<RenderShader>>* GetShadersOfType(enum ShaderType type)
 		{
 			if(type == ShaderType::Vertex)
 				return SceneVertexShaders;
@@ -79,13 +82,13 @@ namespace SimpleRender
 		/// </summary>
 		/// <param name="program"></param>
 		/// <param name="path"></param>
-		void AddObject(RenderShaderProgram*& program, std::string path = "");
+		void AddObject(RenderShaderProgram* const& program, const std::string& path = "");
 
 		/// <summary>
 		/// Delete the specified object. Manage the IDs afterwards.
 		/// </summary>
 		/// <param name="object"></param>
-		void DeleteObject(RenderObject* object);
+		void DeleteObject(RenderObject* const object);
 
 		/// <summary>
 		/// Delete the active object. Equivalent to calling DeleteObject with arg = ActiveObject
@@ -101,55 +104,48 @@ namespace SimpleRender
 		void UpdateDeferredRender();
 
 
-		std::vector<RenderObject*>* const SceneObjects = &objects;
-		std::vector<RenderCamera*>* const SceneCameras = &cameras;
+		std::vector<std::unique_ptr<RenderObject>>* const SceneObjects = &objects;
 
-		std::vector<RenderShader*>* const SceneVertexShaders = &vertexShaders;
-		std::vector<RenderShader*>* const SceneFragmentShaders = &fragmentShaders;
-		std::vector<RenderShader*>* const SceneGeometryShaders = &geometryShaders;
+		std::vector<std::unique_ptr<RenderShader>>* const SceneVertexShaders = &vertexShaders;
+		std::vector<std::unique_ptr<RenderShader>>* const SceneFragmentShaders = &fragmentShaders;
+		std::vector<std::unique_ptr<RenderShader>>* const SceneGeometryShaders = &geometryShaders;
 
-		std::vector<RenderShaderProgram*>* const SceneShaderPrograms = &shaderPrograms;
+		std::vector<std::unique_ptr<RenderShaderProgram>>* const SceneShaderPrograms = &shaderPrograms;
 
-		RenderCamera* ActiveCamera = nullptr;
+
 		RenderObject* ActiveObject = nullptr;
 		RenderShaderProgram* ActiveShaderProgram = nullptr;
 		RenderShader* ActiveShader = nullptr;
 
-		GLuint* SceneFrameBuffer = &framebuffer;
-		GLuint* SceneTexture = &screenTexture;
 
 
 		RenderApplication*& Application = application;
 
-		RenderShaderProgram* const ObjectIDShaderProgram = &objectSelectionShaderProgram;
-		RenderShaderProgram* const GBufferShaderProgram = &gbufferShaderProgram;
 
-		RenderDeferredRender*& DeferredRender = deferredRender;
-
-		RenderCubemap*& Cubemap = cubemap;
+		const std::unique_ptr<RenderShaderProgram>& ObjectIDShaderProgram = objectSelectionShaderProgram;
+		const std::unique_ptr<RenderShaderProgram>& GBufferShaderProgram = gbufferShaderProgram;
+		const std::unique_ptr<RenderDeferredRender>& DeferredRender = deferredRender;
+		const std::unique_ptr<RenderCubemap>& Cubemap = cubemap;
 
 	private:
 		RenderApplication* application;
 
 
-		std::vector<RenderObject*> objects;
-		std::vector<RenderCamera*> cameras;
+		std::vector<std::unique_ptr<RenderObject>> objects;
 
-		std::vector<RenderShader*> vertexShaders;
-		std::vector<RenderShader*> fragmentShaders;
-		std::vector<RenderShader*> geometryShaders;
+		std::vector<std::unique_ptr<RenderShader>> vertexShaders;
+		std::vector<std::unique_ptr<RenderShader>> fragmentShaders;
+		std::vector<std::unique_ptr<RenderShader>> geometryShaders;
 
-		std::vector<RenderShaderProgram*> shaderPrograms;
+		std::vector<std::unique_ptr<RenderShaderProgram>> shaderPrograms;
 
-		GLuint framebuffer = 0;
-		GLuint screenTexture = 0;
 
-		RenderShaderProgram objectSelectionShaderProgram;
-		RenderShaderProgram gbufferShaderProgram;
-
-		RenderCubemap* cubemap;
-
-		RenderDeferredRender* deferredRender;
+		std::unique_ptr<RenderShaderProgram> objectSelectionShaderProgram;
+		std::unique_ptr<RenderShader> selectionVert, selectionFrag;
+		std::unique_ptr<RenderShaderProgram> gbufferShaderProgram;
+		std::unique_ptr<RenderShader> gBufferVert, gBufferFrag;
+		std::unique_ptr<RenderCubemap> cubemap;
+		std::unique_ptr<RenderDeferredRender> deferredRender;
 	};
 
 

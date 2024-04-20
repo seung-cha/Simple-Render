@@ -12,6 +12,29 @@ RenderShaderProgram::RenderShaderProgram()
 	programID = glCreateProgram();
 }
 
+SimpleRender::RenderShaderProgram::~RenderShaderProgram()
+{
+
+	auto copy = associatedObjects;
+	//ReplaceShaderProgram() modifies the vector by erasing the reference of itself.
+
+	for(auto& object : copy)
+	{
+		object->ReplaceShaderProgram(nullptr);
+	}
+
+
+	glDeleteProgram(programID);
+	for(int i = 0; i < 3; i++)
+	{
+		if(shaders[i])
+		{
+			shaders[i]->ParentShaderPrograms->erase(this);
+		}
+	}
+
+}
+
 
 void RenderShaderProgram::LinkProgram()
 {
@@ -41,27 +64,28 @@ void RenderShaderProgram::LinkProgram()
 
 }
 
-void RenderShaderProgram::Dispose()
+
+void SimpleRender::RenderShaderProgram::AttachShader(RenderShader* shader)
 {
-	auto copy = associatedObjects;
+	GLenum type = shader->Type();
 
-	for(auto& object : copy)
+	// Detach the shader from the program if exists
+	if(shaders[type])
 	{
-		object->ReplaceShaderProgram(nullptr);
+		glDetachShader(programID, shaders[type]->ID());
+		shaders[type]->ParentShaderPrograms->erase(this);
 	}
 
-	for(int i = 0; i < 3; i++)
-	{
-		if(shaders[i])
-		{
-			shaders[i]->ParentShaderPrograms->erase(this);
-		}
-	}
 
-	
+	shaders[type] = shader;
+	shaders[type]->ParentShaderPrograms->insert(this);
+	glAttachShader(programID, shaders[type]->ID());
 
-	glDeleteProgram(programID);
+	std::cout << "Attached a " << RenderShader::ShaderTypeToString(shader->Type()) << " shader" << std::endl << std::endl;
 }
+
+
+
 
 void RenderShaderProgram::ApplyUniformVariables()
 {

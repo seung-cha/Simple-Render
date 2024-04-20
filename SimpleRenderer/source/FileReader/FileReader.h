@@ -12,7 +12,7 @@ public:
 	/// </summary>
 	/// <param name="path"></param>
 	/// <returns></returns>
-	static const char* ReadFile(const char* path);
+	static std::string ReadFile(const std::string& path);
 
 	static std::string OpenFileDialogue();
 	

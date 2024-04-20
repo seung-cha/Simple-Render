@@ -27,6 +27,10 @@ RenderTexture::RenderTexture(const TextureType type, std::string path)
 		this->path = path;
 }
 
+SimpleRender::RenderTexture::~RenderTexture()
+{
+	glDeleteTextures(1, &id);
+}
 
 bool RenderTexture::LoadTexture(std::string path)
 {

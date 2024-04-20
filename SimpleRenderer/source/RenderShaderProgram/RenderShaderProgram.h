@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <unordered_set>
+#include <memory>
 
 
 namespace SimpleRender 
@@ -23,31 +24,13 @@ namespace SimpleRender
 		ShaderProgramError
 	};
 
-	class RenderShaderProgram : public SimpleRenderPure::Disposable
+	class RenderShaderProgram
 	{
 	public:
 
 		RenderShaderProgram();
-
-		inline void AttachShader(RenderShader* shader)
-		{
-			GLenum type = shader->Type();
-
-			// Detach the shader from the program if exists
-			if(shaders[type])
-			{
-				glDetachShader(programID, shaders[type]->ID());
-				shaders[type]->ParentShaderPrograms->erase(this);
-			}
-
-
-			shaders[type] = shader;
-			shaders[type]->ParentShaderPrograms->insert(this);
-			glAttachShader(programID, shaders[type]->ID());
-
-			std::cout << "Attached a " << RenderShader::ShaderTypeToString(shader->Type()) << " shader" << std::endl << std::endl;
-
-		}
+		~RenderShaderProgram();
+		void AttachShader(RenderShader* shader);
 
 		inline void DetachShader(enum ShaderType type)
 		{
@@ -82,15 +65,6 @@ namespace SimpleRender
 			return shaders[index];
 		}
 
-		std::unordered_set<RenderObject*>* AssociatedObjects = &associatedObjects;
-		
-		/// <summary>
-		/// Delete the shader program.
-		/// This object practically becomes useless.
-		/// All objects that use this shader must not use it after calling this function.
-		/// Attached shaders are automatically detached by OpenGL.
-		/// </summary>
-		virtual void Dispose() override;
 
 
 		inline GLuint ID()
@@ -114,7 +88,8 @@ namespace SimpleRender
 		}
 
 		
-		std::vector<ShaderProgramData*>* UniformData = &programData;
+		std::unordered_set<RenderObject*>* const AssociatedObjects = &associatedObjects;
+		std::vector<ShaderProgramData*>* const UniformData = &programData;
 
 		/// <summary>
 		/// Apply all data in UniformData to this GLSL shader.

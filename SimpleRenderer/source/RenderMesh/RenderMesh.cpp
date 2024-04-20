@@ -8,7 +8,7 @@ using namespace SimpleRender;
 using namespace std;
 
 
-RenderMesh::RenderMesh(const aiScene* scene, const aiMesh* mesh,  std::vector<unsigned int> textureIndices)
+RenderMesh::RenderMesh(const aiScene* const& scene, const aiMesh* const& mesh,  const std::vector<unsigned int>& textureIndices)
 {
 	this->textureIndices = textureIndices;
 	InitVertices(mesh);
@@ -18,9 +18,11 @@ RenderMesh::RenderMesh(const aiScene* scene, const aiMesh* mesh,  std::vector<un
 
 RenderMesh::~RenderMesh()
 {
+	glDeleteBuffers(BufferType::LEN, buffers);
+	glDeleteVertexArrays(1, &vertexArray);
 }
 
-void RenderMesh::InitVertices(const aiMesh* mesh)
+void RenderMesh::InitVertices(const aiMesh* const& mesh)
 {
 	vertices.reserve(mesh->mNumVertices);
 
@@ -31,7 +33,8 @@ void RenderMesh::InitVertices(const aiMesh* mesh)
 
 		auto pos = mesh->mVertices[i];
 		auto normal = mesh->mNormals[i];
-
+		auto tangent = mesh->mTangents[i];
+		auto biTangent = mesh->mBitangents[i];
 		
 		vertex.position.x = pos.x;
 		vertex.position.y = pos.y;
@@ -40,6 +43,16 @@ void RenderMesh::InitVertices(const aiMesh* mesh)
 		vertex.normal.x = normal.x;
 		vertex.normal.y = normal.y;
 		vertex.normal.z = normal.z;
+
+		vertex.tangent.x = tangent.x;
+		vertex.tangent.y = tangent.y;
+		vertex.tangent.z = tangent.z;
+
+		vertex.biTangent.x = biTangent.x;
+		vertex.biTangent.y = biTangent.y;
+		vertex.biTangent.z = biTangent.z;
+
+		
 
 		// Add texture coordinates if exists
 		if(mesh->mTextureCoords[0])
@@ -94,11 +107,15 @@ void RenderMesh::InitBuffers()
 	glEnableVertexAttribArray(0);		// Enable position
 	glEnableVertexAttribArray(1);		// Enable normal
 	glEnableVertexAttribArray(2);		// Enable texture coordinate
+	glEnableVertexAttribArray(3);		// Enable tangent
+	glEnableVertexAttribArray(4);		// Enable biTangent
+
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), (void*)(offsetof(RenderVertex, position)));
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), (void*)(offsetof(RenderVertex, normal)));
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), (void*)(offsetof(RenderVertex, texturePosition)));
-
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), (void*)(offsetof(RenderVertex, tangent)));
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), (void*)(offsetof(RenderVertex, biTangent)));
 
 
 	glBindVertexArray(0);
@@ -109,7 +126,7 @@ void RenderMesh::InitBuffers()
 
 }
 
-void RenderMesh::DrawID(RenderShaderProgram* program)
+void RenderMesh::DrawID(RenderShaderProgram* const& program)
 {
 	glUseProgram(program->ID());
 	glBindVertexArray(vertexArray);
@@ -121,14 +138,16 @@ void RenderMesh::DrawID(RenderShaderProgram* program)
 	
 }
 
-void RenderMesh::Draw(RenderShaderProgram* program, const std::vector<RenderTexture*>& textureMap)
+void RenderMesh::Draw(RenderShaderProgram* const& program, const std::vector<RenderTexture*>& textureMap)
 {
 	glUseProgram(program->ID());
 	
 	// Bind textures
 	unsigned int diffNo = 0;
 	unsigned int specNo = 0;
+	unsigned int normalNo = 0;
 	unsigned int globalTexID = 0;
+
 
 
 	for(unsigned int& index : textureIndices)
@@ -141,6 +160,8 @@ void RenderMesh::Draw(RenderShaderProgram* program, const std::vector<RenderText
 			texNo = diffNo++;
 		else if(texture->Type() == TextureType::Specular)
 			texNo = specNo++;
+		else if(texture->Type() == TextureType::Normal)
+			texNo = normalNo++;
 
 
 		ostringstream stream;
@@ -156,10 +177,6 @@ void RenderMesh::Draw(RenderShaderProgram* program, const std::vector<RenderText
 	}
 
 
-
-	//char log[512];
-	//glGetProgramInfoLog(program->ID(), 512, 0, log);
-	//cout << log << endl;
 
 	glBindVertexArray(vertexArray);
 

@@ -16,7 +16,7 @@ namespace SimpleRenderUI
 	class RenderUI
 	{
 	public:
-		RenderUI(std::string title, SimpleRender::RenderApplication* application) : title{ title }, application{ application }
+		RenderUI(const std::string& title, SimpleRender::RenderApplication* const& application) : title{ title }, application{ application }
 		{
 		}
 
@@ -26,10 +26,6 @@ namespace SimpleRenderUI
 		/// Update the UI, receiving input but not applying them
 		/// </summary>
 		virtual void UpdateWidget() = 0;
-		/// <summary>
-		/// Update the applicationw with received inputs
-		/// </summary>
-		virtual inline void ReflectUpdate() = 0;
 
 	protected:
 		std::string title;

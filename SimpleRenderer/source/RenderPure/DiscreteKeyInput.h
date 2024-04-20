@@ -25,14 +25,12 @@ namespace SimpleRenderPure
 		void RegisterDiscreteKeyInput();
 		void UnregisterDiscreteKeyInput();
 		
-
 		virtual void OnDiscreteKeyInput(GLFWwindow* window, int key, int scancode, int action, int mods) = 0;
 
 
 	private:
 		SimpleRender::RenderApplication* _application;
-
-
+		bool registered = false;
 	};
 
 

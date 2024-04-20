@@ -12,7 +12,7 @@ using namespace SimpleRender;
 using namespace std;
 
 
-ShaderUI::ShaderUI(SimpleRender::RenderApplication* application, std::string title) : RenderUI(title, application)
+ShaderUI::ShaderUI(SimpleRender::RenderApplication* const& application, const std::string& title) : RenderUI(title, application)
 {
 
 }
@@ -52,40 +52,40 @@ void ShaderUI::UpdateWidget()
 
 void ShaderUI::ShadersWidget(enum ShaderType type)
 {
-	string title = RenderShader::ShaderTypeToString(type);
-	vector<RenderShader*>* shaders = application->Scene->GetShadersOfType(type);
+	//string title = RenderShader::ShaderTypeToString(type);
+	////vector<RenderShader*>* shaders = application->Scene->GetShadersOfType(type);
 
-	ImGui::SeparatorText(title.c_str());
+	//ImGui::SeparatorText(title.c_str());
 
-	for(int i = 0; i < shaders->size(); i++)
-	{
+	//for(int i = 0; i < shaders->size(); i++)
+	//{
 
-		ostringstream s;
-		s << title << i;
-		if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
-		{
-			if(application->Scene->ActiveShader == (*shaders)[i])
-				application->Scene->ActiveShader = nullptr;
-			else
-				application->Scene->ActiveShader = (*shaders)[i];
+	//	ostringstream s;
+	//	s << title << i;
+	//	if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
+	//	{
+	//		if(application->Scene->ActiveShader == (*shaders)[i])
+	//			application->Scene->ActiveShader = nullptr;
+	//		else
+	//			application->Scene->ActiveShader = (*shaders)[i];
 
-			cout << "Pressed" << endl;
-		}
+	//		cout << "Pressed" << endl;
+	//	}
 
-		ImGui::SameLine();
-	}
+	//	ImGui::SameLine();
+	//}
 
-	// button to create a new shader
-	ostringstream s;
-	s << "New " << title;
+	//// button to create a new shader
+	//ostringstream s;
+	//s << "New " << title;
 
-	if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
-	{
-		vector<RenderShader*>* vec = application->Scene->GetShadersOfType(type);
-		vec->push_back(new RenderShader(type));
+	//if(ImGui::Button(s.str().c_str(), ImVec2(64.0f, 64.0f)))
+	//{
+	//	//vector<RenderShader*>* vec = application->Scene->GetShadersOfType(type);
+	//	//vec->push_back(new RenderShader(type));
 
-		std::cout << application->Scene->GetShadersOfType(type)->size() << endl;
-	}
+	//	//std::cout << application->Scene->GetShadersOfType(type)->size() << endl;
+	//}
 
 }
 
@@ -103,7 +103,7 @@ void ShaderUI::FocusedShaderDetails()
 	ImGui::Text(application->Scene->ActiveShader->Path().c_str());
 
 	ImGui::Text("Source: ");
-	ImGui::Text(application->Scene->ActiveShader->Source() ? application->Scene->ActiveShader->Source() : "This shader does not have a source.");
+	ImGui::Text(application->Scene->ActiveShader->Source() != "" ? application->Scene->ActiveShader->Source().c_str() : "This shader does not have a source.");
 
 	if(application->Scene->ActiveShader->State() == ShaderState::ShaderNew)
 	{
@@ -127,10 +127,10 @@ void ShaderUI::FocusedShaderDetails()
 
 	if(ImGui::Button("DELETE THIS SHADER"))
 	{
-		vector<RenderShader*>* shaders = application->Scene->GetShadersOfType(application->Scene->ActiveShader->Type());
+		auto shaders = application->Scene->GetShadersOfType(application->Scene->ActiveShader->Type());
 		for(unsigned int i = 0; i < shaders->size(); i++)
 		{
-			if(application->Scene->ActiveShader == (*shaders)[i])
+			if(application->Scene->ActiveShader == (*shaders)[i].get())
 			{
 				shaders->erase(shaders->begin() + i);
 				break;
@@ -138,7 +138,6 @@ void ShaderUI::FocusedShaderDetails()
 		}
 
 
-		application->Scene->ActiveShader->Dispose();
 		delete application->Scene->ActiveShader;
 		application->Scene->ActiveShader = nullptr;
 	}
@@ -153,29 +152,30 @@ void ShaderUI::ShaderProgramsWidget()
 {
 	ImGui::SeparatorText("Shader Program");
 
-	for(unsigned int i = 0; i < application->Scene->SceneShaderPrograms->size(); i++)
-	{
-		ostringstream stream;
-		stream << "Program" << i;
+	//for(unsigned int i = 0; i < application->Scene->SceneShaderPrograms->size(); i++)
+	//{
+	//	ostringstream stream;
+	//	stream << "Program" << i;
 
-		if(ImGui::Button(stream.str().c_str(), ImVec2(64.0f, 64.0f)))
-		{
-			// Deselect if the same item is pressed.
-			if(application->Scene->ActiveShaderProgram == (*application->Scene->SceneShaderPrograms)[i])
-				application->Scene->ActiveShaderProgram = nullptr;
-			else
-				application->Scene->ActiveShaderProgram = (*application->Scene->SceneShaderPrograms)[i];
-		}
+	//	if(ImGui::Button(stream.str().c_str(), ImVec2(64.0f, 64.0f)))
+	//	{
+	//		// Deselect if the same item is pressed.
+	//		if(application->Scene->ActiveShaderProgram == (*application->Scene->SceneShaderPrograms)[i].get())
+	//			application->Scene->ActiveShaderProgram = nullptr;
+	//		else
+	//			application->Scene->ActiveShaderProgram = (*application->Scene->SceneShaderPrograms)[i];
+	//	}
 
-		ImGui::SameLine();
-	}
+	//	ImGui::SameLine();
+	//}
 
-	if(ImGui::Button("New Program", ImVec2(64.0f, 64.0f)))
-	{
-		vector<RenderShaderProgram*>* vec = application->Scene->SceneShaderPrograms;
-		vec->push_back(new RenderShaderProgram());
+	//if(ImGui::Button("New Program", ImVec2(64.0f, 64.0f)))
+	//{
+	//	printf("ShaderUI NewProgram button clicked. Implement this functionality after refactoring code\n");
+	//	//vector<RenderShaderProgram*>* vec = application->Scene->SceneShaderPrograms;
+	//	//vec->push_back(new RenderShaderProgram());
 
-	}
+	//}
 
 }
 
@@ -215,11 +215,10 @@ void ShaderUI::FocusedShaderProgramDetails()
 
 	if(ImGui::Button("DELETE THIS PROGRAM"))
 	{
-		application->Scene->ActiveShaderProgram->Dispose();
 
 		for(unsigned int i = 0; i < application->Scene->SceneShaderPrograms->size(); i++)
 		{
-			if(application->Scene->ActiveShaderProgram == (*application->Scene->SceneShaderPrograms)[i])
+			if(application->Scene->ActiveShaderProgram == (*application->Scene->SceneShaderPrograms)[i].get())
 			{
 				application->Scene->SceneShaderPrograms->erase(application->Scene->SceneShaderPrograms->begin() + i);
 				break;

@@ -23,13 +23,13 @@ namespace SimpleRender
 		ShaderError
 	};
 
-	class RenderShader : public SimpleRenderPure::Disposable
+	class RenderShader
 	{
-
 
 	public:
 		RenderShader(enum ShaderType type);
 		RenderShader(enum ShaderType type, std::string path);
+		~RenderShader();
 		bool CompileShader();
 
 		inline ShaderType Type()
@@ -52,7 +52,7 @@ namespace SimpleRender
 			return path;
 		}
 
-		inline const char* Source()
+		inline std::string Source()
 		{
 			return source;
 		}
@@ -69,15 +69,15 @@ namespace SimpleRender
 
 		void ShaderSource(std::string path);
 
-		virtual void Dispose() override;
 
-		std::unordered_set<RenderShaderProgram*>* ParentShaderPrograms = &shaderPrograms;
+
+		std::unordered_set<RenderShaderProgram*>* const ParentShaderPrograms = &parentShaderPrograms;
 
 	private:
 		void CreateShader();
-		std::unordered_set<RenderShaderProgram*> shaderPrograms;
+		std::unordered_set<RenderShaderProgram*> parentShaderPrograms;
 
-		const char* source = nullptr;
+		std::string source = "";
 		std::string path;
 		enum ShaderState state = ShaderState::ShaderNew;
 		enum ShaderType type;

@@ -79,6 +79,13 @@ namespace SimpleRender
 
 	};
 
+
+
+
+
+
+
+
 	class ShaderDataFloat : public ShaderProgramData
 	{
 	public:
@@ -116,6 +123,14 @@ namespace SimpleRender
 
 	};
 
+
+
+
+
+
+
+
+
 	class ShaderDataInt : public ShaderProgramData
 	{
 	public:
@@ -151,6 +166,13 @@ namespace SimpleRender
 		int value = 0.0f;
 
 	};
+
+
+
+
+
+
+
 
 	class ShaderDataVec2 : public ShaderProgramData
 	{
@@ -189,6 +211,14 @@ namespace SimpleRender
 
 	};
 
+
+
+
+
+
+
+
+
 	class ShaderDataVec3 : public ShaderProgramData
 	{
 	public:
@@ -224,7 +254,6 @@ namespace SimpleRender
 		glm::vec3 value = glm::vec3(0.0f);
 
 	};
-
 
 
 }

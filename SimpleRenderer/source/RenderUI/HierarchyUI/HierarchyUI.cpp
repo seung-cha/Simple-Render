@@ -6,6 +6,7 @@
 #include "RenderApplication/RenderApplication.h"
 #include "RenderScene/RenderScene.h"
 
+#include <memory>
 #include <string>
 
 using namespace SimpleRenderUI;
@@ -13,7 +14,7 @@ using namespace SimpleRender;
 using namespace std;
 
 
-HierarchyUI::HierarchyUI(RenderApplication* application, string title) : RenderUI(title, application)
+HierarchyUI::HierarchyUI(RenderApplication* const& application, const string& title) : RenderUI(title, application)
 {
 	
 }
@@ -26,14 +27,13 @@ void HierarchyUI::UpdateWidget()
 	{
 		string path = FileReader::OpenFileDialogue();
 
-		RenderObject* obj = new RenderObject(application->Scene, (*application->Scene->SceneShaderPrograms)[0], application->Scene->SceneObjects->size() + 1, path);
-		application->Scene->SceneObjects->push_back(obj);
-		application->Scene->ActiveObject = obj;
+		application->Scene->AddObject((*application->Scene->SceneShaderPrograms)[0].get(), path);
+		application->Scene->ActiveObject = (*application->Scene->SceneObjects)[application->Scene->SceneObjects->size() - 1].get();
 	}
 
 	for(unsigned int i = 0; i < application->Scene->SceneObjects->size(); i++)
 	{
-		RenderObject* obj = (*application->Scene->SceneObjects)[i];
+		RenderObject* obj = (*application->Scene->SceneObjects)[i].get();
 
 		// If the object is a child, do not draw
 		if(obj->Parent)

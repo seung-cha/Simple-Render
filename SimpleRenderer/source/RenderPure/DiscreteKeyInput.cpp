@@ -13,15 +13,18 @@ SimpleRenderPure::DiscreteKeyInput::DiscreteKeyInput(SimpleRender::RenderApplica
 void SimpleRenderPure::DiscreteKeyInput::RegisterDiscreteKeyInput()
 {
 	_application->RegisterDiscreteKeyInput(this);
+	registered = true;
 }
 
 void SimpleRenderPure::DiscreteKeyInput::UnregisterDiscreteKeyInput()
 {
 	_application->UnregisterDiscreteKeyInput(this);
+	registered = false;
 }
 
 
 SimpleRenderPure::DiscreteKeyInput::~DiscreteKeyInput()
 {
-	UnregisterDiscreteKeyInput();
+	if(registered)
+		UnregisterDiscreteKeyInput();
 }

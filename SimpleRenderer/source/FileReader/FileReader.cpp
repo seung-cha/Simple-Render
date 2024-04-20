@@ -1,43 +1,41 @@
 #include "FileReader.h"
-#include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <Windows.h>
 
 
-using namespace std; 
 
-const char* FileReader::ReadFile(const char* path)
+std::string FileReader::ReadFile(const std::string& path)
 {
-	ifstream file;
+	std::ifstream file;
 	file.open(path);
 
 	if(!file.is_open())
 	{
-		cerr << "Could not open the file: " << path << endl;
-		return nullptr;
+		std::cerr << "Could not open the file: " << path << std::endl;
+		return "";
 	}
 
 	try
 	{
-		ostringstream strStream;
+		std::ostringstream strStream;
 		strStream << file.rdbuf();
 		file.close();
 
 
-		return _strdup(strStream.str().c_str());
+		return std::string(strStream.str());
 	}
-	catch (exception e)
+	catch (std::exception e)
 	{
-		cerr << "Could read from the file: " << path << endl;
+		std::cerr << "Could read from the file: " << path << std::endl;
 	}
 	
 	file.close();
 	return nullptr;
 }
 
-string FileReader::OpenFileDialogue()
+std::string FileReader::OpenFileDialogue()
 {
 	// Direct copy from a tutorial by The Cherno
 	// https://youtu.be/zn7N7zHgCcs?si=Mf70bKsJdPrk0woi

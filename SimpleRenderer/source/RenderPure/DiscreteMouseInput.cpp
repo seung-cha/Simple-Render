@@ -10,15 +10,18 @@ SimpleRenderPure::DiscreteMouseInput::DiscreteMouseInput(SimpleRender::RenderApp
 
 SimpleRenderPure::DiscreteMouseInput::~DiscreteMouseInput()
 {
-	UnregisterDiscreteMouseInput();
+	if(registered)
+		UnregisterDiscreteMouseInput();
 }
 
 void SimpleRenderPure::DiscreteMouseInput::RegisterDiscreteMouseInput()
 {
 	_application->RegisterDiscreteMouseInput(this);
+	registered = true;
 }
 
 void SimpleRenderPure::DiscreteMouseInput::UnregisterDiscreteMouseInput()
 {
 	_application->UnregisterDiscreteMouseInput(this);
+	registered = false;
 }

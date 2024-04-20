@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-#include "RenderPure/Disposable.h"
 #include <unordered_set>
 #include <memory>		// unique ptr
 #include <iostream>
@@ -30,105 +29,52 @@ namespace SimpleRender
 {
 	struct MouseStatus
 	{
-		MouseStatus()
-		{
-			xPos = yPos = lastX = lastY = 0;
-			LeftClick = RightClick = false;
-		}
-		int xPos;
-		int yPos;
+		MouseStatus() {}
 
-		int deltaXPos;
-		int deltaYPos;
+		int xPos = 0;
+		int yPos = 0;
+
+		int deltaXPos = 0;
+		int deltaYPos = 0;
 
 		/// <summary>
 		/// True for as long as LMB is held
 		/// </summary>
-		int LeftClick;
+		int LeftClick = 0;
 		/// <summary>
 		/// True for as long as RMB is held
 		/// </summary>
-		int RightClick;
+		int RightClick = 0;
 
 		/// <summary>
 		/// The last X coordinate of the mouse
 		/// </summary>
-		int lastX;
+		int lastX = 0;
 
 		/// <summary>
 		/// The last Y coordinate of the mouse
 		/// </summary>
-		int lastY;
+		int lastY = 0;
 
 		/// <summary>
 		/// Equivalent to <xPos, yPos>
 		/// </summary>
-		glm::vec2 MouseCoordinates;
+		glm::vec2 MouseCoordinates = {0, 0};
 
 		/// <summary>
 		/// Equivalent to <deltaXPos, deltaYPos>
 		/// </summary>
-		glm::vec2 MouseDelta;
+		glm::vec2 MouseDelta = {0, 0};
 
 		/// <summary>
 		/// Equivalent to <lastX, lastY>
 		/// </summary>
-		glm::vec2 MouseLastCoordinates;
+		glm::vec2 MouseLastCoordinates = {0, 0};
 
 	};
 
 	struct AppStatus
 	{
-		int Width;
-		int Height;
-
-		glm::vec2 Resolution;
-
-		float AspectRatio = 0.0f;
-
-		int FixedWidth = 1920;
-		int FixedHeight = 1080;
-
-		float FixedAspectRatio = FixedWidth / static_cast<float>(FixedHeight);
-
-		glm::vec2 FixedResolution = glm::vec2(FixedWidth, FixedHeight);
-
-		bool SleepMode;
-		std::string Title = "Simple Render";
-
-
-		/// <summary>
-		/// Time in double; default type
-		/// </summary>
-		double Time = 0.0;
-
-		/// <summary>
-		/// Time in float
-		/// </summary>
-		float Timef = 0.0f;
-
-		/// <summary>
-		/// Time in int
-		/// </summary>
-		int Timei = 0;
-
-
-		MouseStatus* Mouse = &mouse;
-
-
-		inline void UpdateWindowSizeStatus(int newWidth, int newHeight)
-		{
-			Width = newWidth;
-			Height = newHeight;
-			Resolution = glm::vec2(Width, Height);
-
-
-			SleepMode = Width == Height && Width == 0;
-
-			AspectRatio = newHeight == 0 ? 0.0f : newWidth / static_cast<float>(newHeight);
-
-		}
-
 		AppStatus(int width, int height)
 		{
 			Width = width;
@@ -153,6 +99,53 @@ namespace SimpleRender
 			SleepMode = false;
 		}
 
+		inline void UpdateWindowSizeStatus(int newWidth, int newHeight)
+		{
+			Width = newWidth;
+			Height = newHeight;
+			Resolution = glm::vec2(Width, Height);
+
+
+			SleepMode = Width == Height && Width == 0;
+
+			AspectRatio = newHeight == 0 ? 0.0f : newWidth / static_cast<float>(newHeight);
+
+		}
+
+		int Width = 0;
+		int Height = 0;
+
+		glm::vec2 Resolution = {0, 0};
+
+		float AspectRatio = 0.0f;
+
+		const int FixedWidth = 1920;
+		const int FixedHeight = 1080;
+
+		float FixedAspectRatio = FixedWidth / static_cast<float>(FixedHeight);
+
+		glm::vec2 FixedResolution = glm::vec2(FixedWidth, FixedHeight);
+
+		bool SleepMode;
+		std::string Title = "Simple Render";
+
+		/// <summary>
+		/// Time in double; default type
+		/// </summary>
+		double Time = 0.0;
+
+		/// <summary>
+		/// Time in float
+		/// </summary>
+		float Timef = 0.0f;
+
+		/// <summary>
+		/// Time in int
+		/// </summary>
+		int Timei = 0;
+
+		MouseStatus* const Mouse = &mouse;
+
 
 	private:
 		MouseStatus mouse;
@@ -163,16 +156,20 @@ namespace SimpleRender
 	class RenderScene;
 	class RenderDeferredRender;
 
-	class RenderApplication : public SimpleRenderPure::Disposable
+	class RenderApplication
 	{
 	public:
 		RenderApplication();
+		~RenderApplication();
 		bool Run();
 
 
-		void AddUI(SimpleRenderUI::RenderUI* widget);
+		/// <summary>
+		/// Create and display a UI widget.
+		/// Pointer is managed internally.
+		/// </summary>
+		void AddUI(SimpleRenderUI::RenderUI* const& widget);
 
-		void Dispose() override;
 
 		
 
@@ -206,13 +203,12 @@ namespace SimpleRender
 		/// <summary>
 		/// DO NOT WRITE TO THIS
 		/// </summary>
-		AppStatus* const Status = &status;
-		
+		AppStatus* const& Status = &status;
+
 		/// <summary>
 		/// DO NOT WRITE TO THIS
 		/// </summary>
-
-		RenderScene*& Scene = scene;
+		RenderScene* const& Scene = scene;
 		
 
 	
@@ -233,12 +229,17 @@ namespace SimpleRender
 	private:
 		void UpdateWidgets();
 
+		
+		// can't turn these two into unique_ptr.
+		// GLFWwindow does not define a destructor
+		// RenderScene needs a const ref to itself.
 		GLFWwindow* window = nullptr;
 		RenderScene* scene = nullptr;
 
-		// Change this to unique_ptr later
-		std::unordered_set<SimpleRenderUI::RenderUI*> widgets;
+		std::unordered_set<std::unique_ptr<SimpleRenderUI::RenderUI>> widgets;
 
+		// Map of different key input objects.
+		// The owner of this must free them.
 		std::unordered_set<SimpleRenderPure::ContiguousKeyInput*> contiguousKeyInputs;
 		std::unordered_set<SimpleRenderPure::DiscreteKeyInput*> discreteKeyInputs;
 		std::unordered_set<SimpleRenderPure::MousePositionInput*> mousePositionInputs;

@@ -6,7 +6,6 @@
 #include <iostream>
 #include <string>
 
-#include "RenderPure/Disposable.h"
 
 namespace SimpleRender
 {
@@ -15,7 +14,8 @@ namespace SimpleRender
 	enum TextureType
 	{
 		Diffuse,
-		Specular
+		Specular,
+		Normal,
 	};
 
 	enum TextureStatus
@@ -24,7 +24,7 @@ namespace SimpleRender
 		Ready
 	};
 
-	class RenderTexture : public SimpleRenderPure::Disposable
+	class RenderTexture
 	{
 	private:
 		GLuint id;
@@ -34,11 +34,13 @@ namespace SimpleRender
 
 	public:
 		RenderTexture(const TextureType type, std::string path = "");
+		~RenderTexture();
 
 		inline std::string* Path()
 		{
 			return &path;
 		}
+
 		inline enum TextureStatus Status()
 		{
 			return status;
@@ -71,8 +73,10 @@ namespace SimpleRender
 				return Diffuse;
 			else if(type == aiTextureType_SPECULAR)
 				return Specular;
+			else if(type == aiTextureType_HEIGHT)
+				return Normal;
 			else
-				return Specular;
+				return Normal;
 		}
 
 		static inline std::string TextureTypeToString(TextureType type)
@@ -81,6 +85,8 @@ namespace SimpleRender
 				return "Diffuse";
 			else if(type == TextureType::Specular)
 				return "Specular";
+			else if(type == TextureType::Normal)
+				return "Normal";
 		}
 
 
@@ -97,10 +103,6 @@ namespace SimpleRender
 			glUniform1i(glGetUniformLocation(program, s.c_str()), index);
 		}
 
-		void Dispose() override
-		{
-			glDeleteTextures(1, &id);
-		}
 
 		/// <summary>
 		/// Replace the current texture with the provided one.

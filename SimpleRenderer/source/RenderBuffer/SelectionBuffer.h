@@ -8,7 +8,7 @@ namespace SimpleRenderBuffer
 	class SelectionBuffer : public RenderBuffer
 	{
 	public:
-		SelectionBuffer(int width, int height) : RenderBuffer(width, height)
+		SelectionBuffer(const int& width, const int& height) : RenderBuffer(width, height)
 		{
 
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -38,17 +38,15 @@ namespace SimpleRenderBuffer
 
 		}
 
+		~SelectionBuffer()
+		{
+			glDeleteTextures(1, &depthTexture);
+		}
 
 
 	public:
-		 GLuint& DepthTexture = depthTexture;
+		 const GLuint& DepthTexture = depthTexture;
 
-		 void Dispose() override
-		 {
-			 RenderBuffer::Dispose();
-			 glDeleteTextures(1, &depthTexture);
-
-		 }
 
 	protected:
 		GLuint depthTexture;

@@ -5,19 +5,19 @@
 #include "RenderApplication/RenderApplication.h"
 
 
-SimpleRender::RenderDeferredRender::RenderDeferredRender(RenderScene* scene) :
-	gBuffer(scene->Application->Status->FixedWidth, scene->Application->Status->FixedHeight)
+SimpleRender::RenderDeferredRender::RenderDeferredRender(RenderScene* scene)
 {
 	this->scene = scene;
 
-	SimpleRender::RenderShader vertShader(SimpleRender::ShaderType::Vertex, "shaders/deferred_render/deferred_render.vert");
-	SimpleRender::RenderShader fragShader(SimpleRender::ShaderType::Fragment, "shaders/deferred_render/deferred_render.frag");
+	program = std::make_unique<SimpleRender::RenderShaderProgram>();
 
-	program.AttachShader(&vertShader);
-	program.AttachShader(&fragShader);
+	program->AttachShader(new SimpleRender::RenderShader(SimpleRender::ShaderType::Vertex, "shaders/deferred_render/deferred_render.vert"));
+	program->AttachShader(new SimpleRender::RenderShader(SimpleRender::ShaderType::Fragment, "shaders/deferred_render/deferred_render.frag"));
 
-	program.LinkProgram();
+	program->LinkProgram();
 
+
+	gBuffer = std::make_unique<SimpleRenderBuffer::GBuffer>(scene->Application->Status->FixedWidth, scene->Application->Status->FixedHeight);
 
 
 	float quadVertices[] = {
@@ -61,37 +61,58 @@ SimpleRender::RenderDeferredRender::RenderDeferredRender(RenderScene* scene) :
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-
-void SimpleRender::RenderDeferredRender::Draw(SimpleRender::RenderCamera* camera, GLuint& framebuffer)
+SimpleRender::RenderDeferredRender::~RenderDeferredRender()
 {
-	scene->DrawGBufferScene(camera, gBuffer.Framebuffer);
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+}
+
+
+void SimpleRender::RenderDeferredRender::Draw(SimpleRender::RenderCamera* const& camera, const GLuint& framebuffer)
+{
+	scene->DrawGBufferScene(camera, gBuffer->Framebuffer);
 	
-	program.ApplyUniformVariables();
+	program->ApplyUniformVariables();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glUseProgram(program.ID());
+	glUseProgram(program->ID());
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, gBuffer.PositionTexture);
+	glBindTexture(GL_TEXTURE_2D, gBuffer->PositionTexture);
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, gBuffer.NormalTexture);
+	glBindTexture(GL_TEXTURE_2D, gBuffer->NormalTexture);
 
 	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, gBuffer.ColourTexture);
+	glBindTexture(GL_TEXTURE_2D, gBuffer->ColourTexture);
 
 	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, gBuffer.ObjectTexture);
+	glBindTexture(GL_TEXTURE_2D, gBuffer->ObjectTexture);
 
-	glUniform1i(glGetUniformLocation(program.ID(), "Rendering.Position"), 0);
-	glUniform1i(glGetUniformLocation(program.ID(), "Rendering.Normal"), 1);
-	glUniform1i(glGetUniformLocation(program.ID(), "Rendering.Colour"), 2);
-	glUniform1i(glGetUniformLocation(program.ID(), "Rendering.Object"), 3);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, gBuffer->TangentTexture);
+
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, gBuffer->BiTangentTexture);
+
+	glActiveTexture(GL_TEXTURE6);
+	glBindTexture(GL_TEXTURE_2D, gBuffer->NormalMapTexture);
+
+	glUniform1i(glGetUniformLocation(program->ID(), "Rendering.Position"), 0);
+	glUniform1i(glGetUniformLocation(program->ID(), "Rendering.Normal"), 1);
+	glUniform1i(glGetUniformLocation(program->ID(), "Rendering.Colour"), 2);
+	glUniform1i(glGetUniformLocation(program->ID(), "Rendering.Object"), 3);
+	glUniform1i(glGetUniformLocation(program->ID(), "Rendering.Tangent"), 4);
+	glUniform1i(glGetUniformLocation(program->ID(), "Rendering.BiTangent"), 5);
+	glUniform1i(glGetUniformLocation(program->ID(), "Rendering.NormalMap"), 6);
 
 
-	glUniform3fv(glGetUniformLocation(program.ID(), "Rendering.ViewPosition"), 1, &camera->Position()[0]);
+
+
+	glUniform3fv(glGetUniformLocation(program->ID(), "Rendering.ViewPosition"), 1, &camera->Position()[0]);
 
 
 	glBindVertexArray(VAO);

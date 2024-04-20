@@ -13,7 +13,7 @@
 #include <sstream>
 
 
-SimpleRenderUI::RenderingUI::RenderingUI(SimpleRender::RenderApplication* application, std::string title) :
+SimpleRenderUI::RenderingUI::RenderingUI(SimpleRender::RenderApplication* const& application, const std::string& title) :
 	RenderUI(title, application)
 {
 
@@ -114,8 +114,4 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 }
 
 
-void SimpleRenderUI::RenderingUI::ReflectUpdate()
-{
-
-}
 

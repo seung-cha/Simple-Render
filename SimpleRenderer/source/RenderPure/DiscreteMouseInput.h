@@ -23,8 +23,8 @@ namespace SimpleRenderPure
 
 
 	private:
-		
 		SimpleRender::RenderApplication* _application;
+		bool registered = false;
 
 	};
 
