@@ -153,9 +153,6 @@ void RenderObject::InitMeshes(const aiScene* scene, const aiNode* node)
 			transform.Rotation = eulerRot * (180.0f / 3.141592f);
 
 
-
-
-
 			InitMeshes(scene, node->mChildren[i]);
 		}
 	}

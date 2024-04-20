@@ -211,10 +211,13 @@ void RenderScene::UpdateDeferredRender()
 	auto copy = deferredRender.release();
 	deferredRender = make_unique<RenderDeferredRender>(this);
 
+	// Add back the uniform variables
 	for(auto item : *copy->ShaderProgram->UniformData)
 	{
 		deferredRender->ShaderProgram->UniformData->push_back(item);
 	}
 
+	// Free the previous pointer
+	delete(copy);
 
 }
