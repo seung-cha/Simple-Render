@@ -38,7 +38,6 @@ void main()
 
     mat3 normMat = transpose(inverse(mat3(transform.Model)));
     gNormal = normMat * Normal;
-s
 
     gTexturePosition = TexturePosition;
 
