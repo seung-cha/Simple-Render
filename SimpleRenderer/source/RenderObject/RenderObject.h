@@ -17,6 +17,8 @@
 #include <RenderMaterial/RenderMaterial.h>
 #include <memory>
 
+#include <set>
+
 namespace SimpleRender
 {
 	class RenderScene;
@@ -119,8 +121,17 @@ namespace SimpleRender
 		Transform* Transform = &transform;
 		glm::mat4& Matrix = matrix;
 		std::string& Name = name;
+		/// <summary>
+		/// Direct parent. This parent may be a child of another object.
+		/// </summary>
 		RenderObject*& Parent = parent;
-		std::vector<RenderObject*>* Children = &children;
+
+		/// <summary>
+		/// Highest ancestor. This parent is never a child of another object.
+		/// </summary>
+		RenderObject*& AbsoluteParent = absoluteParent;
+
+		std::set<RenderObject*>& const Children = children;
 
 		const int& ID = id;
 
@@ -134,6 +145,7 @@ namespace SimpleRender
 		RenderScene* scene;
 
 		int id;
+		std::string objectID;
 		std::string name;
 		SimpleRender::Transform transform;
 		glm::mat4 matrix = glm::mat4(1.0f);
@@ -144,8 +156,12 @@ namespace SimpleRender
 
 
 
+
+		RenderObject* absoluteParent = nullptr;
 		RenderObject* parent = nullptr;
-		std::vector<RenderObject*> children;
+
+		std::set<RenderObject*> children;
+		
 		RenderMaterial* material;
 
 		RenderShaderProgram* shaderProgram;

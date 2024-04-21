@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
@@ -19,7 +20,11 @@ RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int
 	this->id = ID;
 	this->scene = scene;
 	this->parent = parent;
+
+	this->absoluteParent = parent->absoluteParent ? parent->absoluteParent : parent;
+
 	this->shaderProgram = program;
+	shaderProgram->AssociatedObjects->insert(this);
 
 
 	InitMeshes(aiScene, node);
@@ -33,6 +38,8 @@ RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int
 	shaderProgram->AssociatedObjects->insert(this);
 
 	this->scene = scene;
+
+	this->absoluteParent = this;
 
 
 	if(path == "")
@@ -49,6 +56,13 @@ RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int
 RenderObject::~RenderObject()
 {
 	// Unlink the parent
+
+	for(auto& obj : children)
+	{
+		ReplaceShaderProgram(nullptr);
+	}
+
+
 	ReplaceShaderProgram(nullptr);
 }
 
@@ -131,7 +145,7 @@ void RenderObject::InitMeshes(const aiScene* scene, const aiNode* node)
 
 
 			this->scene->SceneObjects->push_back(std::unique_ptr<SimpleRender::RenderObject>(obj));
-			children.push_back(obj);
+			children.insert(obj);
 		}
 		else
 		{

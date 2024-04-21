@@ -43,6 +43,8 @@ namespace SimpleRenderUI
 		SimpleRender::RenderViewportCamera camera;
 		
 		bool pressed = false;
+		int lastID = -1;
+
 
 	};
 

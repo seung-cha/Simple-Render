@@ -57,7 +57,7 @@ void HierarchyUI::UpdateWidget()
 void SimpleRenderUI::HierarchyUI::DrawObjectHierarchy(RenderObject* obj)
 {
 	// If the object has no child, render it as a leaf
-	ImGuiTreeNodeFlags flag = obj->Children->size() == 0 ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_None;
+	ImGuiTreeNodeFlags flag = obj->Children.size() == 0 ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_None;
 
 	flag |= application->Scene->ActiveObject == obj ? ImGuiTreeNodeFlags_Selected : 0;
 
@@ -69,9 +69,9 @@ void SimpleRenderUI::HierarchyUI::DrawObjectHierarchy(RenderObject* obj)
 		if(ImGui::IsItemClicked() || ImGui::IsItemToggledOpen())
 			application->Scene->ActiveObject = obj;
 
-		for(int i = 0; i < obj->Children->size(); i++)
+		for(RenderObject* const& obj : obj->Children)
 		{
-			DrawObjectHierarchy((*obj->Children)[i]);
+			DrawObjectHierarchy(obj);
 		}
 		
 		ImGui::TreePop();

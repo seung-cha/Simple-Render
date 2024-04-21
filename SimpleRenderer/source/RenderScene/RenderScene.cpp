@@ -159,6 +159,7 @@ void RenderScene::AddObject(RenderShaderProgram* const& program, const std::stri
 {
 	objects.push_back(std::make_unique<SimpleRender::RenderObject>(this, program, objects.size() + 1, path));
 
+	std::cout << "Size of data structure: " << objects.size() << std::endl;
 }
 
 
@@ -167,18 +168,16 @@ void RenderScene::DeleteObject(RenderObject* const object)
 	if(object == nullptr)
 		return;
 
-	if(object->Children->size() != 0)
+	auto temp = object->Children;
+	for(RenderObject* const& obj : temp)
 	{
-		std::cout << "Deletion of parent object is not supported as of now!" << std::endl << std::endl;
-		return;
+		DeleteObject(obj);
 	}
 
 	if(object->Parent)
 	{
 		// Remove a reference to this from the parent's children vector
-		auto it = std::find(object->Parent->Children->begin(), 
-			object->Parent->Children->end(), object);
-		object->Parent->Children->erase(it);
+		object->Parent->Children.erase(object);
 	}
 
 	std::cout << "Deleting: " << object->Name << std::endl;

@@ -94,6 +94,7 @@ void ScreenUI::UpdateWidget()
 				unsigned char col[4];
 
 
+				// Convert pixel data to id
 				glBindFramebuffer(GL_READ_FRAMEBUFFER, selectionBuffer.Framebuffer);
 				glReadPixels(res[0], application->Status->FixedHeight - res[1], 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &col);
 				glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
@@ -105,9 +106,24 @@ void ScreenUI::UpdateWidget()
 				int num = static_cast<int>(col[0]);
 
 				if(num > 0 && num <= application->Scene->SceneObjects->size())
-					application->Scene->ActiveObject = (*application->Scene->SceneObjects)[static_cast<int>(num - 1)].get();
+				{
+					// Check if user wants to select the child instead
+					if(lastID == num)
+					{
+						application->Scene->ActiveObject = (*application->Scene->SceneObjects)[static_cast<int>(num - 1)].get();
+					}
+					else
+					{
+						application->Scene->ActiveObject = (*application->Scene->SceneObjects)[static_cast<int>(num - 1)].get()->AbsoluteParent;
+					}
+
+					lastID = num;
+				}
 				else
+				{
 					application->Scene->ActiveObject = nullptr;
+					lastID = -1;
+				}
 		}
 
 	}
