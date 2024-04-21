@@ -19,6 +19,7 @@ ScreenUI::ScreenUI(SimpleRender::RenderApplication* const& application, const st
 	RenderUI(title, application), 
 	camera(application), 
 	DiscreteMouseInput(application), 
+	DiscreteKeyInput(application),
 	selectionBuffer(application->Status->FixedWidth, application->Status->FixedHeight),
 	deferBuffer(application->Status->FixedWidth, application->Status->FixedHeight)
 {
@@ -133,7 +134,7 @@ void ScreenUI::UpdateWidget()
 
 	ImVec2 s = ImGui::GetWindowSize();
 
-	ImGui::Image(ImTextureID(deferBuffer.Texture), s, {0, 1}, {1, 0});
+	ImGui::Image(showSelectBuffer ? ImTextureID(selectionBuffer.Texture) : ImTextureID(deferBuffer.Texture), s, {0, 1}, {1, 0});
 
 	RenderScene();
 	RenderGizmo();
@@ -150,6 +151,15 @@ void SimpleRenderUI::ScreenUI::OnDiscreteMouseInput(GLFWwindow* window, int butt
 	if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
 		pressed = true;
+	}
+
+}
+
+void SimpleRenderUI::ScreenUI::OnDiscreteKeyInput(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if(key == GLFW_KEY_F1 && action == GLFW_PRESS)
+	{
+		showSelectBuffer = !showSelectBuffer;
 	}
 
 }

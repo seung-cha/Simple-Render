@@ -195,7 +195,6 @@ SimpleRender::RenderApplication::RenderApplication()
 
 SimpleRender::RenderApplication::~RenderApplication()
 {
-	std::cout << "TO DO: FREE ALLOCATED RESOURCES IN RENDER_APPLICATION" << std::endl;
 	glfwDestroyWindow(window);
 
 	// Manually unregister binds
