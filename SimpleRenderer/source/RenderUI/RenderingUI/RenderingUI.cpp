@@ -79,27 +79,22 @@ void SimpleRenderUI::RenderingUI::UpdateWidget()
 
 	if(ImGui::Button("Add Uniform Int"))
 	{
-		application->Scene->DeferredRender->
-			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataInt());
+		application->Scene->DeferredRender->ShaderProgram->AddUniformData(new SimpleRender::ShaderDataInt());
 	}
 
 	if(ImGui::Button("Add Uniform Float"))
 	{
-		application->Scene->DeferredRender->
-			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataFloat());
+		application->Scene->DeferredRender->ShaderProgram->AddUniformData(new SimpleRender::ShaderDataFloat());
 	}
 
 	if(ImGui::Button("Add Uniform Vec2"))
 	{
-		application->Scene->DeferredRender->
-			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataVec2());
-
+		application->Scene->DeferredRender->ShaderProgram->AddUniformData(new SimpleRender::ShaderDataVec2());
 	}
 
 	if(ImGui::Button("Add Uniform Vec3"))
 	{
-		application->Scene->DeferredRender->
-			ShaderProgram->UniformData->push_back(new SimpleRender::ShaderDataVec3());
+		application->Scene->DeferredRender->ShaderProgram->AddUniformData(new SimpleRender::ShaderDataVec3());
 
 	}
 

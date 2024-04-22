@@ -87,6 +87,8 @@ namespace SimpleRender
 				return "Error";
 		}
 
+
+		void AddUniformData(ShaderProgramData* data);
 		
 		std::unordered_set<RenderObject*>* const AssociatedObjects = &associatedObjects;
 		std::vector<ShaderProgramData*>* const UniformData = &programData;

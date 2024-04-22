@@ -150,8 +150,29 @@ void RenderScene::LoadDefaultScene()
 
 	prog->LinkProgram();
 
-	AddDefaultObject(shaderPrograms[0].get());
-	ActiveObject = objects[0].get();
+	if(AddObject(shaderPrograms[0].get(), "models/default/guitar/Gibson A1.obj"))
+	{
+		ActiveObject = objects[0].get();
+		ActiveObject->Transform->Position.z = -50.0f;
+	}
+	else
+	{
+		ActiveObject = nullptr;
+	}
+
+
+	if(AddObject(shaderPrograms[0].get(), "models/default/sphere/sphere.obj"))
+	{
+		RenderObject* const& lightObj = objects[objects.size() - 1].get();
+		lightObj->Transform->Position = glm::vec3(20.0f, 10.0f, -30.0f);
+
+		// Supply uniform data for lightPos
+		SimpleRender::ShaderDataVec3* i = new SimpleRender::ShaderDataVec3();
+		i->name = "lightPos";
+		i->ToVariable(&lightObj->Transform->Position);
+
+		deferredRender->ShaderProgram->AddUniformData(i);
+	}
 
 
 }
@@ -174,12 +195,6 @@ bool RenderScene::AddObject(RenderShaderProgram* const& program, const std::stri
 	std::cout << "Size of data structure: " << objects.size() << std::endl;
 	return true;
 }
-
-void RenderScene::AddDefaultObject(RenderShaderProgram* const& program)
-{
-	objects.push_back(std::make_unique<SimpleRender::RenderObject>(this, program, objects.size() + 1));
-}
-
 
 
 void RenderScene::DeleteObject(RenderObject* const object)

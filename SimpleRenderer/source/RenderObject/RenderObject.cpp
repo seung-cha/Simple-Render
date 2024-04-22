@@ -46,31 +46,11 @@ RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int
 	this->absoluteParent = this;
 
 	LoadMesh(path);
-
-
-
 }
-
-RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID)
-{
-	this->id = ID;
-	shaderProgram = program;
-
-	this->scene = scene;
-
-	this->absoluteParent = this;
-
-	LoadDefaultMesh();
-
-}
-
-
-
 
 
 RenderObject::~RenderObject()
 {
-
 	// Unlink the parent
 	for(auto& obj : children)
 	{
@@ -80,18 +60,6 @@ RenderObject::~RenderObject()
 
 	ReplaceShaderProgram(nullptr);
 }
-
-void RenderObject::LoadDefaultMesh()
-{
-	cout << "Loading a default mesh" << endl << endl;
-
-	// Get the default model
-	// and set transforms specific to this model
-	LoadMesh("models/default/Gibson A1.obj");
-	Transform->Position.z = -50.0f;
-
-}
-
 
 
 void RenderObject::LoadMesh(const std::string path)
@@ -135,7 +103,7 @@ void RenderObject::InitMeshes(const aiScene* scene, const aiNode* node)
 		//Recursively create children
 		if(i > 0)
 		{
-			RenderObject* obj = new RenderObject(this->scene, this->shaderProgram,
+			std::unique_ptr<RenderObject> obj = std::make_unique<RenderObject>(this->scene, this->shaderProgram,
 				this->scene->SceneObjects->size() + 1, scene, node->mChildren[i], this);
 
 			aiVector3D scale, translate;
@@ -159,8 +127,8 @@ void RenderObject::InitMeshes(const aiScene* scene, const aiNode* node)
 			obj->Transform->Rotation = eulerRot * (180.0f / 3.141592f);
 
 
-			this->scene->SceneObjects->push_back(std::unique_ptr<SimpleRender::RenderObject>(obj));
-			children.insert(obj);
+			children.insert(obj.get());
+			this->scene->SceneObjects->push_back(std::move(obj));
 		}
 		else
 		{

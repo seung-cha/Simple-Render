@@ -24,7 +24,6 @@ void ShaderUI::UpdateWidget()
 	if(ImGui::IsWindowAppearing())
 	{
 		application->Scene->ActiveShader = nullptr;
-		application->Scene->ActiveShader = nullptr;
 	}
 
 	ShaderProgramsWidget();

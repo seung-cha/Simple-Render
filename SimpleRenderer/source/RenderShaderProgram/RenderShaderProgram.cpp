@@ -33,6 +33,11 @@ SimpleRender::RenderShaderProgram::~RenderShaderProgram()
 		}
 	}
 
+	for(auto& data : programData)
+	{
+		delete(data);
+	}
+
 }
 
 
@@ -85,6 +90,12 @@ void SimpleRender::RenderShaderProgram::AttachShader(RenderShader* shader)
 }
 
 
+void RenderShaderProgram::AddUniformData(ShaderProgramData* data)
+{
+	programData.push_back(data);
+
+
+}
 
 
 void RenderShaderProgram::ApplyUniformVariables()
