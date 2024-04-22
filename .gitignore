@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # ImGUI
 SimpleRenderer/imgui.ini
+
+# Json test file
+SimpleRenderer/output.json

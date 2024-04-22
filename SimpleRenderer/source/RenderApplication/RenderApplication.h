@@ -165,13 +165,15 @@ namespace SimpleRender
 		bool Run();
 
 
+
 		/// <summary>
 		/// Create and display a UI widget.
 		/// Pointer is managed internally.
 		/// </summary>
 		void AddUI(SimpleRenderUI::RenderUI* const& widget);
 
-
+		void SaveScene();
+		void LoadScene();
 		
 
 		void ProcessInput();
@@ -212,8 +214,6 @@ namespace SimpleRender
 		RenderScene* const& Scene = scene;
 		
 
-	
-
 		/// <summary>
 		/// Do not use; needed to communicate in glfw callback
 		/// </summary>
@@ -226,6 +226,8 @@ namespace SimpleRender
 		/// Do not use; needed to communicate in glfw callback
 		/// </summary>
 		std::unordered_set<SimpleRenderPure::DiscreteMouseInput*>* const MouseButtonInputs = &mouseButtonInputs;
+
+
 
 	private:
 		void UpdateWidgets();

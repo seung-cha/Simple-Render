@@ -12,9 +12,15 @@
 
 #include <algorithm>
 
+#include "RenderJson/RenderJson.h"
+
 
 using namespace SimpleRender;
 using namespace std;
+
+
+
+
 
 RenderScene::RenderScene(RenderApplication* application)
 {
@@ -150,9 +156,9 @@ void RenderScene::LoadDefaultScene()
 
 	prog->LinkProgram();
 
-	if(AddObject(shaderPrograms[0].get(), "models/default/guitar/Gibson A1.obj"))
+	if(RenderObject* obj = AddObject(shaderPrograms[0].get(), "models/default/guitar/Gibson A1.obj"))
 	{
-		ActiveObject = objects[0].get();
+		ActiveObject = obj;
 		ActiveObject->Transform->Position.z = -50.0f;
 	}
 	else
@@ -161,15 +167,14 @@ void RenderScene::LoadDefaultScene()
 	}
 
 
-	if(AddObject(shaderPrograms[0].get(), "models/default/sphere/sphere.obj"))
+	if(RenderObject* obj = AddObject(shaderPrograms[0].get(), "models/default/sphere/sphere.obj"))
 	{
-		RenderObject* const& lightObj = objects[objects.size() - 1].get();
-		lightObj->Transform->Position = glm::vec3(20.0f, 10.0f, -30.0f);
+		obj->Transform->Position = glm::vec3(20.0f, 10.0f, -30.0f);
 
 		// Supply uniform data for lightPos
 		SimpleRender::ShaderDataVec3* i = new SimpleRender::ShaderDataVec3();
 		i->name = "lightPos";
-		i->ToVariable(&lightObj->Transform->Position);
+		i->ToVariable(&obj->Transform->Position);
 
 		deferredRender->ShaderProgram->AddUniformData(i);
 	}
@@ -178,22 +183,24 @@ void RenderScene::LoadDefaultScene()
 }
 
 
-bool RenderScene::AddObject(RenderShaderProgram* const& program, const std::string& path)
+
+RenderObject* RenderScene::AddObject(RenderShaderProgram* const& program, const std::string& path)
 {
 	try
 	{
 		std::unique_ptr<RenderObject> ptr = std::make_unique<SimpleRender::RenderObject>(this, program, objects.size() + 1, path);
 		objects.push_back(std::move(ptr));
+
+		std::cout << "Size of data structure: " << objects.size() << std::endl;
+		return objects[objects.size() -1].get();
 	}
 	catch(const RenderExceptions::InvalidFile& e)
 	{
 		std::cout << "Unable to add object - Invalid File: " << e.what() << std::endl;
 
-		return false;
+		return nullptr;
 	}
 
-	std::cout << "Size of data structure: " << objects.size() << std::endl;
-	return true;
 }
 
 

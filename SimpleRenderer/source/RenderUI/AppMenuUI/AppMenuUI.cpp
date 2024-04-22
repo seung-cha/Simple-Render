@@ -45,6 +45,7 @@ void AppMenuUI::ShowMenuWidget()
 
 	if(ImGui::Button("Save Project"))
 	{
+		application->SaveScene();
 
 		ImGui::CloseCurrentPopup();
 	}
@@ -59,6 +60,7 @@ void AppMenuUI::ShowMenuWidget()
 
 	if(ImGui::Button("Load Project"))
 	{
+		application->LoadScene();
 
 		ImGui::CloseCurrentPopup();
 	}

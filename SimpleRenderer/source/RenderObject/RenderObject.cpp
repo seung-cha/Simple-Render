@@ -64,9 +64,11 @@ RenderObject::~RenderObject()
 
 void RenderObject::LoadMesh(const std::string path)
 {
+	this->path = path;
 	directory = path.substr(0, path.find_last_of('/')) + '/';
 	cout << "Loading a model located in: " << endl;
 	cout << path << endl << endl;
+
 
 	Importer importer;
 

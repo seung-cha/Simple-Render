@@ -28,6 +28,7 @@ namespace SimpleRender
 	public:
 		RenderScene(SimpleRender::RenderApplication* application);
 		~RenderScene();
+
 		void LoadDefaultScene();
 
 		void DrawScene(RenderCamera* const& camera, const GLuint& framebuffer);
@@ -54,6 +55,7 @@ namespace SimpleRender
 		/// <param name="camera"></param>
 		/// <param name="framebuffer"></param>
 		void DrawIDScene(RenderCamera* const& camera, const GLuint& framebuffer);
+
 
 		/// <summary>
 		/// Free allocated memory.
@@ -83,7 +85,7 @@ namespace SimpleRender
 		/// <param name="program"></param>
 		/// <param name="path"></param>
 		/// <returns>true if successfully added object</returns>
-		bool AddObject(RenderShaderProgram* const& program, const std::string& path);
+		RenderObject* AddObject(RenderShaderProgram* const& program, const std::string& path);
 
 		/// <summary>
 		/// Delete the specified object. Manage the IDs afterwards.

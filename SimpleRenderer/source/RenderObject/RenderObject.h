@@ -19,8 +19,15 @@
 
 #include <set>
 
+
 namespace SimpleRender
 {
+
+
+
+
+
+
 	class RenderScene;
 	class RenderCamera;
 
@@ -122,6 +129,8 @@ namespace SimpleRender
 		Transform* Transform = &transform;
 		glm::mat4& Matrix = matrix;
 		std::string& Name = name;
+		std::string const& Path = path;
+
 		/// <summary>
 		/// Direct parent. This parent may be a child of another object.
 		/// </summary>
@@ -187,10 +196,9 @@ namespace SimpleRender
 
 		std::vector<unsigned int> LoadTexturesFromMesh(aiMaterial* material);
 		std::vector<unsigned int> LoadTexture(aiMaterial* material, aiTextureType type);
-		std::string directory;
-		void LoadDefaultMesh();
 
-
+		std::string directory = "";
+		std::string path = "";
 	};
 
 

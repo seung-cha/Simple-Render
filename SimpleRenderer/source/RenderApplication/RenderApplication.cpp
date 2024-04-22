@@ -29,6 +29,12 @@
 
 
 #include <iostream>
+#include <fstream>
+#include "FileReader/FileReader.h"
+
+#include "RenderJson/RenderJson.h"
+
+
 #include <functional>
 
 
@@ -301,6 +307,50 @@ void SimpleRender::RenderApplication::UpdateWidgets()
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+
+
+
+
+void SimpleRender::RenderApplication::SaveScene()
+{
+	json j = scene;
+	std::cout << "Json: " << j << std::endl;
+
+
+	ofstream of("output.json");
+	of << j;
+	of.close();
+
+}
+
+
+void SimpleRender::RenderApplication::LoadScene()
+{
+	json json = json::parse(FileReader::ReadFile("output.json"));
+
+	RenderScene* newScene = new RenderScene(this);
+	
+	if(LoadSceneFromJson(json, newScene))
+	{
+		delete(scene);
+		scene = newScene;
+	}
+	else
+	{
+		delete(newScene);
+	}
+
+
+
+
+	
+
+}
+
+
+
+
+
 
 void SimpleRender::RenderApplication::ProcessInput()
 {

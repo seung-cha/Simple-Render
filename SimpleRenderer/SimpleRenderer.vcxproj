@@ -40,6 +40,7 @@
     <ClCompile Include="source\RenderCamera\Viewport\RenderViewportCamera.cpp" />
     <ClCompile Include="source\RenderCubemap\RenderCubemap.cpp" />
     <ClCompile Include="source\RenderDeferredRender\RenderDeferredRender.cpp" />
+    <ClCompile Include="source\RenderJson\RenderJson.cpp" />
     <ClCompile Include="source\RenderMaterial\RenderMaterial.cpp" />
     <ClCompile Include="source\RenderMesh\RenderMesh.cpp" />
     <ClCompile Include="source\RenderObject\RenderObject.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="source\RenderCubemap\RenderCubemap.h" />
     <ClInclude Include="source\RenderDeferredRender\RenderDeferredRender.h" />
     <ClInclude Include="source\RenderExceptions\InvalidFile.h" />
+    <ClInclude Include="source\RenderJson\RenderJson.h" />
     <ClInclude Include="source\RenderMaterial\RenderMaterial.h" />
     <ClInclude Include="source\RenderMesh\RenderMesh.h" />
     <ClInclude Include="source\RenderObject\RenderObject.h" />

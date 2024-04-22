@@ -162,6 +162,9 @@
     <ClCompile Include="source\RenderUI\AppMenuUI\AppMenuUI.cpp">
       <Filter>Source Files\RenderUI</Filter>
     </ClCompile>
+    <ClCompile Include="source\RenderJson\RenderJson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\RenderMesh\RenderMesh.h">
@@ -307,6 +310,9 @@
     </ClInclude>
     <ClInclude Include="source\RenderExceptions\InvalidFile.h">
       <Filter>Header Files\RenderExceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderJson\RenderJson.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
