@@ -4,6 +4,8 @@
 #include "RenderCubemap/RenderCubemap.h"
 #include "RenderDeferredRender/RenderDeferredRender.h"
 
+#include "RenderExceptions/InvalidFile.h"
+
 #include "RenderShaderProgram/ShaderProgramData.h"
 
 #include "imgui.h"
@@ -148,19 +150,36 @@ void RenderScene::LoadDefaultScene()
 
 	prog->LinkProgram();
 
-	AddObject(shaderPrograms[0].get());
+	AddDefaultObject(shaderPrograms[0].get());
 	ActiveObject = objects[0].get();
 
 
 }
 
 
-void RenderScene::AddObject(RenderShaderProgram* const& program, const std::string& path)
+bool RenderScene::AddObject(RenderShaderProgram* const& program, const std::string& path)
 {
-	objects.push_back(std::make_unique<SimpleRender::RenderObject>(this, program, objects.size() + 1, path));
+	try
+	{
+		std::unique_ptr<RenderObject> ptr = std::make_unique<SimpleRender::RenderObject>(this, program, objects.size() + 1, path);
+		objects.push_back(std::move(ptr));
+	}
+	catch(const RenderExceptions::InvalidFile& e)
+	{
+		std::cout << "Unable to add object - Invalid File: " << e.what() << std::endl;
+
+		return false;
+	}
 
 	std::cout << "Size of data structure: " << objects.size() << std::endl;
+	return true;
 }
+
+void RenderScene::AddDefaultObject(RenderShaderProgram* const& program)
+{
+	objects.push_back(std::make_unique<SimpleRender::RenderObject>(this, program, objects.size() + 1));
+}
+
 
 
 void RenderScene::DeleteObject(RenderObject* const object)

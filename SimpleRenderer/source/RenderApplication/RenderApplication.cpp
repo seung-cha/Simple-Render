@@ -17,6 +17,7 @@
 #include "RenderUI/HierarchyUI/HierarchyUI.h"
 #include "RenderUI/ScreenUI/ScreenUI.h"
 #include "RenderUI/RenderingUI/RenderingUI.h"
+#include "RenderUI/AppMenuUI/AppMenuUI.h"
 
 
 #include "RenderPure/ContiguousKeyInput.h"
@@ -186,6 +187,8 @@ SimpleRender::RenderApplication::RenderApplication()
 	AddUI(new HierarchyUI(this));
 	AddUI(new ScreenUI(this));
 	AddUI(new RenderingUI(this));
+	AddUI(new AppMenuUI(this));
+
 
 
 	glEnable(GL_DEPTH_TEST);

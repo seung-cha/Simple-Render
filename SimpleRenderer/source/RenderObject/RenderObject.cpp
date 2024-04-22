@@ -10,6 +10,8 @@
 
 #include "RenderScene/RenderScene.h"
 #include "RenderCamera/RenderCamera.h"
+#include "RenderExceptions/InvalidFile.h"
+
 
 using namespace SimpleRender;
 using namespace std;
@@ -35,28 +37,41 @@ RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int
 {
 	this->id = ID;
 	shaderProgram = program;
-	shaderProgram->AssociatedObjects->insert(this);
+	// Don't insert the reference to this object in shaderProgram here.
+	// Constructor might not finish if the path is invalid.
+	// LoadMesh() will insert the reference when the path is valid.
 
 	this->scene = scene;
 
 	this->absoluteParent = this;
 
-
-	if(path == "")
-	{
-		// Load Default Mesh
-		LoadDefaultMesh();
-		return;
-	}
-
 	LoadMesh(path);
+
+
 
 }
 
+RenderObject::RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID)
+{
+	this->id = ID;
+	shaderProgram = program;
+
+	this->scene = scene;
+
+	this->absoluteParent = this;
+
+	LoadDefaultMesh();
+
+}
+
+
+
+
+
 RenderObject::~RenderObject()
 {
-	// Unlink the parent
 
+	// Unlink the parent
 	for(auto& obj : children)
 	{
 		ReplaceShaderProgram(nullptr);
@@ -96,12 +111,12 @@ void RenderObject::LoadMesh(const std::string path)
 	{
 		cerr << "Import was unsuccessful: " << endl;
 		cerr << importer.GetErrorString() << endl << endl;
-		LoadDefaultMesh();
 
-		return;
+		shaderProgram = nullptr;
+		throw RenderExceptions::InvalidFile(path);
 	}
 
-
+	shaderProgram->AssociatedObjects->insert(this);
 	InitMeshes(scene, scene->mRootNode);
 }
 

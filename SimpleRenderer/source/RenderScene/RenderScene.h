@@ -82,7 +82,10 @@ namespace SimpleRender
 		/// </summary>
 		/// <param name="program"></param>
 		/// <param name="path"></param>
-		void AddObject(RenderShaderProgram* const& program, const std::string& path = "");
+		/// <returns>true if successfully added object</returns>
+		bool AddObject(RenderShaderProgram* const& program, const std::string& path);
+		void AddDefaultObject(RenderShaderProgram* const& program);
+
 
 		/// <summary>
 		/// Delete the specified object. Manage the IDs afterwards.

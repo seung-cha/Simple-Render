@@ -34,6 +34,9 @@
     <Filter Include="Header Files\Buffers">
       <UniqueIdentifier>{2dc4525c-7170-49f4-b31a-4a559c01f6a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\RenderExceptions">
+      <UniqueIdentifier>{a5da356c-ea83-4e25-8256-c31de3f171d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
@@ -155,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="source\RenderMaterial\RenderMaterial.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderUI\AppMenuUI\AppMenuUI.cpp">
+      <Filter>Source Files\RenderUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +301,12 @@
     </ClInclude>
     <ClInclude Include="source\RenderMaterial\RenderMaterial.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderUI\AppMenuUI\AppMenuUI.h">
+      <Filter>Header Files\RenderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RenderExceptions\InvalidFile.h">
+      <Filter>Header Files\RenderExceptions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,9 +27,8 @@ void HierarchyUI::UpdateWidget()
 	{
 		string path = FileReader::OpenFileDialogue();
 
-		if(path.size() > 0)
+		if(application->Scene->AddObject((*application->Scene->SceneShaderPrograms)[0].get(), path))
 		{
-			application->Scene->AddObject((*application->Scene->SceneShaderPrograms)[0].get(), path);
 			application->Scene->ActiveObject = (*application->Scene->SceneObjects)[application->Scene->SceneObjects->size() - 1].get();
 		}
 

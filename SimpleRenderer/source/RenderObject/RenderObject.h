@@ -62,7 +62,15 @@ namespace SimpleRender
 		/// <param name="mesh"></param>
 		/// <param name="parent"></param>
 		RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const aiScene* aiScene, const aiNode* node, RenderObject* parent = nullptr);
-		RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const std::string path = "");
+		RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID, const std::string path);
+		/// <summary>
+		/// Load the default mesh
+		/// </summary>
+		/// <param name="scene"></param>
+		/// <param name="program"></param>
+		/// <param name="ID"></param>
+		RenderObject(RenderScene* scene, RenderShaderProgram* program, int ID);
+
 		~RenderObject();
 		void Draw(RenderCamera* camera);
 
@@ -142,6 +150,8 @@ namespace SimpleRender
 		}
 
 	private:
+
+
 		RenderScene* scene;
 
 		int id;

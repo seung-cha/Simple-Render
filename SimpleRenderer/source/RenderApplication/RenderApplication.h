@@ -128,6 +128,7 @@ namespace SimpleRender
 
 		bool SleepMode;
 		std::string Title = "Simple Render";
+		std::string RootDir = "";
 
 		/// <summary>
 		/// Time in double; default type
