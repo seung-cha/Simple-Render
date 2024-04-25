@@ -174,7 +174,8 @@ void RenderScene::LoadDefaultScene()
 		// Supply uniform data for lightPos
 		SimpleRender::ShaderDataVec3* i = new SimpleRender::ShaderDataVec3();
 		i->name = "lightPos";
-		i->ToVariable(&obj->Transform->Position);
+		i->ToVariable(&(*obj));
+		i->ReferenceType = ShaderProgramData::RefType::ObjPos;
 
 		deferredRender->ShaderProgram->AddUniformData(i);
 	}

@@ -57,8 +57,16 @@ RenderObject::~RenderObject()
 		ReplaceShaderProgram(nullptr);
 	}
 
-
 	ReplaceShaderProgram(nullptr);
+
+	// Remove the reference to shader data
+
+	std::cout << "Reference: " << shaderReference.size() << std::endl;
+	for(auto& obj : shaderReference)
+	{
+		obj->data = nullptr;
+	}
+
 }
 
 

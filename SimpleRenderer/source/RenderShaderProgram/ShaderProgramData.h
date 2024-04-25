@@ -9,13 +9,34 @@ namespace SimpleRender
 {
 	class RenderScene;
 
+
+
+
 	class ShaderProgramData
 	{
 	public:
+
+		static enum RefType
+		{
+			RunTimei,
+			RunTimef,
+			LeftClickCont,
+			RightClickCont,
+			AspectRatio,
+			AspectRatioFixed,
+			Resoltion,
+			ResolutionFixed,
+			MousePos,
+			MouseDelta,
+			ObjPos,
+			ObjRot,
+			ObjScal,
+		};
 		
-		void* data = 0;
+		void* data = nullptr;
 		bool ReadOnly = false;
 		std::string name = "";
+		RefType ReferenceType;
 
 
 		virtual ~ShaderProgramData()
@@ -89,26 +110,14 @@ namespace SimpleRender
 	class ShaderDataFloat : public ShaderProgramData
 	{
 	public:
+
 		ShaderDataFloat()
 		{
 			ToConstant();
 		}
 
-		void Apply(GLuint shaderProgram) override
-		{
-			glUniform1f(glGetUniformLocation(shaderProgram, name.c_str()), *static_cast<float*>(data));
-		}
-
-		void DrawUI() override
-		{
-			ImGui::BeginDisabled(ReadOnly);
-
-
-			ImGui::DragFloat("", ReadOnly ? static_cast<float*>(data) : &value, 0.05f);
-
-			ImGui::EndDisabled();
-
-		}
+		void Apply(GLuint shaderProgram) override;
+		void DrawUI() override;
 
 		void ToConstant() override
 		{
@@ -139,20 +148,8 @@ namespace SimpleRender
 			ToConstant();
 		}
 
-		void Apply(GLuint shaderProgram) override
-		{
-			glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), *static_cast<int*>(data));
-		}
-
-		void DrawUI() override
-		{
-			ImGui::BeginDisabled(ReadOnly);
-
-			ImGui::DragInt("", ReadOnly ? static_cast<int*>(data) : &value, 0.05f);
-
-			ImGui::EndDisabled();
-
-		}
+		void Apply(GLuint shaderProgram) override;
+		void DrawUI() override;
 
 		void ToConstant() override
 		{
@@ -182,21 +179,8 @@ namespace SimpleRender
 			ToConstant();
 		}
 
-		void Apply(GLuint shaderProgram) override
-		{
-			glUniform2fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, &(*static_cast<glm::vec2*>(data))[0]);
-		}
-
-		void DrawUI() override
-		{
-			ImGui::BeginDisabled(ReadOnly);
-
-	
-			ImGui::DragFloat2("", ReadOnly ? &(*static_cast<glm::vec2*>(data))[0] : &value[0], 0.05f);
-
-			ImGui::EndDisabled();
-
-		}
+		void Apply(GLuint shaderProgram) override;
+		void DrawUI() override;
 
 		void ToConstant() override
 		{
@@ -227,20 +211,13 @@ namespace SimpleRender
 			ToConstant();
 		}
 
-		void Apply(GLuint shaderProgram) override
-		{
-			glUniform3fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, &(*static_cast<glm::vec3*>(data))[0]);
-		}
+		~ShaderDataVec3() override;
 
-		void DrawUI() override
-		{
-			ImGui::BeginDisabled(ReadOnly);
+		void Apply(GLuint shaderProgram) override;
 
-			ImGui::DragFloat3("", ReadOnly ? &(*static_cast<glm::vec3*>(data))[0] : &value[0], 0.05f);
+		void DrawUI() override;
 
-			ImGui::EndDisabled();
-
-		}
+		void ToVariable(void* data) override;
 
 		void ToConstant() override
 		{

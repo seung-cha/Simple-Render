@@ -4,6 +4,7 @@
 
 #include "RenderTexture/RenderTexture.h"
 #include "RenderShaderProgram/RenderShaderProgram.h"
+#include "RenderMaterial/RenderMaterial.h"
 #include "RenderMesh/RenderMesh.h"
 
 #include <glm/glm.hpp>
@@ -14,7 +15,6 @@
 #include <assimp/postprocess.h>
 #include <vector>
 #include <string>
-#include <RenderMaterial/RenderMaterial.h>
 #include <memory>
 
 #include <set>
@@ -24,10 +24,7 @@ namespace SimpleRender
 {
 
 
-
-
-
-
+	class ShaderProgramData;
 	class RenderScene;
 	class RenderCamera;
 
@@ -141,7 +138,12 @@ namespace SimpleRender
 		/// </summary>
 		RenderObject*& AbsoluteParent = absoluteParent;
 
-		std::set<RenderObject*>& const Children = children;
+		std::set<RenderObject*>& Children = children;
+		/// <summary>
+		/// Keep track of the ShaderProgramData.
+		/// </summary>
+		std::unordered_set<ShaderProgramData*>& ShaderReference = shaderReference;
+
 
 		const int& ID = id;
 
@@ -167,6 +169,7 @@ namespace SimpleRender
 		std::vector<RenderTexture*> textures;	// To delete
 
 
+		std::unordered_set<ShaderProgramData*> shaderReference;
 
 
 		RenderObject* absoluteParent = nullptr;
