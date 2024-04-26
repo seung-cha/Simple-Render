@@ -31,12 +31,13 @@ namespace SimpleRender
 			ObjPos,
 			ObjRot,
 			ObjScal,
+			None,
 		};
 		
 		void* data = nullptr;
 		bool ReadOnly = false;
 		std::string name = "";
-		RefType ReferenceType;
+		RefType ReferenceType = RefType::None;
 
 
 		virtual ~ShaderProgramData()

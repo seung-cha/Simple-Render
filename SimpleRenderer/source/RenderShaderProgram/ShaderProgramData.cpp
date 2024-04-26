@@ -226,7 +226,11 @@ void SimpleRender::ShaderDataVec3::ToVariable(void* data)
 
 	// Insert reference to the object
 	obj = static_cast<RenderObject*>(data);
-	obj->ShaderReference.insert(this);
+
+	if(obj)
+	{
+		obj->ShaderReference.insert(this);
+	}
 
 }
 
@@ -295,9 +299,6 @@ void SimpleRender::ShaderDataVec3::Apply(GLuint shaderProgram)
 			glm::vec3 v(0.0f, 0.0f, 0.0f);
 			glUniform3fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, &v[0]);
 		}
-
-
-	
 
 	}
 	else

@@ -181,6 +181,13 @@ void RenderScene::LoadDefaultScene()
 	}
 
 
+	json j;
+	
+	ShaderProgramData* d = new ShaderDataVec3();
+	d->name = "bing";
+	j = d;
+	cout << j << std::endl;
+
 }
 
 
