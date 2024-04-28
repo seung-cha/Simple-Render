@@ -313,33 +313,62 @@ void SimpleRender::RenderApplication::UpdateWidgets()
 
 void SimpleRender::RenderApplication::SaveScene()
 {
-	json j = scene;
-	std::cout << "Json: " << j << std::endl;
+	if(Status->SaveFile.size() <= 0)
+	{
+		SaveSceneAs();
+	}
+	else
+	{
+		json j = scene;
+		ofstream of(Status->SaveFile);
+		of << j;
+		std::cout << j << std::endl;
+		of.close();
+	}
 
+}
 
-	ofstream of("output.json");
-	of << j;
-	of.close();
+void SimpleRender::RenderApplication::SaveSceneAs()
+{
+	std::string saveFile = FileReader::OpenSaveFileDialogue();
+	
+	if(saveFile.size() > 0)
+	{
+		Status->SaveFile = saveFile;
+		SaveScene();
+	}
 
 }
 
 
 void SimpleRender::RenderApplication::LoadScene()
 {
-	json json = json::parse(FileReader::ReadFile("output.json"));
+	try
+	{
 
-	RenderScene* newScene = new RenderScene(this);
+		std::string file = FileReader::OpenFileDialogue();
+
+		json json = json::parse(FileReader::ReadFile(file));
+
+		RenderScene* newScene = new RenderScene(this);
 	
-	if(LoadSceneFromJson(json, newScene))
-	{
-		delete(scene);
-		scene = newScene;
-	}
-	else
-	{
-		delete(newScene);
-	}
+		if(LoadSceneFromJson(json, newScene))
+		{
+			delete(scene);
+			scene = newScene;
+		}
+		else
+		{
+			delete(newScene);
+		}
 
+		Status->SaveFile = file;
+
+	}
+	catch(std::exception e)
+	{
+		std::cout << "Unable to load scene: " << e.what() << std::endl;
+	}
 
 
 

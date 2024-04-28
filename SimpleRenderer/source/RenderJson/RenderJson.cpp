@@ -328,7 +328,7 @@ bool SimpleRender::LoadSceneFromJson(const json& j, RenderScene* const& scene)
 	}
 	catch(...)
 	{
-
+		return false;
 	}
 
 

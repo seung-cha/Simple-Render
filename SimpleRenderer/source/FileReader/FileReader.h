@@ -15,6 +15,7 @@ public:
 	static std::string ReadFile(const std::string& path);
 
 	static std::string OpenFileDialogue();
+	static std::string OpenSaveFileDialogue();
 	
 	
 

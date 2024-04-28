@@ -265,6 +265,8 @@ void RenderScene::UpdateDeferredRender()
 		deferredRender->ShaderProgram->UniformData->push_back(item);
 	}
 
+	copy->ShaderProgram->UniformData->clear();
+
 	// Free the previous pointer
 	delete(copy);
 

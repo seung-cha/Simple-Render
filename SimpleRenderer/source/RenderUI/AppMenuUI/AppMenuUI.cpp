@@ -33,13 +33,13 @@ void AppMenuUI::UpdateWidget()
 
 void AppMenuUI::ShowMenuWidget()
 {
-	if(application->Status->RootDir.size() == 0)
+	if(application->Status->SaveFile.size() == 0)
 	{
-		ImGui::Text("Project is not Selected!");
+		ImGui::Text("Save File not Targeted!");
 	}
 	else
 	{
-		ImGui::Text("Project is Selected!");
+		ImGui::Text("Save File Targeted!");
 	}
 
 
@@ -53,7 +53,7 @@ void AppMenuUI::ShowMenuWidget()
 
 	if(ImGui::Button("Save Project As"))
 	{
-
+		application->SaveSceneAs();
 		ImGui::CloseCurrentPopup();
 	}
 

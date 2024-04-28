@@ -128,7 +128,7 @@ namespace SimpleRender
 
 		bool SleepMode;
 		std::string Title = "Simple Render";
-		std::string RootDir = "";
+		std::string SaveFile = "";
 
 		/// <summary>
 		/// Time in double; default type
@@ -173,6 +173,7 @@ namespace SimpleRender
 		void AddUI(SimpleRenderUI::RenderUI* const& widget);
 
 		void SaveScene();
+		void SaveSceneAs();
 		void LoadScene();
 		
 
